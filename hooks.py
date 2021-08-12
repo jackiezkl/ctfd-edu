@@ -19,4 +19,11 @@ def on_challenge_solve(mapper, conn, solve):
   
   notif_type = req.get("type","alert")
   notif_sound = req.get("sound",True)
-  response.data
+  response.data["type"] = notif_type
+  response.data["sound"] = notif_sound
+  
+  current_app.events_manaager.publish(data=response..data, type="notification")
+  return{"success":True, "data": response.data}
+
+def load_hooks():
+  listen(Solves, "after_insert", on_challenge_solve)
