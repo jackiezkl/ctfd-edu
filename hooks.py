@@ -8,7 +8,7 @@ def on_challenge_solve(mapper, conn, solve):
   print("conn: ", conn)
   print("solve: ", solve)
   
-  req = "{'title': 'challenge solved', 'content': 'one of the challenge is solved by xxx', 'type': 'alert', 'sound': True)"
+  req = "{'title': 'challenge solved', 'content': 'one of the challenge is solved by xxx', 'type': 'alert', 'sound': True}"
   schema = NotificationSchema()
   result = schema.load(req)
   
