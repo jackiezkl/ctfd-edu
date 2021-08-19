@@ -1,4 +1,3 @@
-import json
 import os
 
 from .hooks import load_hooks
