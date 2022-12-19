@@ -4,7 +4,7 @@ import sys
 
 def main():
     token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
-    url = http://209.114.126.63
+    url = "http://209.114.126.63"
     url = url.strip("/")
     s = requests.Session()
     s.headers.update({"Authorization": f"Token {token}"})
