@@ -9,14 +9,15 @@ def main():
     s = requests.Session()
     s.headers.update({"Authorization": f"Token {token}"})
 
-    # NOTE: If you wish for the user's credentials to be emailed to them, pass the
-    # notify=true parameter in the URL. For example: /api/v1/users?notify=true
+#     r = s.post(
+#         f"{url}/api/v1/challenges",
+#         json={"name":"XOR Challenge 2","category":"Coordination","description":"Retrieve \"**Tom**\" and \"**Ashley**\"'s secret  8-bit number\r\n\r\nReturn the XOR of these two binary sequences.\r\n\r\nThe flag is in the format:``flag{01010101}``\r\n\r\nplease use private one-on-one chat function.","value":"23","state":"hidden","type":"standard"},
+#     )
+
     r = s.post(
         f"{url}/api/v1/challenges",
-        json={"name":"XOR Challenge 2","category":"Coordination","description":"Retrieve \"**Tom**\" and \"**Ashley**\"'s secret  8-bit number\r\n\r\nReturn the XOR of these two binary sequences.\r\n\r\nThe flag is in the format:``flag{01010101}``\r\n\r\nplease use private one-on-one chat function.","value":"23","state":"hidden","type":"standard"},
+        json={"challenge_id":"2","content":"20101010","type":"static","data":""},
     )
-    print(r.json())
-
 
 if __name__ == "__main__":
     main()
