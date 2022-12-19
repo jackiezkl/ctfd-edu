@@ -23,6 +23,10 @@ def main():
         f"{url}/api/v1/flags",
         json={"challenge_id":"4","content":"30101010","type":"static","data":""},
     )
+    
+    r = s.get(
+        f"{url}/api/v1/users")
 
+    print(r)
 if __name__ == "__main__":
     main()
