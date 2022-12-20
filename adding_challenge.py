@@ -25,7 +25,7 @@ def main():
 #     )
     
     r = s.get(
-        f"{url}/api/v1/users")
+        f"{url}/api/v1/challenges")
 
     print(r)
 if __name__ == "__main__":
