@@ -23,7 +23,9 @@ def main(url,token):
 #     )
     
     r = s.get(
-        f"{url}/api/v1/challenges")
+        f"{url}/api/v1/challenges",
+        json=""
+    )
 
     print(r.json)
 if __name__ == "__main__":
