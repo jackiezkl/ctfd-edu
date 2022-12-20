@@ -27,6 +27,6 @@ def main():
     r = s.get(
         f"{url}/api/v1/challenges")
 
-    print(r)
+    print(r.json)
 if __name__ == "__main__":
     main()
