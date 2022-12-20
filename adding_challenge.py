@@ -25,8 +25,17 @@ def main(url,token):
     r = s.get(
         f"{url}/api/v1/users",
     )
+    y = r.json()
 
-    print(r.json())
+    print(json.dumps(y,indent=2))
+
+    n = y['meta']['pagination']['total']
+
+    for i in range(n):
+    # the result is a Python dictionary:
+        print(i)
+        print(y['data'][i]['name'])
+
 if __name__ == "__main__":
     token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
     url = "http://209.114.126.63"    
