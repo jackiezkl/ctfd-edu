@@ -27,13 +27,11 @@ def main(url,token):
     )
     y = r.json()
 
-    print(json.dumps(y,indent=2))
-
     n = y['meta']['pagination']['total']
 
     for i in range(n):
     # the result is a Python dictionary:
-        print(i)
+
         print(y['data'][i]['name'])
 
 if __name__ == "__main__":
