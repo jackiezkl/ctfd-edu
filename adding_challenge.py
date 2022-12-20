@@ -24,8 +24,6 @@ def main(url,token):
     
     r = s.get(
         f"{url}/api/v1/users",
-        json="",
-        headers={"Content-Type": "application/json"},
     )
 
     print(r.json)
