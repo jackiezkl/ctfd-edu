@@ -25,7 +25,7 @@ def main(url,token):
     r = s.get(
         f"{url}/api/v1/challenges",
         json="",
-        headers={"Content-Type": "application/json"}
+        headers={"Content-Type": "application/json"},
     )
 
     print(r.json)
