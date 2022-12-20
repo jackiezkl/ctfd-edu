@@ -2,10 +2,8 @@ import requests
 import sys
 
 
-def main():
-    token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
-    url = "http://209.114.126.63"
-    url = url.strip("/")
+def main(url,token):
+
     s = requests.Session()
     s.headers.update({"Authorization": f"Token {token}"})
 
@@ -29,4 +27,6 @@ def main():
 
     print(r.json)
 if __name__ == "__main__":
-    main()
+    token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
+    url = "http://209.114.126.63"    
+    main(url,token)
