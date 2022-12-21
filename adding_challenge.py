@@ -10,7 +10,7 @@ def get_usernames(url):
 
 
         
-def add_new_challenge(url,token)
+def add_new_challenge(url,token):
   s = requests.Session()
   s.headers.update({"Authorization": f"Token {token}"})
 
