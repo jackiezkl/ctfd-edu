@@ -37,9 +37,6 @@ def get_usernames(url):
   for i in range(total_number_of_users):
     csv.write('%s,%s\n' % (all_user_info_json['data'][i]['name'],generate_binary())
 
-
-
-        
 def add_new_challenge(url,token):
   s = requests.Session()
   s.headers.update({"Authorization": f"Token {token}"})
