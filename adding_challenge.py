@@ -35,7 +35,7 @@ def get_usernames(url):
   total_number_of_users = all_user_info_json['meta']['pagination']['total']
 
   for i in range(total_number_of_users):
-    csv.write('%s\n' % all_user_info_json['data'][i]['name'])
+    csv.write('%s\n' % all_user_info_json['data'][i]['Full Name'])
 
   csv.close()
   print("[+] code_assign_record.csv")
