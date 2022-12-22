@@ -24,7 +24,7 @@ this code will add user binary information to the profile page. So, user can che
 add everything after line 9 <h1>{{ user.name }}</h1>, before line 11 {% if user.team_id %}
 
 {% for field in user.get_fields(admin=true) %}
-	<h4 class="d-block">
+	<h5 class="d-block">
 		{{ field.name }}: {{ field.value }}
-	</h4>
+	</h5>
 {% endfor %}
