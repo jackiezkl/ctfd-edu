@@ -68,9 +68,9 @@ if __name__ == "__main__":
 
   get_usernames(url)
 
-  csv = open('code_assign_record.csv', 'w', newline='')
+  code_assign_csv = open('code_assign_record.csv', 'w', newline='')
 
-  csv.write('Full name, Birth month, User binary, Paired name, Paired binary, XOR result\n')
+  code_assign_csv.write('Full name, Birth month, User binary, Paired name, Paired binary, XOR result\n')
   print("[+] Created code assign record file: code_assign_record.csv")
 
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
         user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
         user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
         first_binary,second_binary,xor_result = generate_binary()
-        csv.write('%s,%s,%s,%s,%s,%s' % (user_full_name+','+user_birth_month+','+first_binary+',,'+second_binary+','+xor_result))
+        code_assign_csv.write('%s,%s,%s,%s,%s,%s' % (user_full_name+','+user_birth_month+','+first_binary+',,'+second_binary+','+xor_result))
       except Exception:
         continue
 #   add_new_challenge(url,token)
