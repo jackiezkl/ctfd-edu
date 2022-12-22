@@ -67,9 +67,17 @@ if __name__ == "__main__":
 #   create_xor_record()
 
   get_usernames(url)
-  
-#   user_session = requests.Session()
-#   try:
+
+  user_session = requests.Session()
+  with open("names_record.csv") as names_record:
+    heading = next(names_record)
+
+    names_reader = csv.reader(names_record)
     
-    
+    for line in names_reader:
+      try:
+        user_info = username_session.get(f"{url}/api/v1/users/{line[1]}").json()
+        user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
+        print(user_full_name)
+        print(user_birth_month)
 #   add_new_challenge(url,token)
