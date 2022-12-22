@@ -27,7 +27,7 @@ def create_xor_record():
 def get_usernames(url):
   csv = open('names_record.csv', 'w', newline='')
 
-  csv.write('Name\n')
+  csv.write('User Name\n')
   print("[+] Created code assign record file: names_record.csv")
   
   username_session = requests.Session()
