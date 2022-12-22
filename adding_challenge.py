@@ -35,10 +35,11 @@ def get_usernames(url):
   total_number_of_users = all_user_info_json['meta']['pagination']['total']
 
   for i in range(total_number_of_users):
-    csv.write('%s\n' % all_user_info_json['data'][i]['name'])
+    csv.write('%s,%s\n' % (all_user_info_json['data'][i]['name'],all_user_info_json['data'][i]['id'])
 
   csv.close()
-  print("[+] code_assign_record.csv")
+  print("[+] Saved to names_record.csv")
+  
 def add_new_challenge(url,token):
   s = requests.Session()
   s.headers.update({"Authorization": f"Token {token}"})
@@ -66,4 +67,9 @@ if __name__ == "__main__":
 #   create_xor_record()
 
   get_usernames(url)
+  
+#   user_session = requests.Session()
+#   try:
+    
+    
 #   add_new_challenge(url,token)
