@@ -78,8 +78,7 @@ if __name__ == "__main__":
       try:
         user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
         user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-        print(user_full_name)
-        print(user_birth_month)
+        print(user_full_name, user_birth_month)
       except Exception:
         continue
 #   add_new_challenge(url,token)
