@@ -8,7 +8,7 @@ def generate_binary():
   first_binary = (bin(int(hex_array[i], 16))[2:].zfill(4))
   second_binary = (bin(int(hex_array[j], 16))[2:].zfill(4))
   xor_result = (bin(int(hex_array[i], 16) ^ int(hex_array[j], 16))[2:].zfill(4))
-  return first_binary
+  return first_binary,second_binary,xor_result
 
 # def create_code_assign_record():
 #   csv = open('code_assign_record.csv', 'w', newline='')
@@ -25,10 +25,10 @@ def create_xor_record():
   csv.close()
 
 def get_usernames(url):
-  csv = open('code_assign_record.csv', 'w', newline='')
+  csv = open('names_record.csv', 'w', newline='')
 
   csv.write('Name\n')
-  print("[+] Created code assign record file: code_assign_record.csv")
+  print("[+] Created code assign record file: names_record.csv")
   
   username_session = requests.Session()
   all_user_info_json = username_session.get(f"{url}/api/v1/users").json()
@@ -38,7 +38,7 @@ def get_usernames(url):
     csv.write('%s\n' % all_user_info_json['data'][i]['name'])
 
   csv.close()
-
+  print("[+] code_assign_record.csv")
 def add_new_challenge(url,token):
   s = requests.Session()
   s.headers.update({"Authorization": f"Token {token}"})
