@@ -3,11 +3,15 @@ import requests,sys,json,csv,random
 def generate_binary():
   hex_array = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
 
-  i = random.randint(0,15)
-  j = random.randint(0,15)
-  first_binary = (bin(int(hex_array[i], 16))[2:].zfill(4))
-  second_binary = (bin(int(hex_array[j], 16))[2:].zfill(4))
-  xor_result = (bin(int(hex_array[i], 16) ^ int(hex_array[j], 16))[2:].zfill(4))
+  higherbits = random.randint(0,15)
+  lowerbits = random.randint(0,15)
+  first_fullbits = hex_array[higherbits] + hex_array[lowerbits]
+  first_binary = (bin(int(first_fullbits, 16))[2:].zfill(8))
+  higherbits = random.randint(0,15)
+  lowerbits = random.randint(0,15)
+  second_fullbits = hex_array[higherbits] + hex_array[lowerbits]
+  second_binary = (bin(int(second_fullbits, 16))[2:].zfill(8))
+  xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
   return first_binary,second_binary,xor_result
 
 # def create_code_assign_record():
