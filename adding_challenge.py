@@ -74,7 +74,6 @@ if __name__ == "__main__":
     heading = next(names_record)
 
     names_reader = csv.reader(names_record)
-    print(names_reader)
     for line in names_reader:
       try:
         user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
