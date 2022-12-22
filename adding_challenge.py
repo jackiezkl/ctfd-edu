@@ -29,7 +29,7 @@ def get_usernames(url):
 
   csv.write('User Name\n')
   print("[+] Created code assign record file: names_record.csv")
-  
+
   username_session = requests.Session()
   all_user_info_json = username_session.get(f"{url}/api/v1/users").json()
   total_number_of_users = all_user_info_json['meta']['pagination']['total']
@@ -39,7 +39,7 @@ def get_usernames(url):
 
   csv.close()
   print("[+] Saved to names_record.csv")
-  
+
 def add_new_challenge(url,token):
   s = requests.Session()
   s.headers.update({"Authorization": f"Token {token}"})
@@ -68,7 +68,8 @@ if __name__ == "__main__":
 
   get_usernames(url)
 
-  username_session = requests.Session()
+  userinfo_session = requests.Session()
+  userinfo_session.headers.update({"Authorization": f"Token {token}"})
   with open("names_record.csv") as names_record:
     heading = next(names_record)
 
@@ -76,7 +77,7 @@ if __name__ == "__main__":
     print(names_reader)
     for line in names_reader:
       try:
-        user_info = username_session.get(f"{url}/api/v1/users/{line[1]}").json()
+        user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
         user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
         print(user_full_name)
         print(user_birth_month)
