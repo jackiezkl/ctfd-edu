@@ -5,14 +5,14 @@ def generate_binary():
 
   higherbits = random.randint(0,15)
   lowerbits = random.randint(0,15)
-  first_fullbits = hex_array[higherbits] + hex_array[lowerbits]
-  first_binary = (bin(int(first_fullbits, 16))[2:].zfill(8))
-  higherbits = random.randint(0,15)
-  lowerbits = random.randint(0,15)
-  second_fullbits = hex_array[higherbits] + hex_array[lowerbits]
-  second_binary = (bin(int(second_fullbits, 16))[2:].zfill(8))
-  xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
-  return first_binary,second_binary,xor_result
+  fullbits = hex_array[higherbits] + hex_array[lowerbits]
+#   first_binary = (bin(int(first_fullbits, 16))[2:].zfill(8))
+#   higherbits = random.randint(0,15)
+#   lowerbits = random.randint(0,15)
+#   second_fullbits = hex_array[higherbits] + hex_array[lowerbits]
+#   second_binary = (bin(int(second_fullbits, 16))[2:].zfill(8))
+#   xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
+  return fullbits
 
 # def create_code_assign_record():
 #   csv = open('code_assign_record.csv', 'w', newline='')
@@ -88,8 +88,9 @@ if __name__ == "__main__":
       try:
         user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
         user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-        first_binary,second_binary,xor_result = generate_binary()
-        code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,first_binary,'',second_binary,xor_result))
+        fullbits = generate_binary()
+#         code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,first_binary,'',second_binary,xor_result))
+        code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,fullbits,'','',''))
       except Exception:
         continue
 #   add_new_challenge(url,token)
