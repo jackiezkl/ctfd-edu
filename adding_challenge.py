@@ -27,8 +27,8 @@ def create_xor_record():
 def get_usernames(url):
   csv = open('names_record.csv', 'w', newline='')
 
-  csv.write('User Name\n')
-  print("[+] Created code assign record file: names_record.csv")
+  csv.write('User Name, id\n')
+  print("[+] Created username record file: names_record.csv")
 
   username_session = requests.Session()
   all_user_info_json = username_session.get(f"{url}/api/v1/users").json()
@@ -68,6 +68,12 @@ if __name__ == "__main__":
 
   get_usernames(url)
 
+  csv = open('code_assign_record.csv', 'w', newline='')
+
+  csv.write('Full name, Birth month, User binary, Paired name, Paired binary, XOR result\n')
+  print("[+] Created code assign record file: code_assign_record.csv")
+
+
   userinfo_session = requests.Session()
   userinfo_session.headers.update({"Authorization": f"Token {token}"})
   with open("names_record.csv") as names_record:
@@ -78,7 +84,8 @@ if __name__ == "__main__":
       try:
         user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
         user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-        print(user_full_name+','+user_birth_month)
+        first_binary,second_binary,xor_result = generate_binary()
+        csv.write('%s,%s,%s,%s,%s,%s' % (user_full_name+','+user_birth_month+','+first_binary+',,'+second_binary+','+xor_result))
       except Exception:
         continue
 #   add_new_challenge(url,token)
