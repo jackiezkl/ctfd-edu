@@ -14,12 +14,28 @@ def generate_binary():
 #   xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
   return fullbits
 
-# def create_code_assign_record():
-#   csv = open('code_assign_record.csv', 'w', newline='')
+def create_code_assign_record(url,token):
+  code_assign_csv = open('code_assign_record.csv', 'w', newline='')
 
-#   csv.write('Name,code\n')
-#   print("[+] Created code assign record file: code_assign_record.csv")
-#   csv.close()
+  code_assign_csv.write('Full name, Birth month, User binary, Paired name, Paired binary, XOR result\n')
+  print("[+] Created code assign record file: code_assign_record.csv")
+
+
+  userinfo_session = requests.Session()
+  userinfo_session.headers.update({"Authorization": f"Token {token}"})
+  with open("names_record.csv") as names_record:
+    heading = next(names_record)
+
+    names_reader = csv.reader(names_record)
+    for line in names_reader:
+      try:
+        user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+        user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
+        fullbits = generate_binary()
+#         code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,first_binary,'',second_binary,xor_result))
+        code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,fullbits,'','',''))
+      except Exception:
+        continue
 
 def create_xor_record():
   csv = open('xor_record.csv', 'w', newline='')
@@ -67,30 +83,6 @@ if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
   url = "http://209.114.126.63"
 
-#   create_code_assign_record()
-#   create_xor_record()
-
   get_usernames(url)
-
-  code_assign_csv = open('code_assign_record.csv', 'w', newline='')
-
-  code_assign_csv.write('Full name, Birth month, User binary, Paired name, Paired binary, XOR result\n')
-  print("[+] Created code assign record file: code_assign_record.csv")
-
-
-  userinfo_session = requests.Session()
-  userinfo_session.headers.update({"Authorization": f"Token {token}"})
-  with open("names_record.csv") as names_record:
-    heading = next(names_record)
-
-    names_reader = csv.reader(names_record)
-    for line in names_reader:
-      try:
-        user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-        user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-        fullbits = generate_binary()
-#         code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,first_binary,'',second_binary,xor_result))
-        code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,fullbits,'','',''))
-      except Exception:
-        continue
+  create_code_assign_record(url,token)
 #   add_new_challenge(url,token)
