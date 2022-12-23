@@ -51,6 +51,8 @@ def create_code_assign_record(url,token):
       heading = next(names_record)
       names_reader = csv.reader(names_record)
       code_assign_csv = open('code_assign_record.csv', 'w')
+      userinfo_session = requests.Session()
+      userinfo_session.headers.update({"Authorization": f"Token {token}"})
       for line in names_reader:
         if line[1] in ids:
           print("%s exist" % line[1])
