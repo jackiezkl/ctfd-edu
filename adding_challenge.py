@@ -39,27 +39,26 @@ def create_code_assign_record(url,token):
           continue
   else:
     print("[+] File already exist, checking information...")
-    with open("code_assign_csv","a") as code_assign_append:
-      heading = next(code_assign_append)
-      code_assign_reader = csv.reader(code_assign_append)
+    with open("code_assign_record.csv","a") as code_assign:
+      heading = next(code_assign)
+      code_assign_reader = csv.reader(code_assign)
 
-      with open("names_record.csv") as names_record:
-        heading = next(names_record)
-        names_reader = csv.reader(names_record)
+    with open("names_record.csv") as names_record:
+      heading = next(names_record)
+      names_reader = csv.reader(names_record)
         
-        for line in names_reader:
-          for row in code_assign_reader:
-            if line[1] == row[0]:
-              pass
-            else:
-              try:
-                user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-                user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-                fullbits = generate_binary()
-  #         code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,first_binary,'',second_binary,xor_result))
-                code_assign_csv.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
-              except Exception:
-                continue
+    for line in names_reader:
+      for row in code_assign_reader:
+        if line[1] == row[0]:
+          pass
+        else:
+          try:
+            user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+            user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
+            fullbits = generate_binary()
+            code_assign.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
+          except Exception:
+            continue
 
 
 def create_xor_record():
