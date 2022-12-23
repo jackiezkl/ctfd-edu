@@ -1,4 +1,4 @@
-import requests,sys,json,csv,random
+import requests,sys,json,csv,random,os
 
 def generate_binary():
   hex_array = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
@@ -15,27 +15,30 @@ def generate_binary():
   return fullbits
 
 def create_code_assign_record(url,token):
-  code_assign_csv = open('code_assign_record.csv', 'w', newline='')
+  if os.path.isfile('code_assign_record') == False:
+    code_assign_csv = open('code_assign_record.csv', 'w', newline='')
 
-  code_assign_csv.write('ID,Full Name,Birth Month,User Binary,Paired Name,Paired Binary,XOR Result\n')
-  print("[+] Created code assign record file: code_assign_record.csv")
+    code_assign_csv.write('ID,Full Name,Birth Month,User Binary,Paired Name,Paired Binary,XOR Result\n')
+    print("[+] Code assign record file does not exist, file created.")
+    print("[+] Filling file content...")
 
+    userinfo_session = requests.Session()
+    userinfo_session.headers.update({"Authorization": f"Token {token}"})
+    with open("names_record.csv") as names_record:
+      heading = next(names_record)
 
-  userinfo_session = requests.Session()
-  userinfo_session.headers.update({"Authorization": f"Token {token}"})
-  with open("names_record.csv") as names_record:
-    heading = next(names_record)
-
-    names_reader = csv.reader(names_record)
-    for line in names_reader:
-      try:
-        user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-        user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-        fullbits = generate_binary()
-#         code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,first_binary,'',second_binary,xor_result))
-        code_assign_csv.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
-      except Exception:
-        continue
+      names_reader = csv.reader(names_record)
+      for line in names_reader:
+        try:
+          user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+          user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
+          fullbits = generate_binary()
+  #         code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,first_binary,'',second_binary,xor_result))
+          code_assign_csv.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
+        except Exception:
+          continue
+  else:
+    print("File already exist, checking information...")
 
 def create_xor_record():
   csv = open('xor_record.csv', 'w', newline='')
