@@ -93,24 +93,24 @@ def get_usernames(url,token):
     usersinfo_session = requests.Session()
     usersinfo_session.headers.update({"Authorization": f"Token {token}"})
     for line in id_reader:
-      try:
-        users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-        user_id = users_info_json['data']['id']
-        user_name = users_info_json['data']['name']
-        user_email = users_info_json['data']['email']
-        user_type = users_info_json['data']['type']
-        user_verified = users_info_json['data']['verified']
-        user_hidden = users_info_json['data']['hidden']
-        user_banned = users_info_json['data']['banned']
-        field_id_1 = users_info_json['data']['fields'][0]['field_id']
-        value_1 = users_info_json['data']['fields'][0]['value']
-        field_id_2 = users_info_json['data']['fields'][1]['field_id']
-        value_2 = users_info_json['data']['fields'][1]['value']
-        field_id_3 = users_info_json['data']['fields'][2]['field_id']
-        value_3 = users_info_json['data']['fields'][2]['value']
-        users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,field_id_3,value_3))
-      except Exception:
-        continue
+#     try:
+      users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+      user_id = users_info_json['data']['id']
+      user_name = users_info_json['data']['name']
+      user_email = users_info_json['data']['email']
+      user_type = users_info_json['data']['type']
+      user_verified = users_info_json['data']['verified']
+      user_hidden = users_info_json['data']['hidden']
+      user_banned = users_info_json['data']['banned']
+      field_id_1 = users_info_json['data']['fields'][0]['field_id']
+      value_1 = users_info_json['data']['fields'][0]['value']
+      field_id_2 = users_info_json['data']['fields'][1]['field_id']
+      value_2 = users_info_json['data']['fields'][1]['value']
+      field_id_3 = users_info_json['data']['fields'][2]['field_id']
+      value_3 = users_info_json['data']['fields'][2]['value']
+      users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,field_id_3,value_3))
+#     except Exception:
+#       continue
   
 def update_pair(url,token):
   with open("code_assign_record.csv") as code_assign_record:
