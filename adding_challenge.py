@@ -93,7 +93,7 @@ def get_usernames(url,token):
     usersinfo_session = requests.Session()
     usersinfo_session.headers.update({"Authorization": f"Token {token}"})
     for line in id_reader:
-      try:
+#       try:
         users_info_json = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
         user_id = users_info_json['data']['id']
         user_name = users_info_json['data']['name']
@@ -109,8 +109,8 @@ def get_usernames(url,token):
         field_id_3 = users_info_json['data']['fields'][2]['field_id']
         value_3 = users_info_json['data']['fields'][2]['value']
         users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,field_id_3,value_3))
-      except Exception:
-        continue
+#       except Exception:
+#         continue
   
 def update_pair(url,token):
   with open("code_assign_record.csv") as code_assign_record:
