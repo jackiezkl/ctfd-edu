@@ -40,7 +40,6 @@ def create_code_assign_record(url,token):
   else:
     print("[+] File already exist, checking information...")
     with open("code_assign_record.csv") as code_assign:
-      heading = next(code_assign)
       code_assign_reader = csv.DictReader(code_assign)
       ids = []
       for col in code_assign_reader:
