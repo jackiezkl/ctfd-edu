@@ -16,6 +16,8 @@ add everything after line 74 </div>, before  line 75 {% endblock %}
         ObjParent.replaceChild(tmpelement,oldelement); //here we placing our temporary data instead of our target, so we can find it then and replace it into whatever we want to replace to
         ObjParent.innerHTML=ObjParent.innerHTML.replace('<div><!--THIS DATA SHOULD BE REPLACED--></div>',newelement);
     }
+const element = document.getElementById("fields[3]").parentElement
+element.remove()
 </script>
 
 
