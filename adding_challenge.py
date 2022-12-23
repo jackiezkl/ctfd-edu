@@ -29,7 +29,7 @@ def update_user_profile(url,token):
         json=payload,
         headers={"Content-Type": "application/json"},
       )
-      print(r.json)
+      print(r.json())
 def get_usernames(url,token):
   username_id_csv = open('names_record.csv', 'w', newline='')
   username_id_csv.write('username,id\n')
