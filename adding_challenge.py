@@ -144,9 +144,11 @@ def get_usernames(url,token):
           field_id_2 = users_info_json['data']['fields'][1]['field_id']
           value_2 = users_info_json['data']['fields'][1]['value']
           user_hex = generate_hex()
+          print("[+] New user added.")
           users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,user_hex))
 
-    
+  print('[+] Accquired all user information!')
+
 def update_pair(url,token):
   with open("code_assign_record.csv") as code_assign_record:
     heading = next(code_assign_record)
