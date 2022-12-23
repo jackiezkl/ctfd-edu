@@ -39,9 +39,10 @@ def create_code_assign_record(url,token):
           continue
   else:
     print("[+] File already exist, checking information...")
+    ids = []
     with open("code_assign_record.csv") as code_assign:
       code_assign_reader = csv.DictReader(code_assign)
-      ids = []
+
       for col in code_assign_reader:
         ids.append(col['ID'])
       code_assign.close()
