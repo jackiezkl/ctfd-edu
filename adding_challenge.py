@@ -74,7 +74,7 @@ def generate_binary():
 
 def get_usernames(url,token):
   username_id_csv = open('names_record.csv', 'w', newline='')
-  username_id_csv.write('username,id')
+  username_id_csv.write('username,id\n')
   print("[+] Created username record file: names_record.csv")
 
   username_session = requests.Session()
