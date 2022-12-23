@@ -95,9 +95,9 @@ def get_usernames(url,token):
           user_name = users_info_json['data']['name']
           user_email = users_info_json['data']['email']
           user_type = users_info_json['data']['type']
-          user_verified = users_info_json['data']['verified'].toLowerCase()
-          user_hidden = users_info_json['data']['hidden'].toLowerCase()
-          user_banned = users_info_json['data']['banned'].toLowerCase()
+          user_verified = str(users_info_json['data']['verified']).toLowerCase()
+          user_hidden = str(users_info_json['data']['hidden']).toLowerCase()
+          user_banned = str(users_info_json['data']['banned']).toLowerCase()
           field_id_1 = users_info_json['data']['fields'][0]['field_id']
           value_1 = users_info_json['data']['fields'][0]['value']
           field_id_2 = users_info_json['data']['fields'][1]['field_id']
