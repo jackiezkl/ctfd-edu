@@ -55,7 +55,6 @@ def create_code_assign_record(url,token):
       userinfo_session.headers.update({"Authorization": f"Token {token}"})
       for line in names_reader:
         if line[1] in ids:
-          print("%s exist" % line[1])
           pass
         else:
           try:
