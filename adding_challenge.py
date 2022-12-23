@@ -25,7 +25,7 @@ def update_user_profile(url,token):
       payload = '"name":"'+line[1]+'","email":"'+line[2]+'","type":"'+line[3]+'","verified":'+line[4]+',"hidden":'+line[5]+',"banned":'+line[6]+',"fields":[{"field_id":1,"value":"'+line[8]+'"},{"field_id":2,"value":"'+line[10]+'"},{"field_id":3,"value":"'+bin(int(line[11], 16))[2:].zfill(8)+'"}]'
       user_update_session.patch(
         f"{url}/api/v1/users/{line[0]}",
-        json={},
+        json={payload},
         headers={"Content-Type": "application/json"},
       )
 
