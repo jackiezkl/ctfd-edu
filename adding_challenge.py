@@ -49,8 +49,6 @@ def create_code_assign_record(url,token):
     with open("names_record.csv") as names_record:
       heading = next(names_record)
       names_reader = csv.reader(names_record)
-      names_record.close()
-
       code_assign_csv = open('code_assign_record.csv', 'w')
       for line in names_reader:
         if line[1] in ids:
