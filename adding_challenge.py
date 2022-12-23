@@ -20,14 +20,14 @@ def update_user_profile(url,token):
     users_reader = csv.reader(users_record)
     
     for line in users_reader:
-    user_update_session = requests.Session()
-    user_update_session.headers.update({"Authorization": f"Token {token}"})
+      user_update_session = requests.Session()
+      user_update_session.headers.update({"Authorization": f"Token {token}"})
 
-    user_update_session.patch(
+      user_update_session.patch(
         f"{url}/api/v1/users/{line[0]}",
-         json={"name":"+line[1]+","email":"++line[2]","type":"line[3]","verified":line[4],"hidden":line[5],"banned":line[6],"fields":[{"field_id":1,"value":"line[8]"},{"field_id":2,"value":"line[10]"},{"field_id":3,"value":"line[11]"}]},
-         headers={"Content-Type": "application/json"},
-    )
+        json={"name":"+line[1]+","email":"++line[2]","type":"line[3]","verified":line[4],"hidden":line[5],"banned":line[6],"fields":[{"field_id":1,"value":"line[8]"},{"field_id":2,"value":"line[10]"},{"field_id":3,"value":"line[11]"}]},
+        headers={"Content-Type": "application/json"},
+      )
 
 def get_usernames(url,token):
   username_id_csv = open('names_record.csv', 'w', newline='')
