@@ -8,57 +8,6 @@ def generate_hex():
   fullbits = hex_array[higherbits] + hex_array[lowerbits]
   return fullbits
 
-# def create_code_assign_record(url,token):
-#   if os.path.isfile('code_assign_record.csv') == False:
-#     code_assign_csv = open('code_assign_record.csv', 'w', newline='')
-
-#     code_assign_csv.write('ID,Full Name,Birth Month,User Binary,Paired Name,Paired Binary,XOR Result\n')
-#     print("[+] Code assign record file does not exist, file created.")
-#     print("[+] Filling file content...")
-
-#     userinfo_session = requests.Session()
-#     userinfo_session.headers.update({"Authorization": f"Token {token}"})
-#     with open("names_record.csv") as names_record:
-#       heading = next(names_record)
-
-#       names_reader = csv.reader(names_record)
-#       for line in names_reader:
-#         try:
-#           user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-#           user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-#           fullbits = generate_hex()
-#           code_assign_csv.write('%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits))
-#         except Exception:
-#           continue
-#   else:
-#     print("[+] File already exist, checking information...")
-#     ids = []
-#     with open("code_assign_record.csv") as code_assign:
-#       code_assign_reader = csv.DictReader(code_assign)
-
-#       for col in code_assign_reader:
-#         ids.append(col['ID'])
-#       code_assign.close()
-
-#     with open("names_record.csv") as names_record:
-#       heading = next(names_record)
-#       names_reader = csv.reader(names_record)
-#       code_assign_csv = open('code_assign_record.csv', 'a')
-#       userinfo_session = requests.Session()
-#       userinfo_session.headers.update({"Authorization": f"Token {token}"})
-#       for line in names_reader:
-#         if line[1] in ids:
-#           pass
-#         else:
-#           try:
-#             user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-#             user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-#             fullbits = generate_hex()
-#             code_assign_csv.write('%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits))
-#           except Exception:
-#             continue
-
-
 def create_xor_record(first_hex,second_hex):
   first_binary = (bin(int(first_hex, 16))[2:].zfill(8))
   second_binary = (bin(int(second_hex, 16))[2:].zfill(8))
@@ -66,11 +15,22 @@ def create_xor_record(first_hex,second_hex):
   return first_binary,second_binary,xor_result
 
 def update_user_profile(url,token):
-  pass
+  with open("users_info_record.csv") as users_record:
+    heading = next(users_record)
+    users_reader = csv.reader(users_record)
+    
+    for line in users_reader:
+      print(line[0])
+      print(line[1])
+      print(line[2])
+#     s = requests.Session()
+#     s.headers.update({"Authorization": f"Token {token}"})
 
-def generate_binary():
-    csv = open('code_assign_record.csv', 'w')
-
+#     r = s.post(
+#         f"{url}/api/v1/users/{line[0]}",
+#          json={"name":"user5","email":"user5@sampleuser.com","password":"user1","type":"user","verified":False,"hidden":False,"banned":False,"fields":[]},
+#          headers={"Content-Type": "application/json"},
+#     )
 
 def get_usernames(url,token):
   username_id_csv = open('names_record.csv', 'w', newline='')
@@ -178,6 +138,5 @@ if __name__ == "__main__":
   url = "http://209.114.126.63"
 
   get_usernames(url,token)
-#   create_code_assign_record(url,token)
   update_user_profile(url,token)
 #   add_new_challenge(url,token)
