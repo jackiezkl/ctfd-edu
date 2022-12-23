@@ -27,7 +27,7 @@ def create_code_assign_record(url,token):
           user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
           user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
           fullbits = generate_hex()
-          code_assign_csv.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
+          code_assign_csv.write('%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits))
         except Exception:
           continue
   else:
