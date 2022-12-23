@@ -26,7 +26,7 @@ def update_user_profile(url,token):
 #       print(line[0] + ":" +payload)
       r = user_update_session.patch(
         f"{url}/api/v1/users/{line[0]}",
-        json=payload,
+        json=f"{payload}",
         headers={"Content-Type": "application/json"},
       )
       print(r.json())
