@@ -66,7 +66,7 @@ def create_xor_record(first_hex,second_hex):
   return first_binary,second_binary,xor_result
 
 def update_user_profile(url,token):
-
+  pass
 def generate_binary():
     csv = open('code_assign_record.csv', 'w')
 
