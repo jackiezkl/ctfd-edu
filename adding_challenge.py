@@ -106,9 +106,7 @@ def get_usernames(url,token):
       value_1 = users_info_json['data']['fields'][0]['value']
       field_id_2 = users_info_json['data']['fields'][1]['field_id']
       value_2 = users_info_json['data']['fields'][1]['value']
-      field_id_3 = users_info_json['data']['fields'][2]['field_id']
-      value_3 = users_info_json['data']['fields'][2]['value']
-      users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,field_id_3,value_3))
+      users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2))
 #     except Exception:
 #       continue
   
