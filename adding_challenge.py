@@ -23,13 +23,13 @@ def update_user_profile(url,token):
       user_update_session = requests.Session()
       user_update_session.headers.update({"Authorization": f"Token {token}"})
       payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"'+line[3]+'","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+line[8]+'"},{"field_id":2,"value":"'+line[10]+'"},{"field_id":3,"value":"'+bin(int(line[11], 16))[2:].zfill(8)+'"}]}'
-      print(line[0] + ":" +payload)
-      user_update_session.patch(
+#       print(line[0] + ":" +payload)
+      r = user_update_session.patch(
         f"{url}/api/v1/users/{line[0]}",
         json=payload,
         headers={"Content-Type": "application/json"},
       )
-
+      print(r.json)
 def get_usernames(url,token):
   username_id_csv = open('names_record.csv', 'w', newline='')
   username_id_csv.write('username,id\n')
