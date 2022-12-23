@@ -46,16 +46,17 @@ def create_code_assign_record(url,token):
       for col in code_assign_reader:
         ids.append(col['ID'])
       code_assign.close()
-
+    print("test point 1")
     with open("names_record.csv") as names_record:
       heading = next(names_record)
       names_reader = csv.reader(names_record)
       code_assign_csv = open('code_assign_record.csv', 'w')
       for line in names_reader:
         if line[1] in ids:
-          print('%s exist' % line[1])
+          print("%s exist" % line[1])
           pass
         else:
+          print("test point2")
           try:
             user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
             user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
