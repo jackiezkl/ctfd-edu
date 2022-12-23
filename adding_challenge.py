@@ -1,6 +1,6 @@
 import requests,sys,json,csv,random,os
 
-def generate_binary():
+def generate_hex():
   hex_array = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
 
   higherbits = random.randint(0,15)
@@ -32,8 +32,7 @@ def create_code_assign_record(url,token):
         try:
           user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
           user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-          fullbits = generate_binary()
-  #         code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,first_binary,'',second_binary,xor_result))
+          fullbits = generate_hex()
           code_assign_csv.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
         except Exception:
           continue
@@ -60,7 +59,7 @@ def create_code_assign_record(url,token):
           try:
             user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
             user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
-            fullbits = generate_binary()
+            fullbits = generate_hex()
             code_assign_csv.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
           except Exception:
             continue
