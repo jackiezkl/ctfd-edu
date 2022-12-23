@@ -18,7 +18,7 @@ def update_user_profile(url,token):
   with open("users_info_record.csv") as users_record:
     heading = next(users_record)
     users_reader = csv.reader(users_record)
-    
+
     for line in users_reader:
       user_update_session = requests.Session()
       user_update_session.headers.update({"Authorization": f"Token {token}"})
@@ -38,7 +38,7 @@ def get_usernames(url,token):
   username_session = requests.Session()
   all_user_info_json = username_session.get(f"{url}/api/v1/users").json()
   total_number_of_users = all_user_info_json['meta']['pagination']['total']
-  
+
   for i in range(total_number_of_users):
     username_id_csv.write('%s,%s\n' % (all_user_info_json['data'][i]['name'],all_user_info_json['data'][i]['id']))
   username_id_csv.close()
