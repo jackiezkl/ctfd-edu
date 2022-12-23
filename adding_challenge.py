@@ -86,32 +86,67 @@ def get_usernames(url,token):
   username_id_csv.close()
   print("[+] Saved to names_record.csv")
 
-  with open("names_record.csv") as names_record:
-    heading = next(names_record)
-    id_reader = csv.reader(names_record)
-    users_info_csv = open('users_info_record.csv', 'w')
-    users_info_csv.write('id,name,email,type,verified,hidden,banned,field_id_1,value_1,field_id_2,value_2,hex\n')
-    usersinfo_session = requests.Session()
-    usersinfo_session.headers.update({"Authorization": f"Token {token}"})
-    for line in id_reader:
-#     try:
-      users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-      user_id = users_info_json['data']['id']
-      user_name = users_info_json['data']['name']
-      user_email = users_info_json['data']['email']
-      user_type = users_info_json['data']['type']
-      user_verified = users_info_json['data']['verified']
-      user_hidden = users_info_json['data']['hidden']
-      user_banned = users_info_json['data']['banned']
-      field_id_1 = users_info_json['data']['fields'][0]['field_id']
-      value_1 = users_info_json['data']['fields'][0]['value']
-      field_id_2 = users_info_json['data']['fields'][1]['field_id']
-      value_2 = users_info_json['data']['fields'][1]['value']
-      user_hex = generate_hex()
-      users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,user_hex))
-#     except Exception:
-#       continue
-  
+  if os.path.isfile('users_info_record.csv') == False:
+    with open("names_record.csv") as names_record:
+      heading = next(names_record)
+      id_reader = csv.reader(names_record)
+      users_info_csv = open('users_info_record.csv', 'w')
+      users_info_csv.write('id,name,email,type,verified,hidden,banned,field_id_1,value_1,field_id_2,value_2,hex\n')
+      print("[+] Users' info record file does not exist, file created.")
+      print("[+] Filling file content...")
+      usersinfo_session = requests.Session()
+      usersinfo_session.headers.update({"Authorization": f"Token {token}"})
+      for line in id_reader:
+        users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+        user_id = users_info_json['data']['id']
+        user_name = users_info_json['data']['name']
+        user_email = users_info_json['data']['email']
+        user_type = users_info_json['data']['type']
+        user_verified = users_info_json['data']['verified']
+        user_hidden = users_info_json['data']['hidden']
+        user_banned = users_info_json['data']['banned']
+        field_id_1 = users_info_json['data']['fields'][0]['field_id']
+        value_1 = users_info_json['data']['fields'][0]['value']
+        field_id_2 = users_info_json['data']['fields'][1]['field_id']
+        value_2 = users_info_json['data']['fields'][1]['value']
+        user_hex = generate_hex()
+        users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,user_hex))
+  else:
+    print("[+] File already exist, checking information...")
+    ids = []
+    with open("users_info_record.csv") as users_info_csv:
+      users_info_reader = csv.DictReader(users_info_csv)
+
+      for col in users_info_reader:
+        ids.append(col['id'])
+      users_info_csv.close()
+
+    with open("names_record.csv") as names_record:
+      heading = next(names_record)
+      names_reader = csv.reader(names_record)
+      users_info_record_csv = open('users_info_record.csv', 'a')
+      add_user_info_session = requests.Session()
+      add_user_info_session.headers.update({"Authorization": f"Token {token}"})
+      for line in names_reader:
+        if line[1] in ids:
+          pass
+        else:
+          users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+          user_id = users_info_json['data']['id']
+          user_name = users_info_json['data']['name']
+          user_email = users_info_json['data']['email']
+          user_type = users_info_json['data']['type']
+          user_verified = users_info_json['data']['verified']
+          user_hidden = users_info_json['data']['hidden']
+          user_banned = users_info_json['data']['banned']
+          field_id_1 = users_info_json['data']['fields'][0]['field_id']
+          value_1 = users_info_json['data']['fields'][0]['value']
+          field_id_2 = users_info_json['data']['fields'][1]['field_id']
+          value_2 = users_info_json['data']['fields'][1]['value']
+          user_hex = generate_hex()
+          users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,user_hex))
+
+    
 def update_pair(url,token):
   with open("code_assign_record.csv") as code_assign_record:
     heading = next(code_assign_record)
