@@ -6,12 +6,6 @@ def generate_hex():
   higherbits = random.randint(0,15)
   lowerbits = random.randint(0,15)
   fullbits = hex_array[higherbits] + hex_array[lowerbits]
-#   first_binary = (bin(int(first_fullbits, 16))[2:].zfill(8))
-#   higherbits = random.randint(0,15)
-#   lowerbits = random.randint(0,15)
-#   second_fullbits = hex_array[higherbits] + hex_array[lowerbits]
-#   second_binary = (bin(int(second_fullbits, 16))[2:].zfill(8))
-#   xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
   return fullbits
 
 def create_code_assign_record(url,token):
@@ -60,17 +54,20 @@ def create_code_assign_record(url,token):
             user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
             user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
             fullbits = generate_hex()
-            code_assign_csv.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
+            code_assign_csv.write('%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits))
           except Exception:
             continue
 
 
-def create_xor_record():
-  csv = open('xor_record.csv', 'w', newline='')
+def create_xor_record(first_hex,second_hex):
+  first_binary = (bin(int(first_hex, 16))[2:].zfill(8))
+  second_binary = (bin(int(second_hex, 16))[2:].zfill(8))
+  xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
+  return first_binary,second_binary,xor_result
 
-  csv.write('Name1,code1,name2,code2,XOR\n')
-  print("[+] Created XOR record file: xor_record.csv")
-  csv.close()
+def generate_binary()
+  csv = open('code_assign_record.csv', 'w')
+
 
 def get_usernames(url):
   csv = open('names_record.csv', 'w', newline='')
