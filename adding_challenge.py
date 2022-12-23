@@ -44,7 +44,7 @@ def create_code_assign_record(url,token):
       code_assign_reader = csv.reader(code_assign)
       ids = []
       for col in code_assign_reader:
-        ids.append(col['ID'])
+        ids.append(int(col['ID']))
       code_assign.close()
 
     with open("names_record.csv") as names_record:
