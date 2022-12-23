@@ -65,7 +65,7 @@ def create_xor_record(first_hex,second_hex):
   xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
   return first_binary,second_binary,xor_result
 
-def generate_binary()
+def generate_binary():
   csv = open('code_assign_record.csv', 'w')
 
 
