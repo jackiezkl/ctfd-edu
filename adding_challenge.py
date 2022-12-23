@@ -22,7 +22,7 @@ def update_user_profile(url,token):
     for line in users_reader:
       user_update_session = requests.Session()
       user_update_session.headers.update({"Authorization": f"Token {token}"})
-      payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"'+line[3]+'","verified":'+line[4].toLowerCase+',"hidden":'+line[5].toLowerCase+',"banned":'+line[6].toLowerCase+',"fields":[{"field_id":1,"value":"'+line[8]+'"},{"field_id":2,"value":"'+line[10]+'"},{"field_id":3,"value":"'+bin(int(line[11], 16))[2:].zfill(8)+'"}]}'
+      payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"'+line[3]+'","verified":'+line[4]+',"hidden":'+line[5]+',"banned":'+line[6]+',"fields":[{"field_id":1,"value":"'+line[8]+'"},{"field_id":2,"value":"'+line[10]+'"},{"field_id":3,"value":"'+bin(int(line[11], 16))[2:].zfill(8)+'"}]}'
       print(payload)
       user_update_session.patch(
         f"{url}/api/v1/users/{line[0]}",
@@ -60,9 +60,9 @@ def get_usernames(url,token):
         user_name = users_info_json['data']['name']
         user_email = users_info_json['data']['email']
         user_type = users_info_json['data']['type']
-        user_verified = users_info_json['data']['verified']
-        user_hidden = users_info_json['data']['hidden']
-        user_banned = users_info_json['data']['banned']
+        user_verified = users_info_json['data']['verified'].toLowerCase()
+        user_hidden = users_info_json['data']['hidden'].toLowerCase()
+        user_banned = users_info_json['data']['banned'].toLowerCase()
         field_id_1 = users_info_json['data']['fields'][0]['field_id']
         value_1 = users_info_json['data']['fields'][0]['value']
         field_id_2 = users_info_json['data']['fields'][1]['field_id']
@@ -95,9 +95,9 @@ def get_usernames(url,token):
           user_name = users_info_json['data']['name']
           user_email = users_info_json['data']['email']
           user_type = users_info_json['data']['type']
-          user_verified = users_info_json['data']['verified']
-          user_hidden = users_info_json['data']['hidden']
-          user_banned = users_info_json['data']['banned']
+          user_verified = users_info_json['data']['verified'].toLowerCase()
+          user_hidden = users_info_json['data']['hidden'].toLowerCase()
+          user_banned = users_info_json['data']['banned'].toLowerCase()
           field_id_1 = users_info_json['data']['fields'][0]['field_id']
           value_1 = users_info_json['data']['fields'][0]['value']
           field_id_2 = users_info_json['data']['fields'][1]['field_id']
