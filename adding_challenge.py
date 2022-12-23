@@ -39,24 +39,29 @@ def create_code_assign_record(url,token):
           continue
   else:
     print("[+] File already exist, checking information...")
-    with open("code_assign_record.csv","a") as code_assign:
+    with open("code_assign_record.csv") as code_assign:
       heading = next(code_assign)
       code_assign_reader = csv.reader(code_assign)
+      ids = []
+      for col in code_assign_reader:
+        ids.append(col['ID'])
+      code_assign.close()
 
     with open("names_record.csv") as names_record:
       heading = next(names_record)
       names_reader = csv.reader(names_record)
-        
-    for line in names_reader:
-      for row in code_assign_reader:
-        if line[1] == row[0]:
+      names_record.close()
+
+      code_assign_csv = open('code_assign_record.csv', 'w')
+      for line in names_reader:
+        if line[1] in ids:
           pass
         else:
           try:
             user_info = userinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
             user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
             fullbits = generate_binary()
-            code_assign.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
+            code_assign_csv.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
           except Exception:
             continue
 
