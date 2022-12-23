@@ -71,7 +71,7 @@ def generate_binary():
     csv = open('code_assign_record.csv', 'w')
 
 
-def get_usernames(url):
+def get_usernames(url,token):
   username_id_csv = open('names_record.csv', 'w', newline='')
   username_id_csv.write('username,id')
   print("[+] Created username record file: names_record.csv")
@@ -139,7 +139,7 @@ if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
   url = "http://209.114.126.63"
 
-  get_usernames(url)
+  get_usernames(url,token)
   create_code_assign_record(url,token)
   update_user_profile(url,token)
 #   add_new_challenge(url,token)
