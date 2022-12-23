@@ -15,7 +15,7 @@ def generate_binary():
   return fullbits
 
 def create_code_assign_record(url,token):
-  if os.path.isfile('code_assign_record') == False:
+  if os.path.isfile('code_assign_record.csv') == False:
     code_assign_csv = open('code_assign_record.csv', 'w', newline='')
 
     code_assign_csv.write('ID,Full Name,Birth Month,User Binary,Paired Name,Paired Binary,XOR Result\n')
