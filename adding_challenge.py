@@ -130,7 +130,6 @@ def get_usernames(url,token):
       add_user_info_session.headers.update({"Authorization": f"Token {token}"})
       for line in names_reader:
         if line[1] in ids:
-          print("Nothing new.")
           pass
         else:
           users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
@@ -148,7 +147,7 @@ def get_usernames(url,token):
           user_hex = generate_hex()
           print("[+] New user added.")
           users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,user_hex))
-      print("User information is up to date.")
+      print("[+] User information is up to date.")
 
 
 def update_pair(url,token):
