@@ -67,6 +67,7 @@ def create_xor_record(first_hex,second_hex):
 
 def update_user_profile(url,token):
   pass
+
 def generate_binary():
     csv = open('code_assign_record.csv', 'w')
 
@@ -89,7 +90,7 @@ def get_usernames(url,token):
     heading = next(names_record)
     id_reader = csv.reader(names_record)
     users_info_csv = open('users_info_record.csv', 'w')
-    users_info_csv.write('id,name,email,type,verified,hidden,banned,field_id_1,value_1,field_id_2,value_2,field_id_3,value_3\n')
+    users_info_csv.write('id,name,email,type,verified,hidden,banned,field_id_1,value_1,field_id_2,value_2,hex\n')
     usersinfo_session = requests.Session()
     usersinfo_session.headers.update({"Authorization": f"Token {token}"})
     for line in id_reader:
@@ -106,7 +107,8 @@ def get_usernames(url,token):
       value_1 = users_info_json['data']['fields'][0]['value']
       field_id_2 = users_info_json['data']['fields'][1]['field_id']
       value_2 = users_info_json['data']['fields'][1]['value']
-      users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2))
+      user_hex = generate_hex()
+      users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,user_hex))
 #     except Exception:
 #       continue
   
@@ -138,6 +140,6 @@ if __name__ == "__main__":
   url = "http://209.114.126.63"
 
   get_usernames(url,token)
-  create_code_assign_record(url,token)
+#   create_code_assign_record(url,token)
   update_user_profile(url,token)
 #   add_new_challenge(url,token)
