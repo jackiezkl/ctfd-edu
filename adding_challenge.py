@@ -17,7 +17,7 @@ def generate_binary():
 def create_code_assign_record(url,token):
   code_assign_csv = open('code_assign_record.csv', 'w', newline='')
 
-  code_assign_csv.write('Full name, Birth month, User binary, Paired name, Paired binary, XOR result\n')
+  code_assign_csv.write('ID,Full Name,Birth Month,User Binary,Paired Name,Paired Binary,XOR Result\n')
   print("[+] Created code assign record file: code_assign_record.csv")
 
 
@@ -33,7 +33,7 @@ def create_code_assign_record(url,token):
         user_full_name,user_birth_month = user_info['data']['fields'][0]['value'],user_info['data']['fields'][1]['value']
         fullbits = generate_binary()
 #         code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,first_binary,'',second_binary,xor_result))
-        code_assign_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_full_name,user_birth_month,fullbits,'','',''))
+        code_assign_csv.write('%s,%s,%s,%s,%s,%s,%s\n' % (line[1],user_full_name,user_birth_month,fullbits,'','',''))
       except Exception:
         continue
 
@@ -60,6 +60,10 @@ def get_usernames(url):
   csv.close()
   print("[+] Saved to names_record.csv")
 
+def update_pair(url,token):
+  with open("code_assign_record.csv") as code_assign_record:
+    heading = next(code_assign_record)
+
 def add_new_challenge(url,token):
   s = requests.Session()
   s.headers.update({"Authorization": f"Token {token}"})
@@ -85,4 +89,5 @@ if __name__ == "__main__":
 
   get_usernames(url)
   create_code_assign_record(url,token)
+  
 #   add_new_challenge(url,token)
