@@ -82,19 +82,19 @@ def get_usernames(url):
   total_number_of_users = all_user_info_json['meta']['pagination']['total']
   
   for i in range(total_number_of_users):
-    user_id = all_user_info_json['data']['id']
-    user_name = all_user_info_json['data']['name']
-    user_email = all_user_info_json['data']['email']
-    user_type = all_user_info_json['data']['type']
-    user_verified = all_user_info_json['data']['verified']
-    user_hidden = all_user_info_json['data']['hidden']
-    user_banned = all_user_info_json['data']['banned']
-    field_id_1 = all_user_info_json['data']['fields'][0]['field_id']
-    value_1 = all_user_info_json['data']['fields'][0]['value']
-    field_id_2 = all_user_info_json['data']['fields'][1]['field_id']
-    value_2 = all_user_info_json['data']['fields'][1]['value']
-    field_id_3 = all_user_info_json['data']['fields'][2]['field_id']
-    value_3 = all_user_info_json['data']['fields'][2]['value']
+    user_id = all_user_info_json['data'][i]['id']
+    user_name = all_user_info_json['data'][i]['name']
+    user_email = all_user_info_json['data'][i]['email']
+    user_type = all_user_info_json['data'][i]['type']
+    user_verified = all_user_info_json['data'][i]['verified']
+    user_hidden = all_user_info_json['data'][i]['hidden']
+    user_banned = all_user_info_json['data'][i]['banned']
+    field_id_1 = all_user_info_json['data'][i]['fields'][0]['field_id']
+    value_1 = all_user_info_json['data'][i]['fields'][0]['value']
+    field_id_2 = all_user_info_json['data'][i]['fields'][1]['field_id']
+    value_2 = all_user_info_json['data'][i]['fields'][1]['value']
+    field_id_3 = all_user_info_json['data'][i]['fields'][2]['field_id']
+    value_3 = all_user_info_json['data'][i]['fields'][2]['value']
     csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,field_id_3,value_3))
 
   csv.close()
