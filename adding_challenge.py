@@ -52,6 +52,7 @@ def create_code_assign_record(url,token):
       code_assign_csv = open('code_assign_record.csv', 'w')
       for line in names_reader:
         if line[1] in ids:
+          print('%s exist' % line[1])
           pass
         else:
           try:
