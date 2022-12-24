@@ -48,7 +48,7 @@ def get_usernames(url,token):
       heading = next(names_record)
       id_reader = csv.reader(names_record)
       users_info_csv = open('users_info_record.csv', 'w')
-      users_info_csv.write('id,name,field_1_value_1,field_2_value,hex\n')
+      users_info_csv.write('id,name,field_1_value_1,field_2_value,hex,paired_name,paired_hex,xor_result\n')
       print("[+] Users' info record file does not exist, file created.")
       print("[+] Filling file content...")
       usersinfo_session = requests.Session()
@@ -60,7 +60,7 @@ def get_usernames(url,token):
         field_1_value = users_info_json['data']['fields'][0]['value']
         field_2_value = users_info_json['data']['fields'][1]['value']
         user_hex = generate_hex()
-        users_info_csv.write('%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex))
+        users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
     print("[+] Accquired every user's information!")
   else:
     print("[+] User info file already exist, checking information...")
@@ -89,7 +89,7 @@ def get_usernames(url,token):
           field_2_value = users_info_json['data']['fields'][1]['value']
           user_hex = generate_hex()
           print("[+] New user added.")
-          users_info_record_csv.write('%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex))
+          users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
       print("[+] User information is up to date.")
 
 
