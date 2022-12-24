@@ -114,19 +114,26 @@ def add_new_challenge(url,token):
     json={"challenge_id":"4","content":"30101010","type":"static","data":""},
   )
 
-# def generate_pair_and_xor(url,token):
-#   with open("users_info_record.csv") as users_info_record:
-#     heading = next(users_info_record)
-#     user_info_dictreader = csv.DictReader(users_info_record)
-#     full_name=[]
-#     user_hex=[]
-#     paired_name=[]
-#     paired_hex=[]
-#     xor_result=[]
-#     for col in user_info_dictreader:
-#       full_name.append(col[full name
-#                        ids.append(col['id'])
-      
+def generate_pair_and_xor(url,token):
+  with open("users_info_record.csv") as users_info_record:
+    heading = next(users_info_record)
+    user_info_dictreader = csv.DictReader(users_info_record)
+    full_name=[]
+    user_hex=[]
+    paired_name=[]
+    paired_hex=[]
+    xor_result=[]
+    for col in user_info_dictreader:
+      full_name.append(col['field_1_value'])
+      user_hex.append(col['hex'])
+      paired_name.append(col['paired_name'])
+      paired_hex.append(col['paired_hex'])
+      xor_result.append(col['xor_result'])
+      print(full_name)
+      print(user_hex)
+      print(paired_name)
+      print(paired_hex)
+      print(xor_result)
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
@@ -136,7 +143,7 @@ if __name__ == "__main__":
     while True:
       get_usernames(url,token)
       update_user_profile(url,token)
-#       generate_pair_and_xor(url,token)
+      generate_pair_and_xor(url,token)
   except KeyboardInterrupt:
     print("Quit by user...")
       #   add_new_challenge(url,token)
