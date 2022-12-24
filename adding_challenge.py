@@ -152,9 +152,17 @@ def generate_pair_and_xor(url,token):
     with open("xor_record.csv",'w',newline='') as xor_record:
       col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result']
       writer = csv.DictWriter(xor_record, fieldnames=col_names)
-      
+      row=[]
       writer.writeheader()
-      writer.writecol(ids)
+      for n in range(len(ids)):
+        row[0] = ids[n]
+        row[1] = full_name[n]
+        row[2] = user_hex[n]
+        row[3] = paired_name[n]
+        row[4] = paired_hex[n]
+        row[5] = xor_result[n]
+        writer.writecol(row[n])
+        row=[]
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
