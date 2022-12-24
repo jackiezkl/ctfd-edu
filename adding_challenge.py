@@ -22,20 +22,13 @@ def update_user_profile(url,token):
     user_update_session.headers.update({"Authorization": f"Token {token}"})
     for line in users_reader:
       user_id = int(line[0])
-      print(line[0])
-      print(line[1])
-      print(line[2])
-      print(line[3])
-      print(line[4])
-      print(line[5])
-#       payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"user","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+line[3]+'"},{"field_id":2,"value":"'+line[4]+'"},{"field_id":3,"value":"'+bin(int(line[5], 16))[2:].zfill(8)+'"}]}'
       payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"user","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+line[3]+'"},{"field_id":2,"value":"'+line[4]+'"},{"field_id":3,"value":"'+bin(int(line[5], 16))[2:].zfill(8)+'"}]}'
-      r = user_update_session.patch(
+      user_update_session.patch(
         f"{url}/api/v1/users/{user_id}",
         json=json.loads(payload),
         headers={"Content-Type": "application/json"},
       )
-      print(r.json())
+
 def get_usernames(url,token):
   username_id_csv = open('names_record.csv', 'w', newline='')
   username_id_csv.write('username,id\n')
