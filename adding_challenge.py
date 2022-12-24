@@ -132,7 +132,7 @@ def generate_pair_and_xor(url,token):
       
       writer.writeheader()
       for n in range(len(ids)):
-        if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],n+1) is True:
+        if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
           row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+n+"'}"
           row_dict = ast.literal_eval(row)
           writer.writerow(row_dict)
@@ -156,7 +156,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
     f"{url}/api/v1/challenges",
     json=json.loads(payload))
 
-  payload2 = '{"challenge_id":"'+n+4+'","content":"'+xor+'","type":"static","data":""}'
+  payload2 = '{"challenge_id":"'+str(int(n)+4)+'","content":"'+xor+'","type":"static","data":""}'
   update_session.post(
     f"{url}/api/v1/flags",
     json=json.loads(payload2))
