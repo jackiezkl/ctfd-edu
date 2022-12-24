@@ -155,12 +155,12 @@ def generate_pair_and_xor(url,token):
       row=[]
       writer.writeheader()
       for n in range(len(ids)):
-        row[0] = ids[n]
-        row[1] = full_name[n]
-        row[2] = user_hex[n]
-        row[3] = paired_name[n]
-        row[4] = paired_hex[n]
-        row[5] = xor_result[n]
+        row.append(ids[n])
+        row.append(full_name[n])
+        row.append(user_hex[n])
+        row.append(paired_name[n])
+        row.append(paired_hex[n])
+        row.append(xor_result[n])
         writer.writecol(row[n])
         row=[]
 
