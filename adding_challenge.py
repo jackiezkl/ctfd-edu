@@ -163,6 +163,7 @@ def add_new_flag(url,token,last_id,n,xor,challenge_result):
   if challenge_result['success'] == True:
     payload = '{"challenge_id":"'+str(int(n)+int(last_id))+'","content":"'+xor+'","type":"static","data":""}'
     flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
+    print(flag_result['success'])
     try:
       if flag_result['success'] == True:
         print("[+] New challenge and flag added.")
