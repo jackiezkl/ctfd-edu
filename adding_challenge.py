@@ -28,10 +28,11 @@ def update_user_profile(url,token):
       print(line[3])
       print(line[4])
       print(line[5])
-      payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"user","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+line[3]+'"},{"field_id":2,"value":"'+line[4]+'"},{"field_id":3,"value":"'+bin(int(line[5], 16))[2:].zfill(8)+'"}]}'
+#       payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"user","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+line[3]+'"},{"field_id":2,"value":"'+line[4]+'"},{"field_id":3,"value":"'+bin(int(line[5], 16))[2:].zfill(8)+'"}]}'
+      rayload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"user","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+line[3]+'"},{"field_id":2,"value":"'+line[4]+'"},{"field_id":3,"value":"'+bin(int(line[5], 16))[2:].zfill(8)+'"}]}'
       r = user_update_session.patch(
         f"{url}/api/v1/users/{user_id}",
-        json=f"{payload}",
+        json=payload,
         headers={"Content-Type": "application/json"},
       )
       print(r.json())
