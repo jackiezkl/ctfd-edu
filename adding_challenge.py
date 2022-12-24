@@ -137,7 +137,7 @@ def generate_pair_and_xor(url,token):
         try:
           paired_name[n] = full_name[n+1]
           paired_hex[n] = user_hex[n+1]
-          xor_result[n] = (bin(int(paired_hex[n], 16) ^ int(user_hex[n+1], 16))[2:].zfill(8))
+          xor_result[n] = (bin(int(paired_hex[n], 16) ^ int(user_hex[n], 16))[2:].zfill(8))
         except Exception:
           pass
       else:
