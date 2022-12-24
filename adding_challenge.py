@@ -116,7 +116,6 @@ def add_new_challenge(url,token):
 
 def generate_pair_and_xor(url,token):
   with open("users_info_record.csv") as users_info_record:
-    heading = next(users_info_record)
     user_info_dictreader = csv.DictReader(users_info_record)
     full_name=[]
     user_hex=[]
