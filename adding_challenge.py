@@ -155,7 +155,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
   challenge_result = update_session.post(
     f"{url}/api/v1/challenges",
     json=json.loads(payload))
-  print(challenge_result['success'])
+  print(challenge_result.json()['success'])
 
   if challenge_result['success'] == 'true':
     payload2 = '{"challenge_id":"'+str(int(n)+4)+'","content":"'+xor+'","type":"static","data":""}'
