@@ -3,16 +3,16 @@ import requests,sys,json,csv,random,os
 def generate_hex():
   hex_array = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
 
-  higherbits = random.randint(0,15)
-  lowerbits = random.randint(0,15)
-  fullbits = hex_array[higherbits] + hex_array[lowerbits]
-  return fullbits
+  higher_four_bits = random.randint(0,15)
+  lower_four_bits = random.randint(0,15)
+  full_eight_bits = hex_array[higher_four_bits] + hex_array[lower_four_bits]
+  return full_eight_bits
 
-def create_xor_record(first_hex,second_hex):
-  first_binary = (bin(int(first_hex, 16))[2:].zfill(8))
-  second_binary = (bin(int(second_hex, 16))[2:].zfill(8))
-  xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
-  return first_binary,second_binary,xor_result
+# def create_xor_record(first_hex,second_hex):
+#   first_binary = (bin(int(first_hex, 16))[2:].zfill(8))
+#   second_binary = (bin(int(second_hex, 16))[2:].zfill(8))
+#   xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
+#   return first_binary,second_binary,xor_result
 
 def update_user_profile(url,token):
   with open("users_info_record.csv") as users_record:
@@ -28,6 +28,7 @@ def update_user_profile(url,token):
         json=json.loads(payload),
         headers={"Content-Type": "application/json"},
       )
+    users_record.close()
 
 def get_usernames(url,token):
   username_id_csv = open('names_record.csv', 'w', newline='')
@@ -61,6 +62,7 @@ def get_usernames(url,token):
         field_2_value = users_info_json['data']['fields'][1]['value']
         user_hex = generate_hex()
         users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
+      names_record.close()
     print("[+] Accquired every user's information!")
   else:
     print("[+] User info file already exist, checking information...")
@@ -90,12 +92,8 @@ def get_usernames(url,token):
           user_hex = generate_hex()
           print("[+] New user added.")
           users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
+      names_record.close()
       print("[+] User information is up to date.")
-
-
-def update_pair(url,token):
-  with open("code_assign_record.csv") as code_assign_record:
-    heading = next(code_assign_record)
 
 def add_new_challenge(url,token):
   s = requests.Session()
@@ -116,6 +114,10 @@ def add_new_challenge(url,token):
     json={"challenge_id":"4","content":"30101010","type":"static","data":""},
   )
 
+def generate_pair_and_xor(url,token):
+  with open("users_info_record.csv") as code_assign_record:
+    heading = next(code_assign_record)  
+
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
   url = "http://209.114.126.63"
@@ -124,6 +126,7 @@ if __name__ == "__main__":
     while True:
       get_usernames(url,token)
       update_user_profile(url,token)
+      generate_pair_and_xor(url,token)
   except KeyboardInterrupt:
     print("Quit by user...")
       #   add_new_challenge(url,token)
