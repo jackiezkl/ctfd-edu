@@ -117,12 +117,14 @@ def add_new_challenge(url,token):
 def generate_pair_and_xor(url,token):
   with open("users_info_record.csv") as users_info_record:
     user_info_dictreader = csv.DictReader(users_info_record)
+    ids=[]
     full_name=[]
     user_hex=[]
     paired_name=[]
     paired_hex=[]
     xor_result=[]
     for col in user_info_dictreader:
+      ids.append(col['id'])
       full_name.append(col['field_1_value'])
       user_hex.append(col['hex'])
       paired_name.append(col['paired_name'])
