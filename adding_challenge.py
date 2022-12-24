@@ -1,5 +1,6 @@
 import requests,sys,json,csv,random,os,ast
 
+# randomly generate a hex string (8bits) to be used as binaries later
 def generate_hex():
   hex_array = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
 
@@ -8,12 +9,7 @@ def generate_hex():
   full_eight_bits = hex_array[higher_four_bits] + hex_array[lower_four_bits]
   return full_eight_bits
 
-# def create_xor_record(first_hex,second_hex):
-#   first_binary = (bin(int(first_hex, 16))[2:].zfill(8))
-#   second_binary = (bin(int(second_hex, 16))[2:].zfill(8))
-#   xor_result = (bin(int(first_fullbits, 16) ^ int(second_fullbits, 16))[2:].zfill(8))
-#   return first_binary,second_binary,xor_result
-
+# update the user profile to add binaries to each user
 def update_user_profile(url,token):
   with open("users_info_record.csv") as users_record:
     heading = next(users_record)
@@ -30,6 +26,7 @@ def update_user_profile(url,token):
       )
     users_record.close()
 
+# collect username and id information for other functions to use
 def get_usernames(url,token):
   username_id_csv = open('names_record.csv', 'w', newline='')
   username_id_csv.write('username,id\n')
@@ -95,6 +92,7 @@ def get_usernames(url,token):
       names_record.close()
       print("[+] User information is up to date.")
 
+# pair up users so the coordination challenges can be created
 def generate_pair_and_xor(url,token):
   with open("users_info_record.csv") as users_info_record:
     user_info_dictreader = csv.DictReader(users_info_record)
@@ -144,6 +142,7 @@ def generate_pair_and_xor(url,token):
           writer.writerow(row_dict)
           row=''
 
+# add new coordination challenges
 def add_new_challenge(url,token,first_name,second_name,xor,n):
   id_check_session = requests.Session()
   id_check_session.headers.update({"Authorization": f"Token {token}"})
@@ -157,6 +156,8 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
 
   add_new_flag(url,token,last_id,n,xor,challenge_result)
   update_session.close()
+
+# add corresponding flags for the new challenges
 def add_new_flag(url,token,last_id,n,xor,challenge_result):
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
