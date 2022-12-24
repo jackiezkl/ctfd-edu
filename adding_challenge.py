@@ -155,9 +155,12 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
   payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease use private one-on-one chat function.","value":"24","state":"visible","type":"standard"}'
   challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
 
+  add_new_flag(url,token,last_id,n,xor,challenge_result)
+
+def add_new_flag(url,token,last_id,n,xor,challenge_result):
   if challenge_result['success'] == True:
-    payload2 = '{"challenge_id":"'+str(int(n)+int(last_id))+'","content":"'+xor+'","type":"static","data":""}'
-    flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload2)).json()
+    payload = '{"challenge_id":"'+str(int(n)+int(last_id))+'","content":"'+xor+'","type":"static","data":""}'
+    flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
     try:
       if flag_result['success'] == 'true':
         print("[+] New challenge and flag added.")
@@ -168,7 +171,6 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
   else:
     print("[+] Error when adding challenge.")
     return False
-
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
