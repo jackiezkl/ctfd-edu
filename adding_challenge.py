@@ -115,8 +115,8 @@ def add_new_challenge(url,token):
   )
 
 def generate_pair_and_xor(url,token):
-  with open("users_info_record.csv") as code_assign_record:
-    heading = next(code_assign_record)  
+  with open("users_info_record.csv") as users_info_record:
+    heading = next(users_info_record)
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
