@@ -151,7 +151,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
 
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
-  payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Retrieve secret codes from "**'+first_name+'**" and "**'+second_name+'**".\r\n\r\nReturn the XOR of the two binary sequances.\r\n\r\nThe flag is in the format:<code>flag{01010101}</code>\r\n\r\nPlease use private one-on-one chat function.","value":"24","state":"visible","type":"standard"}'
+  payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Retrieve secret codes from "**'+first_name+'**" and "**'+second_name+'**".\r\n\r\nReturn the XOR of the two binary sequances.\r\n\r\nThe flag is in the format <code>flag{01010101}</code>\r\n\r\nPlease use private one-on-one chat function.","value":"24","state":"visible","type":"standard"}'
   update_session.post(
     f"{url}/api/v1/challenges",
     json=json.loads(payload))
