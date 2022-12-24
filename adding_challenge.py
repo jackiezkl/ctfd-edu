@@ -142,6 +142,7 @@ def generate_pair_and_xor(url,token):
           pass
       else:
         pass
+    print(ids)
     print(full_name)
     print(user_hex)
     print(paired_name)
