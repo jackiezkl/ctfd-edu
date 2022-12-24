@@ -22,7 +22,7 @@ def update_user_profile(url,token):
     user_update_session.headers.update({"Authorization": f"Token {token}"})
     for line in users_reader:
       user_id = int(line[0])
-      payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"'+line[3]+'","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+line[8]+'"},{"field_id":2,"value":"'+line[10]+'"},{"field_id":3,"value":"'+bin(int(line[11], 16))[2:].zfill(8)+'"}]}'
+      payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"user","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+line[3]+'"},{"field_id":2,"value":"'+line[4]+'"},{"field_id":3,"value":"'+bin(int(line[5], 16))[2:].zfill(8)+'"}]}'
       r = user_update_session.patch(
         f"{url}/api/v1/users/{user_id}",
         json=f"{payload}",
@@ -48,7 +48,7 @@ def get_usernames(url,token):
       heading = next(names_record)
       id_reader = csv.reader(names_record)
       users_info_csv = open('users_info_record.csv', 'w')
-      users_info_csv.write('id,name,email,type,verified,hidden,banned,field_id_1,value_1,field_id_2,value_2,hex\n')
+      users_info_csv.write('id,name,email,field_1_value_1,field_2_value,hex\n')
       print("[+] Users' info record file does not exist, file created.")
       print("[+] Filling file content...")
       usersinfo_session = requests.Session()
@@ -58,16 +58,10 @@ def get_usernames(url,token):
         user_id = users_info_json['data']['id']
         user_name = users_info_json['data']['name']
         user_email = users_info_json['data']['email']
-        user_type = users_info_json['data']['type']
-        user_verified = users_info_json['data']['verified']
-        user_hidden = users_info_json['data']['hidden']
-        user_banned = users_info_json['data']['banned']
-        field_id_1 = users_info_json['data']['fields'][0]['field_id']
-        value_1 = users_info_json['data']['fields'][0]['value']
-        field_id_2 = users_info_json['data']['fields'][1]['field_id']
-        value_2 = users_info_json['data']['fields'][1]['value']
+        field_1_value = users_info_json['data']['fields'][0]['value']
+        field_2_value = users_info_json['data']['fields'][1]['value']
         user_hex = generate_hex()
-        users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,user_hex))
+        users_info_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,field_1_value,field_2_value,user_hex))
     print("[+] Accquired every user's information!")
   else:
     print("[+] File already exist, checking information...")
@@ -93,17 +87,11 @@ def get_usernames(url,token):
           user_id = users_info_json['data']['id']
           user_name = users_info_json['data']['name']
           user_email = users_info_json['data']['email']
-          user_type = users_info_json['data']['type']
-          user_verified = users_info_json['data']['verified']
-          user_hidden = users_info_json['data']['hidden']
-          user_banned = users_info_json['data']['banned']
-          field_id_1 = users_info_json['data']['fields'][0]['field_id']
-          value_1 = users_info_json['data']['fields'][0]['value']
-          field_id_2 = users_info_json['data']['fields'][1]['field_id']
-          value_2 = users_info_json['data']['fields'][1]['value']
+          field_1_value = users_info_json['data']['fields'][0]['value']
+          field_2_value = users_info_json['data']['fields'][1]['value']
           user_hex = generate_hex()
           print("[+] New user added.")
-          users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,user_type,user_verified,user_hidden,user_banned,field_id_1,value_1,field_id_2,value_2,user_hex))
+          users_info_record_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,field_1_value,field_2_value,user_hex))
       print("[+] User information is up to date.")
 
 
