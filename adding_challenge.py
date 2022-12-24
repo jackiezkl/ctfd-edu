@@ -148,7 +148,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
   id_check_session = requests.Session()
   id_check_session.headers.update({"Authorization": f"Token {token}"})
   id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
-  print(id_check_result['data'][-1]['id'])
+  last_id = id_check_result['data'][-1]['id']
 
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
@@ -156,7 +156,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
   challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
 
   if challenge_result['success'] == True:
-    payload2 = '{"challenge_id":"'+str(int(n)+4)+'","content":"'+xor+'","type":"static","data":""}'
+    payload2 = '{"challenge_id":"'+str(int(n)+int(last_id))+'","content":"'+xor+'","type":"static","data":""}'
     flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload2)).json()
     try:
       if flag_result['success'] == 'true':
