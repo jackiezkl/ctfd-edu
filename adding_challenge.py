@@ -132,7 +132,7 @@ def generate_pair_and_xor(url,token):
       
       writer.writeheader()
       for n in range(len(ids)):
-        if add_new_challenge(url,token,full_name[n],pared_name[n],xor_result[n],n) is True:
+        if add_new_challenge(url,token,full_name[n],pared_name[n],xor_result[n],n+1) is True:
           row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+n+"'}"
           row_dict = ast.literal_eval(row)
           writer.writerow(row_dict)
@@ -144,28 +144,22 @@ def generate_pair_and_xor(url,token):
           writer.writerow(row_dict)
           row=''
 
-def add_new_challenge(url,token,first_name,second_name,xor):
+def add_new_challenge(url,token,first_name,second_name,xor,n):
 #   with open('xor_record.csv') as xor_record:
 #     header = next(xor_record)
 #     xor_reder = csv.reader(xor_record)
 
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
-  payload = 
+  payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Retrieve secret codes from ``**'+first_name+'**`` and ``**'+second_name+'**``.\r\n\r\nReturn the XOR of the two binary sequances.\r\n\r\nThe flag is in the format:``flag{01010101}``\r\n\r\nPlease use private one-on-one chat function.","value":"24","state":"visible","type":"standard"}'
   update_session.post(
     f"{url}/api/v1/challenges",
-    json={"name":"XOR Challenge 3",
-           "category":"Coordination",
-           "description":"Retrieve \"**Tom**\" and \"**Ashley**\"'s secret  8-bit number\r\n\r\nReturn the XOR of these two binary sequences.\r\n\r\nThe flag is in the format:``flag{01010101}``\r\n\r\nplease use private one-on-one chat function.",
-           "value":"24",
-           "state":"visible",
-           "type":"standard"},
-  )
+    json=json.loads(payload))
 
+  payload2 = '{"challenge_id":"'+n+4+'","content":"'+xor+'","type":"static","data":""}
   update_session.post(
     f"{url}/api/v1/flags",
-    json={"challenge_id":"4","content":"30101010","type":"static","data":""},
-  )
+    json=json.loads(payload2))
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
