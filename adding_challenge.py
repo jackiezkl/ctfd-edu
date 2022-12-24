@@ -160,6 +160,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
   update_session.post(
     f"{url}/api/v1/flags",
     json=json.loads(payload2))
+  return True
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
