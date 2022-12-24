@@ -22,9 +22,7 @@ def update_user_profile(url,token):
     user_update_session.headers.update({"Authorization": f"Token {token}"})
     for line in users_reader:
       user_id = int(line[0])
-#       payload = '{"name":"'+line[1]+'","email":"'+line[2]+'","type":"user","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+line[3]+'"},{"field_id":2,"value":"'+line[4]+'"},{"field_id":3,"value":"'+bin(int(line[5], 16))[2:].zfill(8)+'"}]}'
-      payload = '{"fields":[{"field_id":3,"value":"'+bin(int(line[5], 16))[2:].zfill(8)+'"}]}'
-
+      payload = '{"fields":[{"field_id":3,"value":"'+bin(int(line[4], 16))[2:].zfill(8)+'"}]}'
       user_update_session.patch(
         f"{url}/api/v1/users/{user_id}",
         json=json.loads(payload),
@@ -50,7 +48,7 @@ def get_usernames(url,token):
       heading = next(names_record)
       id_reader = csv.reader(names_record)
       users_info_csv = open('users_info_record.csv', 'w')
-      users_info_csv.write('id,name,email,field_1_value_1,field_2_value,hex\n')
+      users_info_csv.write('id,name,field_1_value_1,field_2_value,hex\n')
       print("[+] Users' info record file does not exist, file created.")
       print("[+] Filling file content...")
       usersinfo_session = requests.Session()
@@ -59,11 +57,10 @@ def get_usernames(url,token):
         users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
         user_id = users_info_json['data']['id']
         user_name = users_info_json['data']['name']
-        user_email = users_info_json['data']['email']
         field_1_value = users_info_json['data']['fields'][0]['value']
         field_2_value = users_info_json['data']['fields'][1]['value']
         user_hex = generate_hex()
-        users_info_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,field_1_value,field_2_value,user_hex))
+        users_info_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex))
     print("[+] Accquired every user's information!")
   else:
     print("[+] User info file already exist, checking information...")
@@ -88,12 +85,11 @@ def get_usernames(url,token):
           users_info_json = add_user_info_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
           user_id = users_info_json['data']['id']
           user_name = users_info_json['data']['name']
-          user_email = users_info_json['data']['email']
           field_1_value = users_info_json['data']['fields'][0]['value']
           field_2_value = users_info_json['data']['fields'][1]['value']
           user_hex = generate_hex()
           print("[+] New user added.")
-          users_info_record_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,field_1_value,field_2_value,user_hex))
+          users_info_record_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex))
       print("[+] User information is up to date.")
 
 
