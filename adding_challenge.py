@@ -156,7 +156,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
     f"{url}/api/v1/challenges",
     json=json.loads(payload))
 
-  payload2 = '{"challenge_id":"'+n+4+'","content":"'+xor+'","type":"static","data":""}
+  payload2 = '{"challenge_id":"'+n+4+'","content":"'+xor+'","type":"static","data":""}'
   update_session.post(
     f"{url}/api/v1/flags",
     json=json.loads(payload2))
