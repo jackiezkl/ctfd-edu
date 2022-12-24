@@ -94,6 +94,12 @@ def get_usernames(url,token):
 
 # pair up users so the coordination challenges can be created
 def generate_pair_and_xor(url,token):
+  id_check_session = requests.Session()
+  id_check_session.headers.update({"Authorization": f"Token {token}"})
+  id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
+  last_id = id_check_result['data'][-1]['id']
+  id_check_session.close()
+  
   with open("users_info_record.csv") as users_info_record:
     user_info_dictreader = csv.DictReader(users_info_record)
     ids=[]
@@ -130,7 +136,7 @@ def generate_pair_and_xor(url,token):
       
       writer.writeheader()
       for n in range(len(ids)):
-        if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
+        if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1),last_id) is True:
           row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
           row_dict = ast.literal_eval(row)
           writer.writerow(row_dict)
@@ -143,12 +149,7 @@ def generate_pair_and_xor(url,token):
           row=''
 
 # add new coordination challenges
-def add_new_challenge(url,token,first_name,second_name,xor,n):
-  id_check_session = requests.Session()
-  id_check_session.headers.update({"Authorization": f"Token {token}"})
-  id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
-  last_id = id_check_result['data'][-1]['id']
-
+def add_new_challenge(url,token,first_name,second_name,xor,n,last_id):
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
   payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease use private one-on-one chat function.","value":"24","state":"visible","type":"standard"}'
