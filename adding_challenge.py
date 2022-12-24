@@ -161,7 +161,7 @@ def generate_pair_and_xor(url,token):
         row.append(paired_name[n])
         row.append(paired_hex[n])
         row.append(xor_result[n])
-        writer.writecol(row[n])
+        writer.writerow(row[n])
         row=[]
 
 if __name__ == "__main__":
