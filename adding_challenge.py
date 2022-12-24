@@ -145,9 +145,10 @@ def generate_pair_and_xor(url,token):
           row=''
 
 def add_new_challenge(url,token,first_name,second_name,xor,n):
-#   with open('xor_record.csv') as xor_record:
-#     header = next(xor_record)
-#     xor_reder = csv.reader(xor_record)
+  id_check_session = requests.Session()
+  id_check_session.headers.update({"Authorization": f"Token {token}"})
+  id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
+  print(id_check_result['data'][-1]['id'])
 
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
@@ -161,9 +162,6 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
       if flag_result['success'] == 'true':
         print("[+] New challenge and flag added.")
         return True
-#       else:
-#         print("[+] Challenge added but flag was not.")
-#         return False
     except Exception:
       print("[+] Error when adding new flag.")
       return False
