@@ -122,7 +122,7 @@ if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
   url = "http://209.114.126.63"
 
-  Try:
+  try:
     while True:
       get_usernames(url,token)
       update_user_profile(url,token)
