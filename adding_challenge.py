@@ -139,7 +139,7 @@ def generate_pair_and_xor(url,token):
           row=''
         else:
           print("[+] Error when creating challenge for %s and %s" % (full_name[n],paired_name[n]))
-          row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'no',challenge_number':'"+str(int(n)+1)+"'}"
+          row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'no','challenge_number':'"+str(int(n)+1)+"'}"
           row_dict = ast.literal_eval(row)
           writer.writerow(row_dict)
           row=''
