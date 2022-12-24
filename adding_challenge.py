@@ -138,6 +138,8 @@ def generate_pair_and_xor(url,token):
           xor_result[n] = (bin(int(paired_hex[n], 16) ^ int(user_hex[n+1], 16))[2:].zfill(8))
         except Exception:
           pass
+      else:
+        pass
     print(full_name)
     print(user_hex)
     print(paired_name)
