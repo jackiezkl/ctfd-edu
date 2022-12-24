@@ -136,7 +136,7 @@ if __name__ == "__main__":
     while True:
       get_usernames(url,token)
       update_user_profile(url,token)
-      generate_pair_and_xor(url,token)
+#       generate_pair_and_xor(url,token)
   except KeyboardInterrupt:
     print("Quit by user...")
       #   add_new_challenge(url,token)
