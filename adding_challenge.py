@@ -64,7 +64,7 @@ def get_usernames(url,token):
         users_info_csv.write('%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,user_email,field_1_value,field_2_value,user_hex))
     print("[+] Accquired every user's information!")
   else:
-    print("[+] File already exist, checking information...")
+    print("[+] User info file already exist, checking information...")
     ids = []
     with open("users_info_record.csv") as users_info_csv:
       users_info_reader = csv.DictReader(users_info_csv)
