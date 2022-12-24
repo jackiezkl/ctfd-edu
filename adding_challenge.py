@@ -49,7 +49,7 @@ def get_usernames(url,token):
       heading = next(names_record)
       id_reader = csv.reader(names_record)
       users_info_csv = open('users_info_record.csv', 'w')
-      users_info_csv.write('id,name,field_1_value_1,field_2_value,hex,paired_name,paired_hex,xor_result\n')
+      users_info_csv.write('id,name,field_1_value,field_2_value,hex,paired_name,paired_hex,xor_result\n')
       print("[+] Users' info record file does not exist, file created.")
       print("[+] Filling file content...")
       usersinfo_session = requests.Session()
@@ -117,6 +117,16 @@ def add_new_challenge(url,token):
 def generate_pair_and_xor(url,token):
   with open("users_info_record.csv") as users_info_record:
     heading = next(users_info_record)
+    user_info_dictreader = csv.DictReader(users_info_record)
+    full_name=[]
+    user_hex=[]
+    paired_name=[]
+    paired_hex=[]
+    xor_result=[]
+    for col in user_info_dictreader:
+      full_name.append(col[full name
+                       ids.append(col['id'])
+      
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
