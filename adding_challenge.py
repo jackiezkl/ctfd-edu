@@ -156,28 +156,25 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
     f"{url}/api/v1/challenges",
     json=json.loads(payload))
 
-  try:
-    if challenge_result['success'] == 'true':
-      payload2 = '{"challenge_id":"'+str(int(n)+4)+'","content":"'+xor+'","type":"static","data":""}'
-      flag_result = update_session.post(
-        f"{url}/api/v1/flags",
-        json=json.loads(payload2))
-      try:
-        if flag_result['success'] == 'true':
-          print("[+] New challenge and flag added.")
-          return True
-        else:
-          print("[+] Error when adding flag.")
-          return False
-      except Exception:
-        print("[+] Error when adding new flag.")
-        return False
-    else:
-      print("[+] Error when adding challenge.")
+  if challenge_result['success'] == 'true':
+    payload2 = '{"challenge_id":"'+str(int(n)+4)+'","content":"'+xor+'","type":"static","data":""}'
+    flag_result = update_session.post(
+      f"{url}/api/v1/flags",
+      json=json.loads(payload2))
+    try:
+      if flag_result['success'] == 'true':
+        print("[+] New challenge and flag added.")
+        return True
+#       else:
+#         print("[+] Challenge added but flag was not.")
+#         return False
+    except Exception:
+      print("[+] Error when adding new flag.")
       return False
-  except Exception:
-    print("[+] Error when adding new challenge.")
+  else:
+    print("[+] Error when adding challenge.")
     return False
+
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
