@@ -125,6 +125,7 @@ def generate_pair_and_xor(url,token):
     xor_result=[]
     for col in user_info_dictreader:
       ids.append(col['id'])
+      bin(int(first_hex, 16))[2:].zfill(8)
       full_name.append(col['field_1_value'])
       user_hex.append(col['hex'])
       paired_name.append(col['paired_name'])
@@ -138,6 +139,8 @@ def generate_pair_and_xor(url,token):
           paired_name[n] = full_name[n+1]
           paired_hex[n] = user_hex[n+1]
           xor_result[n] = (bin(int(paired_hex[n], 16) ^ int(user_hex[n], 16))[2:].zfill(8))
+          user_hex[n] = bin(int(user_hex[n],16))[2:].zfill(8)
+          paired_hex[n] = bin(int(paired_hex_hex[n],16))[2:].zfill(8)
         except Exception:
           pass
       else:
