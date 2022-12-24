@@ -125,7 +125,6 @@ def generate_pair_and_xor(url,token):
     xor_result=[]
     for col in user_info_dictreader:
       ids.append(col['id'])
-      bin(int(first_hex, 16))[2:].zfill(8)
       full_name.append(col['field_1_value'])
       user_hex.append(col['hex'])
       paired_name.append(col['paired_name'])
