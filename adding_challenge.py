@@ -156,16 +156,15 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
   challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
 
   add_new_flag(url,token,last_id,n,xor,challenge_result)
-
+  update_session.close()
 def add_new_flag(url,token,last_id,n,xor,challenge_result):
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
   if challenge_result['success'] == True:
     payload = '{"challenge_id":"'+str(int(n)+int(last_id))+'","content":"'+xor+'","type":"static","data":""}'
     flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
-    print(flag_result)
     try:
-      if flag_result['success'] == 'true':
+      if flag_result['success'] == True:
         print("[+] New challenge and flag added.")
         return True
     except Exception:
