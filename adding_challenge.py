@@ -156,7 +156,7 @@ def generate_pair_and_xor(url,token):
       writer.writeheader()
       for n in range(len(ids)):
         row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"'}"
-        row_dict = ast.literal.eval(row)
+        row_dict = ast.literal_eval(row)
         writer.writerow(row_dict)
         row=''
 
