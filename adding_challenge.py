@@ -129,20 +129,20 @@ def generate_pair_and_xor(url,token):
       paired_hex.append(col['paired_hex'])
       xor_result.append(col['xor_result'])
     users_info_record.close()
-    print(full_name)
-#     print(user_hex)
-    print(paired_name)
-#     print(paired_hex)
-#     print(xor_result)
 
     for n in range(len(paired_name)):
       if paired_name[n] == '':
         try:
           paired_name[n] = full_name[n+1]
+          paired_hex[n] = user_hex[n+1]
+          xor_result[n] = (bin(int(paired_hex[n], 16) ^ int(user_hex[n+1], 16))[2:].zfill(8))
         except Exception:
           pass
     print(full_name)
+    print(user_hex)
     print(paired_name)
+    print(paired_hex)
+    print(xor_result)
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
