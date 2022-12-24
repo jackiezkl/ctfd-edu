@@ -128,6 +128,7 @@ def generate_pair_and_xor(url,token):
       paired_name.append(col['paired_name'])
       paired_hex.append(col['paired_hex'])
       xor_result.append(col['xor_result'])
+    users_info_record.close()
     print(full_name)
     print(user_hex)
     print(paired_name)
@@ -138,11 +139,11 @@ if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
   url = "http://209.114.126.63"
 
-  try:
-    while True:
-      get_usernames(url,token)
-      update_user_profile(url,token)
-      generate_pair_and_xor(url,token)
-  except KeyboardInterrupt:
-    print("Quit by user...")
+#   try:
+#     while True:
+  get_usernames(url,token)
+  update_user_profile(url,token)
+  generate_pair_and_xor(url,token)
+#   except KeyboardInterrupt:
+#     print("Quit by user...")
       #   add_new_challenge(url,token)
