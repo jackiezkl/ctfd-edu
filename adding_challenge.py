@@ -128,11 +128,11 @@ def generate_pair_and_xor(url,token):
       paired_name.append(col['paired_name'])
       paired_hex.append(col['paired_hex'])
       xor_result.append(col['xor_result'])
-      print(full_name)
-      print(user_hex)
-      print(paired_name)
-      print(paired_hex)
-      print(xor_result)
+    print(full_name)
+    print(user_hex)
+    print(paired_name)
+    print(paired_hex)
+    print(xor_result)
 
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
