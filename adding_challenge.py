@@ -148,25 +148,37 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
 #   with open('xor_record.csv') as xor_record:
 #     header = next(xor_record)
 #     xor_reder = csv.reader(xor_record)
-  try:
-    update_session = requests.Session()
-    update_session.headers.update({"Authorization": f"Token {token}"})
-    payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease use private one-on-one chat function.","value":"24","state":"visible","type":"standard"}'
-    challenge_result = update_session.post(
-      f"{url}/api/v1/challenges",
-      json=json.loads(payload))
-    print(challenge_result.json())
 
-    payload2 = '{"challenge_id":"'+str(int(n)+4)+'","content":"'+xor+'","type":"static","data":""}'
-    flag_result = update_session.post(
-      f"{url}/api/v1/flags",
-      json=json.loads(payload2))
-    print(flag_result.json())
-    print("[+] New challenge added.")
-    return True
+  update_session = requests.Session()
+  update_session.headers.update({"Authorization": f"Token {token}"})
+  payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease use private one-on-one chat function.","value":"24","state":"visible","type":"standard"}'
+  challenge_result = update_session.post(
+    f"{url}/api/v1/challenges",
+    json=json.loads(payload))
+
+  try:
+    if challenge_result['success'] == 'true':
+      payload2 = '{"challenge_id":"'+str(int(n)+4)+'","content":"'+xor+'","type":"static","data":""}'
+      flag_result = update_session.post(
+        f"{url}/api/v1/flags",
+        json=json.loads(payload2))
+      try:
+        if flag_result['success'] == 'true':
+          print("[+] New challenge and flag added.")
+          return True
+        else:
+          print("[+] Error when adding flag.")
+          return False
+      except Exception:
+        print("[+] Error when adding new flag.")
+        return False
+    else:
+      print("[+] Error when adding challenge.")
+      return False
   except Exception:
-    print("[+] Error occured when adding challenge.")
+    print("[+] Error when adding new challenge.")
     return False
+
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
   url = "http://209.114.126.63"
