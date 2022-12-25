@@ -219,19 +219,18 @@ if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
   url = "http://209.114.126.63"
 
-#   try:
-#     while True:
-  get_usernames(url,token)
-  update_user_profile(url,token)
-  if os.path.isfile('xor_record.csv') == False:
-      with open("xor_record.csv",'w',newline='') as xor_record:
-        col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_exist','challenge_number']
-        writer = csv.DictWriter(xor_record, fieldnames=col_names)
-      
-        writer.writeheader()
-  else:
-    pass
-  generate_pair_and_xor(url,token)
-#   except KeyboardInterrupt:
-#     print("Quit by user...")
-      #   add_new_challenge(url,token)
+  while True:
+    get_usernames(url,token)
+    update_user_profile(url,token)
+    if os.path.isfile('xor_record.csv') == False:
+        with open("xor_record.csv",'w',newline='') as xor_record:
+          col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_exist','challenge_number']
+          writer = csv.DictWriter(xor_record, fieldnames=col_names)
+
+          writer.writeheader()
+    else:
+      pass
+    generate_pair_and_xor(url,token)
+  except KeyboardInterrupt:
+    print("Quit by user...")
+#   add_new_challenge(url,token)
