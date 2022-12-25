@@ -94,8 +94,6 @@ def get_usernames(url,token):
 
 # pair up users so the coordination challenges can be created
 def generate_pair_and_xor(url,token):
-  last_id = get_last_id(url,token)
-
   with open("users_info_record.csv") as users_info_record:
     user_info_dictreader = csv.DictReader(users_info_record)
     ids=[]
@@ -131,59 +129,51 @@ def generate_pair_and_xor(url,token):
       writer = csv.DictWriter(xor_record, fieldnames=col_names)
 
       for n in range(len(ids)):
-        if is_challenge_exist(n) == True:
+        if does_challenge_exist(n+1) == True:
           print("[+] Challenge already exist, skip.")
           pass
-        elif is_challenge_exist(n) == False:
-          if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1),last_id) is True:
+        elif does_challenge_exist(n+1) == False:
+          if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
             row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
             row_dict = ast.literal_eval(row)
             writer.writerow(row_dict)
             row=''
           else:
-            # row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'no','challenge_number':'"+str(int(n)+1)+"'}"
-            # row_dict = ast.literal_eval(row)
-            # writer.writerow(row_dict)
-            # row=''
             pass
 
-def is_challenge_exist(n):
-  with open("xor_record.csv") as check_existence:
-    header = next(check_existence)
-    reader = csv.reader(check_existence)
-    challenge_number = []
-    for line in reader:
-      challenge_number.append(line[7])
-
-    if str(n+1) in challenge_number:
-      return True
+def does_challenge_exist(n):
+  flag1 = ''
+  flag2 = 'no'
+  check_existence = requests.Session()
+  check_existence.headers.update({"Authorization": f"Token {token}"})
+  challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
+  # print(n)
+  for name in challenge_result['data']:
+    if name['name'] == "XOR Challenge "+str(n):
+      flag1 = "yes"
+      break
     else:
-      return False
+      flag1 = "no"
+      pass
+  check_existence.close()
+  if flag1 == flag2:
+    return False
+  elif flag1 != flag2:
+    return True
 
-def get_last_id(url,token):
-  update_session = requests.Session()
-  update_session.headers.update({"Authorization": f"Token {token}"})
-  payload = '{"name":"test","category":"test","description":"this is a test challenge, should be set as invisible","value":"24","state":"visible","type":"standard"}'
-  challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload))
-  update_session.close() 
-
+def get_last_created_id(url,token,n):
   id_check_session = requests.Session()
   id_check_session.headers.update({"Authorization": f"Token {token}"})
   id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
-  last_id = id_check_result['data'][-1]['id']
-  id_check_session.close()
-
-  delete_test_challenge(url,token,last_id)
-  return last_id
-
-def delete_test_challenge(url,token,last_id):
-  update_session = requests.Session()
-  update_session.headers.update({"Authorization": f"Token {token}"})
-  challenge_result = update_session.delete(f"{url}/api/v1/challenges/{last_id}",json="")
-  update_session.close()
+  for name in id_check_result['data']:
+    if name['name'] == 'XOR Challenge '+n:
+      id_check_session.close()
+      return name['id']
+    else:
+      pass
 
 # add new coordination challenges
-def add_new_challenge(url,token,first_name,second_name,xor,n,last_id):
+def add_new_challenge(url,token,first_name,second_name,xor,n):
   if second_name == '':
     exit()
   else:
@@ -193,6 +183,9 @@ def add_new_challenge(url,token,first_name,second_name,xor,n,last_id):
     challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
     add_challenge_result = challenge_result['success']
     update_session.close()
+
+    last_id = get_last_created_id(url,token,n)
+
     result = add_new_flag(url,token,last_id,n,xor,add_challenge_result)
 
     return result
@@ -202,7 +195,8 @@ def add_new_flag(url,token,last_id,n,xor,add_challenge_result):
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
   if add_challenge_result == True:
-    payload = '{"challenge_id":"'+str(int(n)+int(last_id))+'","content":"'+xor+'","type":"static","data":""}'
+    payload = '{"challenge_id":"'+str(last_id)+'","content":"'+xor+'","type":"static","data":""}'
+    print(payload)
     flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
     if flag_result['success'] == True:
@@ -215,6 +209,7 @@ def add_new_flag(url,token,last_id,n,xor,add_challenge_result):
     print("[+] Error when adding challenge.")
     return False
   update_session.close()
+
 if __name__ == "__main__":
   token = "4fb4c02d643f6667f2d187eb62c081f3b1e0e987978b896d9c1f4ab557db285f"
   url = "http://209.114.126.63"
