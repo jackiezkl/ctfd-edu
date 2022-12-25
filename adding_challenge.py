@@ -125,7 +125,7 @@ def generate_pair_and_xor(url,token):
           pass
       else:
         pass
-    
+
     with open("xor_record.csv",'a') as xor_record:
       col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_exist','challenge_number']
       writer = csv.DictWriter(xor_record, fieldnames=col_names)
@@ -180,7 +180,7 @@ def delete_test_challenge(url,token,last_id):
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
   challenge_result = update_session.delete(f"{url}/api/v1/challenges/{last_id}",json="")
-  update_session.close() 
+  update_session.close()
 
 # add new coordination challenges
 def add_new_challenge(url,token,first_name,second_name,xor,n,last_id):
@@ -192,7 +192,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n,last_id):
     payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease use private one-on-one chat function.","value":"24","state":"visible","type":"standard"}'
     challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
     add_challenge_result = challenge_result['success']
-    update_session.close()    
+    update_session.close()
     result = add_new_flag(url,token,last_id,n,xor,add_challenge_result)
 
     return result
