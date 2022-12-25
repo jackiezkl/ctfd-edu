@@ -146,7 +146,7 @@ def generate_pair_and_xor(url,token):
             # writer.writerow(row_dict)
             # row=''
             pass
-
+  return True
 def is_challenge_exist(n):
   with open("xor_record.csv") as check_existence:
     header = next(check_existence)
