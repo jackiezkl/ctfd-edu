@@ -31,7 +31,19 @@ def patch_base_html():
     exit()
 
 def patch_challenges_html():
-  
+  with open('/home/ctfd/Desktop/test/CTFd/CTFd/themes/core/templates/challenges.html', 'r+') as challenges_file: 
+    lines = challenges_file.readlines()
+    try:
+      for i, line in enumerate(lines):
+        if line.startswith('<div class="modal fade" id="challenge-window"'):
+          lines[i] = '<span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>\n' + lines[i]
+      challenges_file.seek(0)
+      for line in lines:
+        challenges_file.write(line)
+      challenges_file.close()
+    except Exception:
+      print("[+] Couldn't find the *viewport* to replace with.")
+      challenges_file.close()
 
 if __name__=="__main__":
   patch_base_html()
