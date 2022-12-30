@@ -1,4 +1,5 @@
-import shutil,os
+import os
+from shutil import copytree
 
 def patch_base_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/base.html"
@@ -54,16 +55,11 @@ def patch_challenges_html(parent_path):
       challenges_file.close()
 
 def copy_plugin(parent_path):
-  relative_path = "CTFd/CTFd/plugins/auto-scoreboard"
+  relative_path = "CTFd/CTFd/plugins/"
   dst_path = os.path.join(parent_path, relative_path)
-
-  os.mkdir(dst_path)
   src_path = "auto-scoreboard"
 
-  files=os.listdir(src_path)
-  for file_name in files:
-    shutil.copy2(os.path.join(src_path,file_name), dst_path)
-
+  copytree(src_path,dst_path)
 
 if __name__=="__main__":
 #   change parent path of CTFd after clone
