@@ -5,7 +5,7 @@ def patch_base_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/base.html"
   dst_path = os.path.join(parent_path, relative_path)
   try:
-    with open(dst_path, 'r+') as f: 
+    with open(dst_path, 'r+') as f:
       lines = f.readlines()
       try:
         for i, line in enumerate(lines):
@@ -44,7 +44,7 @@ def patch_challenges_html(parent_path):
   dst_path = os.path.join(parent_path, relative_path)
 
   try:
-    with open(dst_path, 'r+') as challenges_file: 
+    with open(dst_path, 'r+') as challenges_file:
       lines = challenges_file.readlines()
       try:
         for i, line in enumerate(lines):
@@ -75,7 +75,7 @@ def patch_register_html(parent_path):
     print("[+] Couldn't find the *register.html* to work with.")
     exit()
 
-  with open(dst_path, 'r+') as f: 
+  with open(dst_path, 'r+') as f:
     lines = f.readlines()
     try:
       for i, line in enumerate(lines):
@@ -96,7 +96,7 @@ def patch_private_html(parent_path):
     print("[+] Couldn't find the *users/private.html* to work with.")
     exit()
 
-  with open(dst_path, 'r+') as f: 
+  with open(dst_path, 'r+') as f:
     lines = f.readlines()
     try:
       for i, line in enumerate(lines):
@@ -107,7 +107,7 @@ def patch_private_html(parent_path):
         f.write(line)
       f.close()
     except Exception:
-      print("[+] Couldn't find the *{% end with %}* to replace with.")
+      print("[+] Couldn't find the *{{ user.name }}* to replace with.")
       f.close()
 
 
