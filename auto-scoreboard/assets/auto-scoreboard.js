@@ -263,7 +263,7 @@
 
   function update_auto_scoreboard() {
     var elapsed = ((Date.now() - now) / 1000)|0;
-    var elements = document.getElementsByClassName('auto-scoreboard');
+    var elements = document.getElementsByClassName('ctfd-auto-scoreboard');
     for (var i=0; i<elements.length; i++) {
       var element = elements[i];
       var seconds = document.getElementsByName("starts_in")[0].content - elapsed;
