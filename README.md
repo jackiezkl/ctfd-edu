@@ -21,7 +21,7 @@ The plugin shows a scoreboard, and a countdown until the start of the event and 
 1. After clone the CTFd repository, don't change directory. Clone this repository to the same CTFd directory. Run the **run_first.py**
 2. It first creates a .ctfd_secret_key file. This is required by the next step
 3. It then check the total number of CPU cores, and calculate the total number of workers. Then, it changes the setting. 
-        ``number_of_workers = 2*number_of_CPUs+1``
+                ``number_of_workers = 2*number_of_CPUs+1``
 3. The program will add to the following to base template (`themes/core/templates/base.html` if you are using the default theme):
 ```
     <meta name="start_in" content="{{ ctf_starts_in() }}">
