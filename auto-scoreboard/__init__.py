@@ -3,8 +3,8 @@ from CTFd.plugins import register_plugin_assets_directory, register_plugin_scrip
 import time
 
 def load(app):
-    register_plugin_assets_directory(app, base_path='/plugins/auto-scoreboard/assets/')
-    register_plugin_script('/plugins/auto-scoreboard/assets/auto-scoreboard.js')
+    register_plugin_assets_directory(app, base_path='/plugins/ctfd-auto-scoreboard/assets/')
+    register_plugin_script('/plugins/ctfd-auto-scoreboard/assets/auto-scoreboard.js')
     app.jinja_env.globals.update(ctf_starts_in=ctf_starts_in)
     app.jinja_env.globals.update(ctf_ends_in=ctf_ends_in)
 
