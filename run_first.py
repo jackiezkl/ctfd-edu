@@ -36,7 +36,7 @@ def patch_challenges_html():
     try:
       for i, line in enumerate(lines):
         if line.startswith('<div class="modal fade" id="challenge-window"'):
-          lines[i] = '<span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>\n' + lines[i]
+          lines[i] = '<span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>\n\n' + lines[i]
       challenges_file.seek(0)
       for line in lines:
         challenges_file.write(line)
