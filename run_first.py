@@ -117,7 +117,7 @@ def patch_private_html(parent_path):
 if __name__=="__main__":
 #   change parent path of CTFd after clone
   current_path=os.getcwd()
-  parent_path = current_path+"/"
+  parent_path = os.path.dirname(current_path)+"/"
 
   patch_base_html(parent_path)
   patch_challenges_html(parent_path)
