@@ -1,5 +1,5 @@
-if __name__="__main__":
-  with open('CTFd/themes/core/templates/.txt', 'r+') as f: 
+if __name__=="__main__":
+  with open('CTFd/themes/core/templates/base.html', 'r+') as f: 
     lines = f.readlines()
     for i, line in enumerate(lines):
         if line.startswith('<meta name="viewport"'):
