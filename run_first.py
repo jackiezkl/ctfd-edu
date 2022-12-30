@@ -9,15 +9,15 @@ def main():
       f.write(line)
     f.close()
     
-  with open(('/home/ctfd/Desktop/test/CTFd/CTFd/themes/core/templates/base.html', 'r+') as file:
-    search_text1 = '<a href="https://ctfd.io" class="text-secondary">\n\t\t\t\t<small class="text-muted">Powered by CTFd</small>\n\t\t\t</a>\n'
+  with open(('/home/ctfd/Desktop/test/CTFd/CTFd/themes/core/templates/base.html', 'r+') as base_file:
+    search_text = '<a href="https://ctfd.io" class="text-secondary">\n\t\t\t\t<small class="text-muted">Powered by CTFd</small>\n\t\t\t</a>\n'
     replace_text = '<script>const d=new Date();let year=d.getFullYear();document.write("CTF - "+year);</script>'
 
-    data = file.read()
+    data = base_file.read()
   
     data = data.replace(search_text, replace_text)
   
-    file.write(data)
+    base_file.write(data)
 
 if __name__=="__main__":
   main()
