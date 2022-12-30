@@ -75,19 +75,35 @@ def patch_register_html(parent_path):
     print("[+] Couldn't find the *register.html* to work with.")
     exit()
 
-  with open(dst_path, 'r+') as f:
-    lines = f.readlines()
+#   with open(dst_path, 'r+') as f:
+#     lines = f.readlines()
+#     try:
+#       for i, line in enumerate(lines):
+#         if line.startswith('\t\t\t{% endwith %}\n\t\t</div>\n\t</div>\n</div>\n'):
+#           lines[i] = lines[i] + '<script>var newelement = \'<select class="form-control" id="fields[2]" name="fields[2]" required="" type="text" value=""><option disabled="" selected="" value=""> -- select an option -- </option><option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option></select>\';var oldelement = document.getElementById(\'fields[2]\');if(oldelement.outerHTML) {oldelement.outerHTML=newelement;}else {var tmpelement=document.createElement("div");tmpelement.innerHTML=\'<!--THIS DATA SHOULD BE REPLACED-->\';ObjParent=oldelement.parentNode;ObjParent.replaceChild(tmpelement,oldelement);ObjParent.innerHTML=ObjParent.innerHTML.replace(\'<div><!--THIS DATA SHOULD BE REPLACED--></div>\',newelement);}const element = document.getElementById("fields[3]").parentElement;element.remove();</script>\n'
+#       f.seek(0)
+#       for line in lines:
+#         f.write(line)
+#       f.close()
+#     except Exception:
+#       print("[+] Couldn't find the *{% end with %}* to replace with.")
+#       f.close()
+  with open(dst_path, 'r') as base_file:
+    search_text = '\t\t\t{% endwith %}\n\t\t</div>\n\t</div>\n</div>\n'
+    replace_text = '<script>var newelement = \'<select class="form-control" id="fields[2]" name="fields[2]" required="" type="text" value=""><option disabled="" selected="" value=""> -- select an option -- </option><option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option></select>\';var oldelement = document.getElementById(\'fields[2]\');if(oldelement.outerHTML) {oldelement.outerHTML=newelement;}else {var tmpelement=document.createElement("div");tmpelement.innerHTML=\'<!--THIS DATA SHOULD BE REPLACED-->\';ObjParent=oldelement.parentNode;ObjParent.replaceChild(tmpelement,oldelement);ObjParent.innerHTML=ObjParent.innerHTML.replace(\'<div><!--THIS DATA SHOULD BE REPLACED--></div>\',newelement);}const element = document.getElementById("fields[3]").parentElement;element.remove();</script>\n\t\t\t{% endwith %}\n\t\t</div>\n\t</div>\n</div>\n'
+    data = base_file.read()
     try:
-      for i, line in enumerate(lines):
-        if line.startswith('\t\t\t{% endwith %}\n\t\t</div>\n\t</div>\n</div>\n'):
-          lines[i] = lines[i] + '<script>var newelement = \'<select class="form-control" id="fields[2]" name="fields[2]" required="" type="text" value=""><option disabled="" selected="" value=""> -- select an option -- </option><option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option></select>\';var oldelement = document.getElementById(\'fields[2]\');if(oldelement.outerHTML) {oldelement.outerHTML=newelement;}else {var tmpelement=document.createElement("div");tmpelement.innerHTML=\'<!--THIS DATA SHOULD BE REPLACED-->\';ObjParent=oldelement.parentNode;ObjParent.replaceChild(tmpelement,oldelement);ObjParent.innerHTML=ObjParent.innerHTML.replace(\'<div><!--THIS DATA SHOULD BE REPLACED--></div>\',newelement);}const element = document.getElementById("fields[3]").parentElement;element.remove();</script>\n'
-      f.seek(0)
-      for line in lines:
-        f.write(line)
-      f.close()
+      data = data.replace(search_text, replace_text)
+      flag = 1
     except Exception:
-      print("[+] Couldn't find the *{% end with %}* to replace with.")
-      f.close()
+      print("[+] Couldn't find the element to replace with")
+      flag = 0
+  if flag == 1:
+    with open(dst_path, 'w') as base_file:
+      base_file.write(data)
+      base_file.close()
+  elif flag == 0:
+    exit()
 
 def patch_private_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/users/private.html"
