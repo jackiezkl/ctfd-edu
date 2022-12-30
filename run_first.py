@@ -1,4 +1,5 @@
 import os
+from secrets import token_hex
 from shutil import copytree
 
 def patch_base_html(parent_path):
@@ -113,12 +114,45 @@ def patch_private_html(parent_path):
       print("[+] Couldn't find the *{{ user.name }}* to replace with.")
       f.close()
 
+def create-secret(parent_path):
+  relative_path = "CTFd/.ctfd_secret_key"
+  dst_path = os.path.join(parent_path,relative_path)
+  with open(dst_path, "w") as secret_file:
+    secret_file.write(token_hex())
+    secret_file.close()
+
+def patch_docker_compose(parent_path):
+  relative_path = "CTFd/docker-compose.yml"
+  dst_path = os.path.join(parent_path, relative_path)
+  if os.path.exists(dst_path) == False:
+    print("[+] Couldn't find the *docker-compose.yml* to work with.")
+    exit()
+
+  with open(dst_path, 'r') as docker_compose_file:
+    search_text = '     - WORKERS=1\n'
+    replace_text = '     - WORKERS=9\n'
+    data = docker_compose_file.read()
+    try:
+      data = data.replace(search_text, replace_text)
+      flag = 1
+    except Exception:
+      print("[+] Couldn't find the element to replace with")
+      flag = 0
+  if flag == 1:
+    with open(dst_path, 'w') as docker_compose_file:
+      docker_compose_file.write(data)
+      docker_compose_file.close()
+  elif flag == 0:
+    docker_compose_file.close()
+    exit()
 
 if __name__=="__main__":
 #   change parent path of CTFd after clone
   current_path=os.getcwd()
   parent_path = os.path.dirname(current_path)+"/"
 
+  create_secret(parent_path)
+  patch_docker_compose(parent_path)
   patch_base_html(parent_path)
   patch_challenges_html(parent_path)
   copy_plugin(parent_path)
