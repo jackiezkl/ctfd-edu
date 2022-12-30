@@ -1,5 +1,6 @@
 # ctfd-auto-scoreboard
 Inspired by ctfd-event-countdown from https://github.com/alokmenghrajani/ctfd-event-countdown
+Altered for special needs.
 
 Plugin for CTFd which shows a scoreboard, and a countdown until the start of the event and then until the end of the event.
 
