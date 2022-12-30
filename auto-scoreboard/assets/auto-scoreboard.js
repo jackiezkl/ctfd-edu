@@ -1,31 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Codespaces
-Marketplace
-Explore
- 
-@jackiezkl 
-simewu
-/
-cwssp
-Public
-forked from CTFd/CTFd
-Code
-Pull requests
-Actions
-Projects
-Security
-Insights
-cwssp/CTFd-3.4.0/CTFd/plugins/ctfd-auto-scoreboard/assets/auto-scoreboard.js /
-@simewu
-simewu Fix scoreboard undefined behavior
-Latest commit 8dec770 on Dec 2, 2021
- History
- 1 contributor
-294 lines (265 sloc)  16 KB
-
 (() => {
   var now = Date.now();
 
@@ -294,7 +266,7 @@ Latest commit 8dec770 on Dec 2, 2021
     var elements = document.getElementsByClassName('ctfd-auto-scoreboard');
     for (var i=0; i<elements.length; i++) {
       var element = elements[i];
-      var seconds = document.getElementsByName("start_in")[0].content - elapsed;
+      var seconds = document.getElementsByName("starts_in")[0].content - elapsed;
       if (seconds > 0) {
         g(element, f(seconds, "Event starts in "), false);
       } else {
