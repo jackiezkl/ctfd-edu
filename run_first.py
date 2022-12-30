@@ -75,22 +75,9 @@ def patch_register_html(parent_path):
     print("[+] Couldn't find the *register.html* to work with.")
     exit()
 
-#   with open(dst_path, 'r+') as f:
-#     lines = f.readlines()
-#     try:
-#       for i, line in enumerate(lines):
-#         if line.startswith('\t\t\t{% endwith %}\n\t\t</div>\n\t</div>\n</div>\n'):
-#           lines[i] = lines[i] + '<script>var newelement = \'<select class="form-control" id="fields[2]" name="fields[2]" required="" type="text" value=""><option disabled="" selected="" value=""> -- select an option -- </option><option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option></select>\';var oldelement = document.getElementById(\'fields[2]\');if(oldelement.outerHTML) {oldelement.outerHTML=newelement;}else {var tmpelement=document.createElement("div");tmpelement.innerHTML=\'<!--THIS DATA SHOULD BE REPLACED-->\';ObjParent=oldelement.parentNode;ObjParent.replaceChild(tmpelement,oldelement);ObjParent.innerHTML=ObjParent.innerHTML.replace(\'<div><!--THIS DATA SHOULD BE REPLACED--></div>\',newelement);}const element = document.getElementById("fields[3]").parentElement;element.remove();</script>\n'
-#       f.seek(0)
-#       for line in lines:
-#         f.write(line)
-#       f.close()
-#     except Exception:
-#       print("[+] Couldn't find the *{% end with %}* to replace with.")
-#       f.close()
   with open(dst_path, 'r') as base_file:
     search_text = '\t\t\t{% endwith %}\n\t\t</div>\n\t</div>\n</div>\n'
-    replace_text = '<script>var newelement = \'<select class="form-control" id="fields[2]" name="fields[2]" required="" type="text" value=""><option disabled="" selected="" value=""> -- select an option -- </option><option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option></select>\';var oldelement = document.getElementById(\'fields[2]\');if(oldelement.outerHTML) {oldelement.outerHTML=newelement;}else {var tmpelement=document.createElement("div");tmpelement.innerHTML=\'<!--THIS DATA SHOULD BE REPLACED-->\';ObjParent=oldelement.parentNode;ObjParent.replaceChild(tmpelement,oldelement);ObjParent.innerHTML=ObjParent.innerHTML.replace(\'<div><!--THIS DATA SHOULD BE REPLACED--></div>\',newelement);}const element = document.getElementById("fields[3]").parentElement;element.remove();</script>\n\t\t\t{% endwith %}\n\t\t</div>\n\t</div>\n</div>\n'
+    replace_text = '\t\t\t{% endwith %}\n\t\t</div>\n\t</div>\n</div>\n<script>\nvar newelement = \'<select class="form-control" id="fields[2]" name="fields[2]" required="" type="text" value=""><option disabled="" selected="" value=""> -- select an option -- </option><option value="January">January</option><option value="February">February</option><option value="March">March</option><option value="April">April</option><option value="May">May</option><option value="June">June</option><option value="July">July</option><option value="August">August</option><option value="September">September</option><option value="October">October</option><option value="November">November</option><option value="December">December</option></select>\';\nvar oldelement = document.getElementById(\'fields[2]\');\nif(oldelement.outerHTML) {\n\toldelement.outerHTML=newelement;\n}\nelse{\n\tvar tmpelement=document.createElement("div");\n\ttmpelement.innerHTML=\'<!--THIS DATA SHOULD BE REPLACED-->\';\n\tObjParent=oldelement.parentNode;\n\tObjParent.replaceChild(tmpelement,oldelement);\n\tObjParent.innerHTML=ObjParent.innerHTML.replace(\'<div><!--THIS DATA SHOULD BE REPLACED--></div>\',newelement);\n}\nconst element = document.getElementById("fields[3]").parentElement;\nelement.remove();</script>\n'
     data = base_file.read()
     try:
       data = data.replace(search_text, replace_text)
