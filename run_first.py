@@ -62,7 +62,7 @@ def patch_challenges_html(parent_path):
     exit()
 
 def copy_plugin(parent_path):
-  relative_path = "CTFd/CTFd/plugins/auto-scoreboard"
+  relative_path = "CTFd/CTFd/plugins/ctfd-auto-scoreboard"
   dst_path = os.path.join(parent_path, relative_path)
   src_path = "ctfd-auto-scoreboard"
 
