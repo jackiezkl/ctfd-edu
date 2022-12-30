@@ -115,7 +115,7 @@ def patch_private_html(parent_path):
       print("[+] Couldn't find the *{{ user.name }}* to replace with.")
       f.close()
 
-def create-secret(parent_path):
+def create_secret(parent_path):
   relative_path = "CTFd/.ctfd_secret_key"
   dst_path = os.path.join(parent_path,relative_path)
   with open(dst_path, "w") as secret_file:
