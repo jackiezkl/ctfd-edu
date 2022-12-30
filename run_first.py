@@ -1,3 +1,5 @@
+import shutil
+
 def patch_base_html():
   with open('/home/ctfd/Desktop/test/CTFd/CTFd/themes/core/templates/base.html', 'r+') as f: 
     lines = f.readlines()
@@ -45,9 +47,15 @@ def patch_challenges_html():
       print("[+] Couldn't find the *viewport* to replace with.")
       challenges_file.close()
 
+def copy_plugin():
+  source_dir = r"auto-scoreboard"
+  destination_dir = r"/home/ctfd/Desktop/test/CTFd/CTFd/plugins"
+  shutil.copytree(source_dir, destination_dir)
+
 if __name__=="__main__":
   patch_base_html()
   patch_challenges_html()
+  copy_plugin()
 
   
   
