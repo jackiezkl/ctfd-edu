@@ -26,9 +26,12 @@ number_of_workers = 2*number_of_CPUs+1
 ````
 3. The program will add to the following to base template (`themes/core/templates/base.html` if you are using the default theme):
 ```
-    <meta name="start_in" content="{{ ctf_starts_in() }}">
-    <meta name="ends_in" content="{{ ctf_ends_in() }}">
+<meta name="start_in" content="{{ ctf_starts_in() }}">
+<meta name="ends_in" content="{{ ctf_ends_in() }}">
 ```
-3. It then adds `<span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>` right before the line with `id=challenge-window` in `themes/core/templates/challenges.html`. Feel free to manually add on any other pages.
-4. At last, it copies the **auto-scoreboard** plugin to the plugins folder
-5. Set an event start or end time in Admin -> Config.
+3. It then adds the following code right before the line with `id=challenge-window` in `themes/core/templates/challenges.html`. Feel free to manually add on any other pages.
+````
+<span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>
+````
+5. At last, it copies the **auto-scoreboard** plugin to the plugins folder
+6. Set an event start or end time in Admin -> Config.
