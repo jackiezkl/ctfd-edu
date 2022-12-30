@@ -1,6 +1,7 @@
 import os
 from secrets import token_hex
 from shutil import copytree
+from multiprocessing import cpu_count
 
 def patch_base_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/base.html"
@@ -130,7 +131,7 @@ def patch_docker_compose(parent_path):
 
   with open(dst_path, 'r') as docker_compose_file:
     search_text = '     - WORKERS=1\n'
-    replace_text = '     - WORKERS=9\n'
+    replace_text = '     - WORKERS='+str(2*cpu_count()+1)+'\n'
     data = docker_compose_file.read()
     try:
       data = data.replace(search_text, replace_text)
