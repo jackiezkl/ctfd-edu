@@ -263,7 +263,7 @@
 
   function update_auto_scoreboard() {
     var elapsed = ((Date.now() - now) / 1000)|0;
-    var elements = document.getElementsByClassName('ctfd-auto-scoreboard');
+    var elements = document.getElementsByClassName('auto-scoreboard');
     for (var i=0; i<elements.length; i++) {
       var element = elements[i];
       var seconds = document.getElementsByName("starts_in")[0].content - elapsed;
@@ -385,18 +385,3 @@
 
 
 })()
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-cwssp/auto-scoreboard.js at master · simewu/cwssp
