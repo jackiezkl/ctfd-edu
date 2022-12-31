@@ -1,9 +1,9 @@
-##CTFd for Edu
+## CTFd for Edu
 
-codes for checking new user and add new challenges using API
+Codes for checking new user and add new challenges using API
 
 before running, login in to CTFd as admin user, go to the settings page. Then, select a future time and generate a authentication token to use the API.
-
+** This repository is not for every CTF use, it is dedicated for the situation mentioned in this research paper: https://doi.org/10.1109/EDUCON52537.2022.9766724 **
 
 # auto-scoreboard plugin
 Inspired by ctfd-event-countdown from https://github.com/alokmenghrajani/ctfd-event-countdown
