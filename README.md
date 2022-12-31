@@ -33,5 +33,26 @@ number_of_workers = 2*number_of_CPUs+1
 ````
 <span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>
 ````
-6. At last, it copies the **auto-scoreboard** plugin to the plugins folder
-7. Set an event start or end time in Admin -> Config.
+6. Next, it copies the **ctfd-auto-scoreboard** plugin to the plugins folder
+7. Go to the host address to initialize the CTF.
+8. Go to `Admin Panel`--> `Config`-->`Custom Fields', create the following fields in order as stated, and make sure to press the save button for each:
+````
+first:
+Field Type: Text Field
+Field Name: Full Name
+Field Description: Please enter your real full name, this will be used to award the prize. 
+Options: check "Required on registration"
+
+second:
+Field Type: Text Field
+Field Name: Birth Month
+Field Description: (leave empty)
+Options: check "Required on registration"
+
+third:
+Field Type: Text Field
+Field Name: Binary Code
+Field Description: (leave empty)
+Options: (do not check anything)
+````
+9. Set an event start or end time in Admin -> Config.
