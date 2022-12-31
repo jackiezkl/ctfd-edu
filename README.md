@@ -35,7 +35,7 @@ number_of_workers = 2*number_of_CPUs+1
 ````
 6. Next, it copies the **ctfd-auto-scoreboard** plugin to the plugins folder
 7. Go to the host address to initialize the CTF.
-8. Go to `Admin Panel`--> `Config`-->`Custom Fields', create the following fields in order as stated, and make sure to press the save button for each:
+8. Go to `Admin Panel`--> `Config`-->`Custom Fields`, create the following fields in order as stated, and make sure to press the save button for each:
 ````
 first:
 Field Type: Text Field
