@@ -212,7 +212,7 @@ def add_new_flag(url,token,last_id,n,xor,add_challenge_result):
 
 if __name__ == "__main__":
   token = "e2fea1edc567772f9890dbae1e7d4e82a71299d9a71183a030685a6efd8f6ce9"
-  url = "http://209.114.126.34"
+  url = "http://127.0.0.1"
 
   if os.path.isfile('xor_record.csv') == False:
       with open("xor_record.csv",'w',newline='') as xor_record:
