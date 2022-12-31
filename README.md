@@ -14,7 +14,7 @@ The plugin shows a scoreboard, and a countdown until the start of the event and 
 
 ## Screenshot
 
-![sample](screenshot.png)
+![scoreboard](scoreboard.png)
 
 
 ## To use
@@ -56,4 +56,6 @@ Field Name: Binary Code
 Field Description: (leave empty)
 Options: (do not check anything)
 ````
+This will add the Full name and birth month fields during registration.
+![registration](registration.png)
 9. Set an event start or end time in Admin -> Config.
