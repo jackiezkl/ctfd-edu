@@ -382,6 +382,4 @@
   setTimeout(update_auto_scoreboard(), 100);
   setTimeout(update_auto_scoreboard(), 500);
   setTimeout(update_auto_scoreboard(), 1000);
-
-
 })()
