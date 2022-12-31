@@ -67,7 +67,7 @@ This will add the Full name and birth month fields during registration.
 
 11. Copy the token, and change the variable `token` in the `adding_challenge.py` file. The program will add binary codes to each player profile, 
 
-![user-profile](user-profile.png)![user-profile-binary](user-profile-binary.png)
+![user-profile](user-profile.png) to ![user-profile-binary](user-profile-binary.png)
 
 and dynamically generate new challenges for each new player joined in. 
 
