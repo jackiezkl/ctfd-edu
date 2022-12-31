@@ -58,4 +58,7 @@ Options: (do not check anything)
 ````
 This will add the Full name and birth month fields during registration.
 ![registration](registration.png)
-9. Set an event start or end time in Admin -> Config.
+
+9. When setting up the event, make sure to set an event start or end time. Or change it in `Admin` -> `Config`.
+10. A token is needed before running the `adding_challenge` program. To do that, login as admin, then go to `Settings`-->`access tokens`-->select a time-->`Generate`.
+![token](token.png)
