@@ -41,7 +41,7 @@ number_of_workers = 2*number_of_CPUs+1
 first:
 Field Type: Text Field
 Field Name: Full Name
-Field Description: Please enter your real full name, this will be used to award the prize. 
+Field Description: Please enter your real full name. It will be used for prizes. 
 Options: check "Required on registration"
 
 second:
