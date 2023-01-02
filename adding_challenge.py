@@ -115,35 +115,36 @@ def generate_pair_and_xor(url,token):
       xor_result.append(col['xor_result'])
     users_info_record.close()
 
-    for n in range(len(paired_name)):
-      if paired_name[n] == '':
-        try:
-          paired_name[n] = full_name[n+1]
-          paired_hex[n] = user_hex[n+1]
-          xor_result[n] = (bin(int(paired_hex[n], 16) ^ int(user_hex[n], 16))[2:].zfill(8))
-          user_hex[n] = bin(int(user_hex[n],16))[2:].zfill(8)
-          paired_hex[n] = bin(int(paired_hex[n],16))[2:].zfill(8)
-        except Exception:
-          pass
-      else:
+  for n in range(len(paired_name)):
+    if paired_name[n] == '':
+      try:
+        paired_name[n] = full_name[n+1]
+        paired_hex[n] = user_hex[n+1]
+        xor_result[n] = (bin(int(paired_hex[n], 16) ^ int(user_hex[n], 16))[2:].zfill(8))
+        user_hex[n] = bin(int(user_hex[n],16))[2:].zfill(8)
+        paired_hex[n] = bin(int(paired_hex[n],16))[2:].zfill(8)
+      except Exception:
         pass
+    else:
+      pass
 
-    with open("xor_record.csv",'a') as xor_record:
-      col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_exist','challenge_number']
-      writer = csv.DictWriter(xor_record, fieldnames=col_names)
+  with open("xor_record.csv",'a') as xor_record:
+    col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_exist','challenge_number']
+    writer = csv.DictWriter(xor_record, fieldnames=col_names)
 
-      for n in range(len(ids)):
-        if does_challenge_exist(n+1) == True:
-          print("[+] Challenge already exist, skip.")
+    for n in range(len(ids)):
+      if does_challenge_exist(n+1) == True:
+        print("[+] Challenge already exist, skip.")
+        pass
+      elif does_challenge_exist(n+1) == False:
+        if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
+          row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
+          row_dict = ast.literal_eval(row)
+          writer.writerow(row_dict)
+          row=''
+        else:
           pass
-        elif does_challenge_exist(n+1) == False:
-          if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
-            row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
-            row_dict = ast.literal_eval(row)
-            writer.writerow(row_dict)
-            row=''
-          else:
-            pass
+
 # check if xor challenge already existed
 def does_challenge_exist(n):
   flag1 = ''
