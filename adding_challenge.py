@@ -180,7 +180,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
   else:
     update_session = requests.Session()
     update_session.headers.update({"Authorization": f"Token {token}"})
-    payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease use private one-on-one chat function.","value":"24","state":"visible","type":"standard"}'
+    payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Each of the player is assigned a binary code, you can find your code in the Profile page.\\r\\nNow, retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease use private one-on-one chat function to ask codes from other player.","value":"24","state":"visible","type":"standard"}'
     challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
     add_challenge_result = challenge_result['success']
     update_session.close()
