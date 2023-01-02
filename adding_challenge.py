@@ -215,19 +215,6 @@ def add_new_flag(url,token,last_id,n,xor,add_challenge_result):
     return False
   update_session.close()
 
-def birthmonth_challenge(url,token):
-  with open("users_info_record.csv") as users_info_record:
-    user_info_dictreader = csv.DictReader(users_info_record)
-    ids=[]
-    full_name=[]
-    birth_month=[]
-    for col in user_info_dictreader:
-      ids.append(col['id'])
-      full_name.append(col['field_1_value'])
-      birth_month.append(col['field_2_value'])
-    users_info_record.close()
-    
-    random.choice.list(birth_month)
 if __name__ == "__main__":
   token = "e2fea1edc567772f9890dbae1e7d4e82a71299d9a71183a030685a6efd8f6ce9"
   url = "http://127.0.0.1"
@@ -238,15 +225,16 @@ if __name__ == "__main__":
         writer = csv.DictWriter(xor_record, fieldnames=col_names)
 
         writer.writeheader()
+        xor_record.close()
   else:
     pass
+
   i = 2
   try:
     while i>1:
       if get_usernames(url,token) == True:
         update_user_profile(url,token)
         generate_pair_and_xor(url,token)
-        birthmonth_challenge(url,token)
       else:
         pass
   except KeyboardInterrupt:
