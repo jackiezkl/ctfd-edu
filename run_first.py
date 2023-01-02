@@ -94,6 +94,30 @@ def patch_register_html(parent_path):
   elif flag == 0:
     exit()
 
+def patch_username_description(parent_path):
+  relative_path = "CTFd/CTFd/themes/core/templates/register.html"
+  dst_path = os.path.join(parent_path, relative_path)
+  if os.path.exists(dst_path) == False:
+    print("[+] Couldn't find the *register.html* to work with.")
+    exit()
+
+  with open(dst_path, 'r') as base_file:
+    search_text = '\t\t\t\t\t\tYour username on the site\n'
+    replace_text = '\t\t\t\t\t\tYour username on the site. It can be anything you want to be called\n'
+    data = base_file.read()
+    try:
+      data = data.replace(search_text, replace_text)
+      flag = 1
+    except Exception:
+      print("[+] Couldn't find the element to replace with")
+      flag = 0
+  if flag == 1:
+    with open(dst_path, 'w') as base_file:
+      base_file.write(data)
+      base_file.close()
+  elif flag == 0:
+    exit()
+
 def patch_private_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/users/private.html"
   dst_path = os.path.join(parent_path, relative_path)
@@ -158,4 +182,5 @@ if __name__=="__main__":
   patch_challenges_html(parent_path)
   copy_plugin(parent_path)
   patch_register_html(parent_path)
+  patch_username_description(parent_path)
   patch_private_html(parent_path)
