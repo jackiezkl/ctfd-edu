@@ -103,7 +103,7 @@ def patch_username_description(parent_path):
 
   with open(dst_path, 'r') as base_file:
     search_text = '\t\t\t\t\t\tYour username on the site\n'
-    replace_text = '\t\t\t\t\t\tYour username on the site. It can be anything you want to be called\n'
+    replace_text = '\t\t\t\t\t\tYour username on the site. It can be anything you want to be called.\n'
     data = base_file.read()
     try:
       data = data.replace(search_text, replace_text)
