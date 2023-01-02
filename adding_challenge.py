@@ -36,61 +36,65 @@ def get_usernames(url,token):
   all_user_info_json = username_session.get(f"{url}/api/v1/users").json()
   total_number_of_users = all_user_info_json['meta']['pagination']['total']
 
-  for i in range(total_number_of_users):
-    username_id_csv.write('%s,%s\n' % (all_user_info_json['data'][i]['name'],all_user_info_json['data'][i]['id']))
-  username_id_csv.close()
-  print("[+] Saved to names_record.csv")
+  if total_number_of_users > 1:
+    for i in range(total_number_of_users):
+      username_id_csv.write('%s,%s\n' % (all_user_info_json['data'][i]['name'],all_user_info_json['data'][i]['id']))
+    username_id_csv.close()
+    print("[+] Saved to names_record.csv")
 
-  if os.path.isfile('users_info_record.csv') == False:
-    with open("names_record.csv") as names_record:
-      heading = next(names_record)
-      id_reader = csv.reader(names_record)
-      users_info_csv = open('users_info_record.csv', 'w')
-      users_info_csv.write('id,name,field_1_value,field_2_value,hex,paired_name,paired_hex,xor_result\n')
-      print("[+] Users' info record file does not exist, file created.")
-      print("[+] Filling file content...")
-      usersinfo_session = requests.Session()
-      usersinfo_session.headers.update({"Authorization": f"Token {token}"})
-      for line in id_reader:
-        users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-        user_id = users_info_json['data']['id']
-        user_name = users_info_json['data']['name']
-        field_1_value = users_info_json['data']['fields'][0]['value']
-        field_2_value = users_info_json['data']['fields'][1]['value']
-        user_hex = generate_hex()
-        users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
-      names_record.close()
-    print("[+] Accquired every user's information!")
-  else:
-    print("[+] User info file already exist, checking information...")
-    ids = []
-    with open("users_info_record.csv") as users_info_csv:
-      users_info_reader = csv.DictReader(users_info_csv)
-
-      for col in users_info_reader:
-        ids.append(col['id'])
-      users_info_csv.close()
-
-    with open("names_record.csv") as names_record:
-      heading = next(names_record)
-      names_reader = csv.reader(names_record)
-      users_info_record_csv = open('users_info_record.csv', 'a')
-      add_user_info_session = requests.Session()
-      add_user_info_session.headers.update({"Authorization": f"Token {token}"})
-      for line in names_reader:
-        if line[1] in ids:
-          pass
-        else:
-          users_info_json = add_user_info_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+    if os.path.isfile('users_info_record.csv') == False:
+      with open("names_record.csv") as names_record:
+        heading = next(names_record)
+        id_reader = csv.reader(names_record)
+        users_info_csv = open('users_info_record.csv', 'w')
+        users_info_csv.write('id,name,field_1_value,field_2_value,hex,paired_name,paired_hex,xor_result\n')
+        print("[+] Users' info record file does not exist, file created.")
+        print("[+] Filling file content...")
+        usersinfo_session = requests.Session()
+        usersinfo_session.headers.update({"Authorization": f"Token {token}"})
+        for line in id_reader:
+          users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
           user_id = users_info_json['data']['id']
           user_name = users_info_json['data']['name']
           field_1_value = users_info_json['data']['fields'][0]['value']
           field_2_value = users_info_json['data']['fields'][1]['value']
           user_hex = generate_hex()
-          print("[+] New user added.")
-          users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
-      names_record.close()
-      print("[+] User information is up to date.")
+          users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
+        names_record.close()
+      print("[+] Accquired every user's information!")
+    else:
+      print("[+] User info file already exist, checking information...")
+      ids = []
+      with open("users_info_record.csv") as users_info_csv:
+        users_info_reader = csv.DictReader(users_info_csv)
+
+        for col in users_info_reader:
+          ids.append(col['id'])
+        users_info_csv.close()
+
+      with open("names_record.csv") as names_record:
+        heading = next(names_record)
+        names_reader = csv.reader(names_record)
+        users_info_record_csv = open('users_info_record.csv', 'a')
+        add_user_info_session = requests.Session()
+        add_user_info_session.headers.update({"Authorization": f"Token {token}"})
+        for line in names_reader:
+          if line[1] in ids:
+            pass
+          else:
+            users_info_json = add_user_info_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+            user_id = users_info_json['data']['id']
+            user_name = users_info_json['data']['name']
+            field_1_value = users_info_json['data']['fields'][0]['value']
+            field_2_value = users_info_json['data']['fields'][1]['value']
+            user_hex = generate_hex()
+            print("[+] New user added.")
+            users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
+        names_record.close()
+        print("[+] User information is up to date.")
+      return True
+    else:
+      return False
 
 # pair up users so the coordination challenges can be created
 def generate_pair_and_xor(url,token):
@@ -229,10 +233,12 @@ if __name__ == "__main__":
   i = 2
   try:
     while i>1:
-      get_usernames(url,token)
-      update_user_profile(url,token)
-      generate_pair_and_xor(url,token)
-      birthmonth_challenge(url,token)
+      if get_usernames(url,token) == True:
+        update_user_profile(url,token)
+        generate_pair_and_xor(url,token)
+        birthmonth_challenge(url,token)
+      else:
+        pass
   except KeyboardInterrupt:
     print("Quit by user...")
 #   add_new_challenge(url,token)
