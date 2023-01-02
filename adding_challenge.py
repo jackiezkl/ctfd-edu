@@ -210,6 +210,9 @@ def add_new_flag(url,token,last_id,n,xor,add_challenge_result):
     return False
   update_session.close()
 
+def birthmonth_challenge(url,token):
+  pass
+
 if __name__ == "__main__":
   token = "e2fea1edc567772f9890dbae1e7d4e82a71299d9a71183a030685a6efd8f6ce9"
   url = "http://127.0.0.1"
@@ -228,6 +231,7 @@ if __name__ == "__main__":
       get_usernames(url,token)
       update_user_profile(url,token)
       generate_pair_and_xor(url,token)
+      birthmonth_challenge(url,token)
   except KeyboardInterrupt:
     print("Quit by user...")
 #   add_new_challenge(url,token)
