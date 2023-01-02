@@ -140,7 +140,7 @@ def generate_pair_and_xor(url,token):
             row=''
           else:
             pass
-
+# check if xor challenge already existed
 def does_challenge_exist(n):
   flag1 = ''
   flag2 = 'no'
@@ -161,6 +161,7 @@ def does_challenge_exist(n):
   elif flag1 != flag2:
     return True
 
+# get the last created challenge id
 def get_last_created_id(url,token,n):
   id_check_session = requests.Session()
   id_check_session.headers.update({"Authorization": f"Token {token}"})
