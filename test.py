@@ -84,11 +84,13 @@ def choose_a_month():
   with open("birth_month_record.csv",'a') as month_record:
     month_dicreader = csv.DictReader(month_record)
     for col in month_dictreader:
-      month_used = col[birth_month]
-  return True
-  return False
+      month_used.append(col[birth_month])
+    month_record.close()
+  if len(month_used) == 0:
+    while True:
+        
 
-def add_birthmonth_challenge(url,token):
+def add_birthmonth_challenge(url,token,number_of_exist_challenge):
   with open("users_info_record.csv") as users_info_record:
     user_info_dictreader = csv.DictReader(users_info_record)
     ids=[]
@@ -99,10 +101,25 @@ def add_birthmonth_challenge(url,token):
       full_name.append(col['field_1_value'])
       birth_month.append(col['field_2_value'])
     users_info_record.close()
-  
-  if len(ids) < 3:
+
+  with open("birth_month_record.csv",'a') as month_record:
+    month_used = []
+    month_dicreader = csv.DictReader(month_record)
+    for col in month_dictreader:
+      month_used.append(col[birth_month])
+    month_record.close()
+
+  if len(set(birth_month)) < 3:
     exit()
-  else:
+  elif len(month_used) == 2:
+    exit()
+  elif len(month_used) == 1:
+    while True:
+      month_to_add = random.choice(birth_month)
+      if month_to_add == month_used[0]:
+        continue
+      else:
+        break
     challenge_flag = random.choice.list(birth_month)
     picked_id = []
     picked_full_name = []
@@ -118,7 +135,7 @@ def add_birthmonth_challenge(url,token):
 
     with open("birth_month_record.csv",'a') as birth_month_record:
       col_names = ['full_name','birth_month','challenge_exist','challenge_number']
-      writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
+      birth_month_writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
 
       for n in range(len(ids)):
         if does_challenge_exist(n+1) == True:
@@ -128,7 +145,7 @@ def add_birthmonth_challenge(url,token):
           if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
             row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
             row_dict = ast.literal_eval(row)
-            writer.writerow(row_dict)
+            birth_month_writer.writerow(row_dict)
             row=''
           else:
             pass
