@@ -70,10 +70,10 @@ def does_challenge_exist(url,token):
   challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
 
   for name in challenge_result['data']:
-    if name['name'] == "Who was born in this month 2":
+    if name['name'] == "Birth Month 2":
       check_existence.close()
       return 2
-    elif name['name'] == "Who was born in this month 1":
+    elif name['name'] == "Birth Month 1":
       check_existence.close()
       return 1
     else:
@@ -136,8 +136,8 @@ def birthmonth_challenge(url,token,number_of_exist_challenge):
       col_names = ['full_name','birth_month','challenge_exist','challenge_number']
       birth_month_writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
 
-    if does_challenge_exist(n+1) == 1:
-      if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
+    if does_challenge_exist(url,token) == 1:
+      if add_new_challenge(url,token,picked_id,picked_full_name,picked_birth_month) is True:
         row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
         row_dict = ast.literal_eval(row)
         birth_month_writer.writerow(row_dict)
@@ -151,35 +151,49 @@ def birthmonth_challenge(url,token,number_of_exist_challenge):
     
   else:
 
+def get_last_created_id(url,token,n):
+  id_check_session = requests.Session()
+  id_check_session.headers.update({"Authorization": f"Token {token}"})
+  id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
+  for name in id_check_result['data']:
+    if name['name'] == 'Birth Month '+n:
+      id_check_session.close()
+      return name['id']
+    else:
+      pass
+
 # add new birth month challenges
-def add_new_birth_challenge(url,token,picked_id,picked_full_name,picked_birth_month):
-    if second_name == '':
-    exit()
-  else:
-    update_session = requests.Session()
-    update_session.headers.update({"Authorization": f"Token {token}"})
-    payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Each of the player is assigned a binary code, you can find your code in the Profile page.\\r\\nNow, retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease speak quietly or use private one-on-one chat function(if there is one) when asking codes from another player.","value":"24","state":"visible","type":"standard"}'
-    challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
-    add_challenge_result = challenge_result['success']
-    update_session.close()
-
-    last_id = get_last_created_id(url,token,n)
-
-    result = add_new_birth_flag(url,token,last_id,n,xor,add_challenge_result)
-
-    return result
-
-# add corresponding birth month flags
-def add_new_birth_flag(url,token,last_id,n,xor,add_challenge_result):
+def add_new_birth_challenge(url,token,picked_id,picked_full_name,picked_birth_month,n):
   update_session = requests.Session()
   update_session.headers.update({"Authorization": f"Token {token}"})
+  payload = '{"name":"Birth Month "'+n+',"category":"Coordination","description":"There should be at least one player that was born in '+picked_birth_month+'. Could you provide the first name of at least one?\\r\\nEnter their first name as the flag.","value":"34","state":"visible","type":"standard"}'
+  challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
+  add_challenge_result = challenge_result['success']
+  update_session.close()
+
+  last_id = get_last_created_id(url,token,n)
+
+  result = add_new_birth_flag(url,token,last_id,picked_full_name,picked_birth_month)
+  return result
+
+# add corresponding birth month flags
+def add_new_birth_flag(url,token,last_id,url,token,last_id,picked_full_name,picked_birth_month):
+  update_session = requests.Session()
+  update_session.headers.update({"Authorization": f"Token {token}"})
+  content_string = ''
+
+  for names in picked_full_name:
+    content_string = content_string+"|"+names.split()[0]
+
+  content_string = '('+content_string.lstrip('|')+')'
+
   if add_challenge_result == True:
-    payload = '{"challenge_id":"'+str(last_id)+'","content":"'+xor+'","type":"static","data":""}'
+    payload = '{"challenge_id":"'+str(last_id)+'","content":"'+content_sctring+'","type":"static","data":""}'
     print(payload)
     flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
     if flag_result['success'] == True:
-      print("[+] New challenge and flag added.")
+      print("[+] New birth month challenge and flag added.")
       return True
     else:
       print("[+] Error when adding flag.")
