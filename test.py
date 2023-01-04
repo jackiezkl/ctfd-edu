@@ -79,18 +79,18 @@ def does_challenge_exist(url,token):
     else:
       check_existence.close()
       return 0
-def choose_a_month():
-  month_used = []
-  with open("birth_month_record.csv",'a') as month_record:
-    month_dicreader = csv.DictReader(month_record)
-    for col in month_dictreader:
-      month_used.append(col[birth_month])
-    month_record.close()
-  if len(month_used) == 0:
-    while True:
+# def choose_a_month():
+#   month_used = []
+#   with open("birth_month_record.csv",'a') as month_record:
+#     month_dicreader = csv.DictReader(month_record)
+#     for col in month_dictreader:
+#       month_used.append(col[birth_month])
+#     month_record.close()
+#   if len(month_used) == 0:
+#     while True:
         
 
-def add_birthmonth_challenge(url,token,number_of_exist_challenge):
+def birthmonth_challenge(url,token,number_of_exist_challenge):
   with open("users_info_record.csv") as users_info_record:
     user_info_dictreader = csv.DictReader(users_info_record)
     ids=[]
@@ -111,22 +111,21 @@ def add_birthmonth_challenge(url,token,number_of_exist_challenge):
 
   if len(set(birth_month)) < 3:
     exit()
-  elif len(month_used) == 2:
+  elif len(set(month_used)) == 2:
     exit()
-  elif len(month_used) == 1:
+  elif len(set(month_used)) == 1:
     while True:
-      month_to_add = random.choice(birth_month)
+      month_to_add = random.choice(set(birth_month))
       if month_to_add == month_used[0]:
         continue
       else:
         break
-    challenge_flag = random.choice.list(birth_month)
     picked_id = []
     picked_full_name = []
     picked_birth_month = []
 
     for n in range(len(ids)):
-      if birth_month[n] == challenge_flag:
+      if birth_month[n] == month_to_add:
         picked_id.append(ids[n])
         picked_full_name.append(full_name[n])
         picked_birth_month.append(birth_month[n])
@@ -137,18 +136,58 @@ def add_birthmonth_challenge(url,token,number_of_exist_challenge):
       col_names = ['full_name','birth_month','challenge_exist','challenge_number']
       birth_month_writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
 
-      for n in range(len(ids)):
-        if does_challenge_exist(n+1) == True:
-          print("[+] Challenge already exist, skip.")
-          pass
-        elif does_challenge_exist(n+1) == False:
-          if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
-            row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
-            row_dict = ast.literal_eval(row)
-            birth_month_writer.writerow(row_dict)
-            row=''
-          else:
-            pass
+    if does_challenge_exist(n+1) == 1:
+      if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
+        row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
+        row_dict = ast.literal_eval(row)
+        birth_month_writer.writerow(row_dict)
+        row=''
+      else:
+        pass
+    elif does_challenge_exist(n+1) == 2 or does_challenge_exist(n+1) == 0:
+      print("[+] Something's wrong. There should be only one birth month challenge; however, the record shows a different number.")
+      pass
+  elif len(set(month_used)) == 0:
+    
+  else:
+
+# add new birth month challenges
+def add_new_birth_challenge(url,token,picked_id,picked_full_name,picked_birth_month):
+    if second_name == '':
+    exit()
+  else:
+    update_session = requests.Session()
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Each of the player is assigned a binary code, you can find your code in the Profile page.\\r\\nNow, retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease speak quietly or use private one-on-one chat function(if there is one) when asking codes from another player.","value":"24","state":"visible","type":"standard"}'
+    challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
+    add_challenge_result = challenge_result['success']
+    update_session.close()
+
+    last_id = get_last_created_id(url,token,n)
+
+    result = add_new_birth_flag(url,token,last_id,n,xor,add_challenge_result)
+
+    return result
+
+# add corresponding birth month flags
+def add_new_birth_flag(url,token,last_id,n,xor,add_challenge_result):
+  update_session = requests.Session()
+  update_session.headers.update({"Authorization": f"Token {token}"})
+  if add_challenge_result == True:
+    payload = '{"challenge_id":"'+str(last_id)+'","content":"'+xor+'","type":"static","data":""}'
+    print(payload)
+    flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
+
+    if flag_result['success'] == True:
+      print("[+] New challenge and flag added.")
+      return True
+    else:
+      print("[+] Error when adding flag.")
+      return False
+  else:
+    print("[+] Error when adding challenge.")
+    return False
+  update_session.close()
 
 if __name__ == "__main__":
   token = "3faf06e19cc198608a2aa9c5ee1f736f93f6c29e8f92bd633dfc4b3af5900e96"
@@ -167,7 +206,7 @@ if __name__ == "__main__":
   number_of_exist_challenge = does_challenge_exist(url,token)
 
   if number_of_exist_challenge < 2:
-    add_birthmonth_challenge(url,token,number_of_exist_challenge)
+    birthmonth_challenge(url,token,number_of_exist_challenge)
   else:
     exit()
 
