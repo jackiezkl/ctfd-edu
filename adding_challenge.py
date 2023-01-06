@@ -14,16 +14,16 @@ def update_user_profile(url,token):
   with open("users_info_record.csv") as users_record:
     heading = next(users_record)
     users_reader = csv.reader(users_record)
-    user_update_session = requests.Session()
-    user_update_session.headers.update({"Authorization": f"Token {token}"})
-    for line in users_reader:
-      user_id = int(line[0])
-      payload = '{"fields":[{"field_id":3,"value":"'+bin(int(line[4], 16))[2:].zfill(8)+'"}]}'
-      user_update_session.patch(
-        f"{url}/api/v1/users/{user_id}",
-        json=json.loads(payload),
-        headers={"Content-Type": "application/json"},
-      )
+    with requests.Session() as user_update_session
+      user_update_session.headers.update({"Authorization": f"Token {token}"})
+      for line in users_reader:
+        user_id = int(line[0])
+        payload = '{"fields":[{"field_id":3,"value":"'+bin(int(line[4], 16))[2:].zfill(8)+'"}]}'
+        user_update_session.patch(
+          f"{url}/api/v1/users/{user_id}",
+          json=json.loads(payload),
+          headers={"Content-Type": "application/json"},
+        )
     users_record.close()
 
 # collect username and id information for other functions to use
@@ -32,9 +32,9 @@ def get_usernames(url,token):
   username_id_csv.write('username,id\n')
   print("[+] Created username record file: names_record.csv")
 
-  username_session = requests.Session()
-  all_user_info_json = username_session.get(f"{url}/api/v1/users").json()
-  total_number_of_users = all_user_info_json['meta']['pagination']['total']
+  with requests.Session() as username_session
+    all_user_info_json = username_session.get(f"{url}/api/v1/users").json()
+    total_number_of_users = all_user_info_json['meta']['pagination']['total']
 
   if total_number_of_users > 1:
     for i in range(total_number_of_users):
@@ -50,16 +50,16 @@ def get_usernames(url,token):
         users_info_csv.write('id,name,field_1_value,field_2_value,hex\n')
         print("[+] Users' info record file does not exist, file created.")
         print("[+] Filling file content...")
-        usersinfo_session = requests.Session()
-        usersinfo_session.headers.update({"Authorization": f"Token {token}"})
-        for line in id_reader:
-          users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-          user_id = users_info_json['data']['id']
-          user_name = users_info_json['data']['name']
-          field_1_value = users_info_json['data']['fields'][0]['value']
-          field_2_value = users_info_json['data']['fields'][1]['value']
-          user_hex = generate_hex()
-          users_info_csv.write('%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex))
+        with requests.Session() as usersinfo_session
+          usersinfo_session.headers.update({"Authorization": f"Token {token}"})
+          for line in id_reader:
+            users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+            user_id = users_info_json['data']['id']
+            user_name = users_info_json['data']['name']
+            field_1_value = users_info_json['data']['fields'][0]['value']
+            field_2_value = users_info_json['data']['fields'][1]['value']
+            user_hex = generate_hex()
+            users_info_csv.write('%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex))
         names_record.close()
       print("[+] Accquired every user's information!")
     else:
@@ -76,20 +76,20 @@ def get_usernames(url,token):
         heading = next(names_record)
         names_reader = csv.reader(names_record)
         users_info_record_csv = open('users_info_record.csv', 'a')
-        add_user_info_session = requests.Session()
-        add_user_info_session.headers.update({"Authorization": f"Token {token}"})
-        for line in names_reader:
-          if line[1] in ids:
-            pass
-          else:
-            users_info_json = add_user_info_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
-            user_id = users_info_json['data']['id']
-            user_name = users_info_json['data']['name']
-            field_1_value = users_info_json['data']['fields'][0]['value']
-            field_2_value = users_info_json['data']['fields'][1]['value']
-            user_hex = generate_hex()
-            print("[+] New user added.")
-            users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
+        with requests.Session() as add_user_info_session
+          add_user_info_session.headers.update({"Authorization": f"Token {token}"})
+          for line in names_reader:
+            if line[1] in ids:
+              pass
+            else:
+              users_info_json = add_user_info_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
+              user_id = users_info_json['data']['id']
+              user_name = users_info_json['data']['name']
+              field_1_value = users_info_json['data']['fields'][0]['value']
+              field_2_value = users_info_json['data']['fields'][1]['value']
+              user_hex = generate_hex()
+              print("[+] New user added.")
+              users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
         names_record.close()
         print("[+] User information is up to date.")
       return True
@@ -149,72 +149,71 @@ def generate_pair_and_xor(url,token):
 def does_challenge_exist(n):
   flag1 = ''
   flag2 = 'no'
-  check_existence = requests.Session()
-  check_existence.headers.update({"Authorization": f"Token {token}"})
-  challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
-  # print(n)
-  for name in challenge_result['data']:
-    if name['name'] == "XOR Challenge "+str(n):
-      flag1 = "yes"
-      break
-    else:
-      flag1 = "no"
-      pass
-  check_existence.close()
-  if flag1 == flag2:
-    return False
-  elif flag1 != flag2:
-    return True
+  with requests.Session() as check_existence
+    check_existence.headers.update({"Authorization": f"Token {token}"})
+    challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
+    # print(n)
+    for name in challenge_result['data']:
+      if name['name'] == "XOR Challenge "+str(n):
+        flag1 = "yes"
+        break
+      else:
+        flag1 = "no"
+        pass
+    check_existence.close()
+    if flag1 == flag2:
+      return False
+    elif flag1 != flag2:
+      return True
 
 # get the last created challenge id
 def get_last_created_id(url,token,n):
-  id_check_session = requests.Session()
-  id_check_session.headers.update({"Authorization": f"Token {token}"})
-  id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
-  for name in id_check_result['data']:
-    if name['name'] == 'XOR Challenge '+n:
-      id_check_session.close()
-      return name['id']
-    else:
-      pass
+  with requests.Session() as id_check_session
+    id_check_session.headers.update({"Authorization": f"Token {token}"})
+    id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
+    for name in id_check_result['data']:
+      if name['name'] == 'XOR Challenge '+n:
+        id_check_session.close()
+        return name['id']
+      else:
+        pass
 
 # add new coordination challenges
 def add_new_challenge(url,token,first_name,second_name,xor,n):
   if second_name == '':
     exit()
   else:
-    update_session = requests.Session()
-    update_session.headers.update({"Authorization": f"Token {token}"})
-    payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Each of the player is assigned a binary code, you can find your code in the Profile page.\\r\\nNow, retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease speak quietly or use private one-on-one chat function(if there is one) when asking codes from another player.","value":"24","state":"visible","type":"standard"}'
-    challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
-    add_challenge_result = challenge_result['success']
-    update_session.close()
+    with requests.Session() as update_session
+      update_session.headers.update({"Authorization": f"Token {token}"})
+      payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Each of the player is assigned a binary code, you can find your code in the Profile page.\\r\\nNow, retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease speak quietly or use private one-on-one chat function(if there is one) when asking codes from another player.","value":"24","state":"visible","type":"standard"}'
+      challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
+      add_challenge_result = challenge_result['success']
+      update_session.close()
 
-    last_id = get_last_created_id(url,token,n)
+      last_id = get_last_created_id(url,token,n)
 
-    result = add_new_flag(url,token,last_id,n,xor,add_challenge_result)
+      result = add_new_flag(url,token,last_id,n,xor,add_challenge_result)
 
-    return result
+      return result
 
 # add corresponding flags for the new challenges
 def add_new_flag(url,token,last_id,n,xor,add_challenge_result):
-  update_session = requests.Session()
-  update_session.headers.update({"Authorization": f"Token {token}"})
-  if add_challenge_result == True:
-    payload = '{"challenge_id":"'+str(last_id)+'","content":"'+xor+'","type":"static","data":""}'
-    print(payload)
-    flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
+  with requests.Session() as update_session
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    if add_challenge_result == True:
+      payload = '{"challenge_id":"'+str(last_id)+'","content":"'+xor+'","type":"static","data":""}'
+      print(payload)
+      flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
-    if flag_result['success'] == True:
-      print("[+] New challenge and flag added.")
-      return True
+      if flag_result['success'] == True:
+        print("[+] New challenge and flag added.")
+        return True
+      else:
+        print("[+] Error when adding flag.")
+        return False
     else:
-      print("[+] Error when adding flag.")
+      print("[+] Error when adding challenge.")
       return False
-  else:
-    print("[+] Error when adding challenge.")
-    return False
-  update_session.close()
 
 if __name__ == "__main__":
   token = "e2fea1edc567772f9890dbae1e7d4e82a71299d9a71183a030685a6efd8f6ce9"
