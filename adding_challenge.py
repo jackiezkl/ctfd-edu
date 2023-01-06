@@ -14,7 +14,7 @@ def update_user_profile(url,token):
   with open("users_info_record.csv") as users_record:
     heading = next(users_record)
     users_reader = csv.reader(users_record)
-    with requests.Session() as user_update_session
+    with requests.Session() as user_update_session:
       user_update_session.headers.update({"Authorization": f"Token {token}"})
       for line in users_reader:
         user_id = int(line[0])
@@ -32,7 +32,7 @@ def get_usernames(url,token):
   username_id_csv.write('username,id\n')
   print("[+] Created username record file: names_record.csv")
 
-  with requests.Session() as username_session
+  with requests.Session() as username_session:
     all_user_info_json = username_session.get(f"{url}/api/v1/users").json()
     total_number_of_users = all_user_info_json['meta']['pagination']['total']
 
@@ -50,7 +50,7 @@ def get_usernames(url,token):
         users_info_csv.write('id,name,field_1_value,field_2_value,hex\n')
         print("[+] Users' info record file does not exist, file created.")
         print("[+] Filling file content...")
-        with requests.Session() as usersinfo_session
+        with requests.Session() as usersinfo_session:
           usersinfo_session.headers.update({"Authorization": f"Token {token}"})
           for line in id_reader:
             users_info_json = usersinfo_session.get(f"{url}/api/v1/users/{line[1]}",headers={"Content-Type": "application/json"}).json()
@@ -76,7 +76,7 @@ def get_usernames(url,token):
         heading = next(names_record)
         names_reader = csv.reader(names_record)
         users_info_record_csv = open('users_info_record.csv', 'a')
-        with requests.Session() as add_user_info_session
+        with requests.Session() as add_user_info_session:
           add_user_info_session.headers.update({"Authorization": f"Token {token}"})
           for line in names_reader:
             if line[1] in ids:
@@ -89,30 +89,30 @@ def get_usernames(url,token):
               field_2_value = users_info_json['data']['fields'][1]['value']
               user_hex = generate_hex()
               print("[+] New user added.")
-              users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
+              users_info_record_csv.write('%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex))
         names_record.close()
         print("[+] User information is up to date.")
       return True
-    else:
-      return False
+  else:
+    return False
 
 # pair up users so the coordination challenges can be created
 def generate_pair_and_xor(url,token):
+  ids=[]
+  full_name=[]
+  user_hex=[]
+  paired_name=[]
+  paired_hex=[]
+  xor_result=[]
   with open("users_info_record.csv") as users_info_record:
     user_info_dictreader = csv.DictReader(users_info_record)
-    ids=[]
-    full_name=[]
-    user_hex=[]
-    paired_name=[]
-    paired_hex=[]
-    xor_result=[]
     for col in user_info_dictreader:
       ids.append(col['id'])
       full_name.append(col['field_1_value'])
       user_hex.append(col['hex'])
-      paired_name.append(col['paired_name'])
-      paired_hex.append(col['paired_hex'])
-      xor_result.append(col['xor_result'])
+      # paired_name.append(col['paired_name'])
+      # paired_hex.append(col['paired_hex'])
+      # xor_result.append(col['xor_result'])
     users_info_record.close()
 
   for n in range(len(paired_name)):
@@ -137,6 +137,10 @@ def generate_pair_and_xor(url,token):
         print("[+] Challenge already exist, skip.")
         pass
       elif does_challenge_exist(n+1) == False:
+        print(n+1)
+        print(full_name[n])
+        print(paired_name[n])
+        print(xor_result[n])
         if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
           row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
           row_dict = ast.literal_eval(row)
@@ -149,7 +153,7 @@ def generate_pair_and_xor(url,token):
 def does_challenge_exist(n):
   flag1 = ''
   flag2 = 'no'
-  with requests.Session() as check_existence
+  with requests.Session() as check_existence:
     check_existence.headers.update({"Authorization": f"Token {token}"})
     challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
     # print(n)
@@ -168,7 +172,7 @@ def does_challenge_exist(n):
 
 # get the last created challenge id
 def get_last_created_id(url,token,n):
-  with requests.Session() as id_check_session
+  with requests.Session() as id_check_session:
     id_check_session.headers.update({"Authorization": f"Token {token}"})
     id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
     for name in id_check_result['data']:
@@ -183,7 +187,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
   if second_name == '':
     exit()
   else:
-    with requests.Session() as update_session
+    with requests.Session() as update_session:
       update_session.headers.update({"Authorization": f"Token {token}"})
       payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Each of the player is assigned a binary code, you can find your code in the Profile page.\\r\\nNow, retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease speak quietly or use private one-on-one chat function(if there is one) when asking codes from another player.","value":"24","state":"visible","type":"standard"}'
       challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
@@ -198,7 +202,7 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
 
 # add corresponding flags for the new challenges
 def add_new_flag(url,token,last_id,n,xor,add_challenge_result):
-  with requests.Session() as update_session
+  with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     if add_challenge_result == True:
       payload = '{"challenge_id":"'+str(last_id)+'","content":"'+xor+'","type":"static","data":""}'
