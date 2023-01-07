@@ -129,11 +129,11 @@ def generate_pair_and_xor():
     writer = csv.DictWriter(xor_record, fieldnames=col_names)
 
     for n in range(len(ids)):
-      if does_challenge_exist(n+1) == True:
+      if does_xor_challenge_exist(n+1) == True:
         print("[+] Challenge already exist, skip.")
         pass
-      elif does_challenge_exist(n+1) == False:
-        if add_new_challenge(full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
+      elif does_xor_challenge_exist(n+1) == False:
+        if add_new_xor_challenge(full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
           row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_added':'yes','challenge_number':'"+str(int(n)+1)+"'}"
           row_dict = ast.literal_eval(row)
           writer.writerow(row_dict)
@@ -142,7 +142,7 @@ def generate_pair_and_xor():
           pass
 
 # check if xor challenge already existed
-def does_challenge_exist(n):
+def does_xor_challenge_exist(n):
   flag1 = ''
   flag2 = 'no'
   with requests.Session() as check_existence:
@@ -162,7 +162,7 @@ def does_challenge_exist(n):
       return True
 
 # get the last created challenge id
-def get_last_created_id(n):
+def get_last_created_xor_id(n):
   with requests.Session() as id_check_session:
     id_check_session.headers.update({"Authorization": f"Token {token}"})
     id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
@@ -173,7 +173,7 @@ def get_last_created_id(n):
         pass
 
 # add new coordination challenges
-def add_new_challenge(first_name,second_name,xor,n):
+def add_new_xor_challenge(first_name,second_name,xor,n):
   if second_name == '':
     pass
   else:
@@ -183,19 +183,18 @@ def add_new_challenge(first_name,second_name,xor,n):
       challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
       add_challenge_result = challenge_result['success']
 
-      last_id = get_last_created_id(n)
+      last_id = get_last_created_xor_id(n)
 
-      result = add_new_flag(last_id,n,xor,add_challenge_result)
+      result = add_new_xor_flag(last_id,n,xor,add_challenge_result)
 
       return result
 
 # add corresponding flags for the new challenges
-def add_new_flag(last_id,n,xor,add_challenge_result):
+def add_new_xor_flag(last_id,n,xor,add_challenge_result):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     if add_challenge_result == True:
       payload = '{"challenge_id":"'+str(last_id)+'","content":"'+xor+'","type":"static","data":""}'
-      print(payload)
       flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
       if flag_result['success'] == True:
@@ -207,9 +206,9 @@ def add_new_flag(last_id,n,xor,add_challenge_result):
     else:
       print("[+] Error when adding challenge.")
       return False
-----------------------------
+##----------------------------
 # check if the birth month challenge is already exist
-def does_challenge_exist():
+def does_birth_challenge_exist():
   print('[i] Checking the challenge status...')
   flag = 0
   with requests.Session() as check_existence:
@@ -225,7 +224,7 @@ def does_challenge_exist():
       pass
 
   if flag == 2:
-    print('[e] There are aleady two birth month challenges, quitting now...\r')
+    print('[e] There are aleady two birth month challenges, checking new user...\r')
     return 2
   elif flag == 1:
     print('[e] There is one birth month challenge already, I can\'t handle this situation right now. Please remove the existing challenge and retry.\r')
@@ -317,8 +316,8 @@ def birthmonth_challenge():
   #     col_names = ['full_name_used','birth_month','challenge_exist','challenge_number']
   #     birth_month_writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
 
-  #   # if does_challenge_exist() == 1:
-  #     if add_new_challenge(picked_id,picked_full_name,picked_birth_month,2) is True:
+  #   # if does_birth_challenge_exist() == 1:
+  #     if add_new_birth_challenge(picked_id,picked_full_name,picked_birth_month,2) is True:
   #       for n in range(len(picked_id))
   #         row="{'full_name_used':'"+picked_full_name[n]+"','birth_month':'"+picked_birth_month+"','challenge_exist':'yes','challenge_number':'2'}"
   #         row_dict = ast.literal_eval(row)
@@ -326,7 +325,7 @@ def birthmonth_challenge():
   #         row=''
   #     else:
   #       pass
-  #   # elif does_challenge_exist() == 2 or does_challenge_exist() == 0:
+  #   # elif does_birth_challenge_exist() == 2 or does_birth_challenge_exist() == 0:
   #   #   print("[+] Something's wrong. There should be only one birth month challenge; however, the record shows a different number.")
   #   #   pass
   else:
@@ -334,7 +333,7 @@ def birthmonth_challenge():
     pass
 
 # get the challenge if od the created challenge, so we can set flag for that challenge
-def get_last_created_id(n):
+def get_last_created_birth_id(n):
   with requests.Session() as id_check_session:
     id_check_session.headers.update({"Authorization": f"Token {token}"})
     id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
@@ -354,7 +353,7 @@ def add_new_birth_challenge(picked_full_name,picked_birth_month,challenge_birth_
     challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
     add_challenge_result = challenge_result['success']
 
-  last_id = get_last_created_id(birth_challenge_number)
+  last_id = get_last_created_birth_id(birth_challenge_number)
 
   result = add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_birth_month,add_challenge_result)
   return result
@@ -431,7 +430,7 @@ if __name__ == "__main__":
       else:
         pass
       
-      if does_challenge_exist() == 0:
+      if does_birth_challenge_exist() == 0:
         birthmonth_challenge()
       else:
         pass
