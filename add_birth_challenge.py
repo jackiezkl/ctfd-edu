@@ -2,6 +2,7 @@ import csv,requests,time,os,random,json,ast
 
 # check if the birth month challenge is already exist
 def does_challenge_exist():
+  print('[i] Checking the challenge status...')
   flag = 0
   with requests.Session() as check_existence:
     check_existence.headers.update({"Authorization": f"Token {token}"})
@@ -37,6 +38,7 @@ def birthmonth_challenge():
       full_name.append(col['field_1_value'])
       user_birth_months.append(col['field_2_value'])
 
+  print('[i] Player information collected.')
   with open("birth_month_record.csv") as month_record:
     month_dictreader = csv.DictReader(month_record)
     name_used = []
@@ -52,6 +54,7 @@ def birthmonth_challenge():
     print('[e] CTF showing no birth challenge; however, csv file showing two. Please remove the "birth_month_record.csv" file and try again.\r')
     exit()
   elif len(set(month_used)) == 0:
+    print('[i] Creating challenge now...')
     month_to_add = random.sample(list(set(user_birth_months)),k=2)
 
     picked_id = []
@@ -165,7 +168,7 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
       flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
       if flag_result['success'] == True:
-        print("[+] New birth month challenge and flag added.")
+        print("[+] The birth month challenge and coressponding flag was added.")
         return True
       else:
         print("[e] Error when adding flag.")
