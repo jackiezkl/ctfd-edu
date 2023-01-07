@@ -186,7 +186,7 @@ def check_token():
   if check_token_result.status_code == 200:
     pass
   else:
-    print('Cannot access CTFd api, please check token or IP settings')
+    print('[e] Cannot access CTFd api, please check token or IP settings')
     exit()
 
 if __name__ == "__main__":
