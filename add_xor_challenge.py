@@ -10,7 +10,7 @@ def generate_hex():
   return full_eight_bits
 
 # update the user profile to add binaries to each user
-def update_user_profile(url,token):
+def update_user_profile():
   with open("users_info_record.csv") as users_record:
     heading = next(users_record)
     users_reader = csv.reader(users_record)
@@ -27,7 +27,7 @@ def update_user_profile(url,token):
     users_record.close()
 
 # collect username and id information for other functions to use
-def get_usernames(url,token):
+def get_usernames():
   username_id_csv = open('names_record.csv', 'w', newline='')
   username_id_csv.write('username,id\n')
   print("[+] Created username record file: names_record.csv")
@@ -47,7 +47,7 @@ def get_usernames(url,token):
         heading = next(names_record)
         id_reader = csv.reader(names_record)
         users_info_csv = open('users_info_record.csv', 'w')
-        users_info_csv.write('id,name,field_1_value,field_2_value,hex\n')
+        users_info_csv.write('id,name,field_1_value,field_2_value,hex,paired_name,paired_hex,xor_result\n')
         print("[+] Users' info record file does not exist, file created.")
         print("[+] Filling file content...")
         with requests.Session() as usersinfo_session:
@@ -59,7 +59,7 @@ def get_usernames(url,token):
             field_1_value = users_info_json['data']['fields'][0]['value']
             field_2_value = users_info_json['data']['fields'][1]['value']
             user_hex = generate_hex()
-            users_info_csv.write('%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex))
+            users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
         names_record.close()
       print("[+] Accquired every user's information!")
     else:
@@ -89,7 +89,7 @@ def get_usernames(url,token):
               field_2_value = users_info_json['data']['fields'][1]['value']
               user_hex = generate_hex()
               print("[+] New user added.")
-              users_info_record_csv.write('%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex))
+              users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
         names_record.close()
         print("[+] User information is up to date.")
       return True
@@ -97,23 +97,25 @@ def get_usernames(url,token):
     return False
 
 # pair up users so the coordination challenges can be created
-def generate_pair_and_xor(url,token):
+def generate_pair_and_xor():
   ids=[]
   full_name=[]
   user_hex=[]
   paired_name=[]
   paired_hex=[]
   xor_result=[]
+
   with open("users_info_record.csv") as users_info_record:
     user_info_dictreader = csv.DictReader(users_info_record)
     for col in user_info_dictreader:
       ids.append(col['id'])
       full_name.append(col['field_1_value'])
       user_hex.append(col['hex'])
-      # paired_name.append(col['paired_name'])
-      # paired_hex.append(col['paired_hex'])
-      # xor_result.append(col['xor_result'])
+      paired_name.append(col['paired_name'])
+      paired_hex.append(col['paired_hex'])
+      xor_result.append(col['xor_result'])
     users_info_record.close()
+
 
   for n in range(len(paired_name)):
     if paired_name[n] == '':
@@ -129,7 +131,7 @@ def generate_pair_and_xor(url,token):
       pass
 
   with open("xor_record.csv",'a') as xor_record:
-    col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_exist','challenge_number']
+    col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_added','challenge_number']
     writer = csv.DictWriter(xor_record, fieldnames=col_names)
 
     for n in range(len(ids)):
@@ -137,12 +139,8 @@ def generate_pair_and_xor(url,token):
         print("[+] Challenge already exist, skip.")
         pass
       elif does_challenge_exist(n+1) == False:
-        print(n+1)
-        print(full_name[n])
-        print(paired_name[n])
-        print(xor_result[n])
-        if add_new_challenge(url,token,full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
-          row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_exist':'yes','challenge_number':'"+str(int(n)+1)+"'}"
+        if add_new_challenge(full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
+          row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_added':'yes','challenge_number':'"+str(int(n)+1)+"'}"
           row_dict = ast.literal_eval(row)
           writer.writerow(row_dict)
           row=''
@@ -171,7 +169,7 @@ def does_challenge_exist(n):
       return True
 
 # get the last created challenge id
-def get_last_created_id(url,token,n):
+def get_last_created_id(n):
   with requests.Session() as id_check_session:
     id_check_session.headers.update({"Authorization": f"Token {token}"})
     id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
@@ -183,7 +181,7 @@ def get_last_created_id(url,token,n):
         pass
 
 # add new coordination challenges
-def add_new_challenge(url,token,first_name,second_name,xor,n):
+def add_new_challenge(first_name,second_name,xor,n):
   if second_name == '':
     exit()
   else:
@@ -194,14 +192,14 @@ def add_new_challenge(url,token,first_name,second_name,xor,n):
       add_challenge_result = challenge_result['success']
       update_session.close()
 
-      last_id = get_last_created_id(url,token,n)
+      last_id = get_last_created_id(n)
 
-      result = add_new_flag(url,token,last_id,n,xor,add_challenge_result)
+      result = add_new_flag(last_id,n,xor,add_challenge_result)
 
       return result
 
 # add corresponding flags for the new challenges
-def add_new_flag(url,token,last_id,n,xor,add_challenge_result):
+def add_new_flag(last_id,n,xor,add_challenge_result):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     if add_challenge_result == True:
@@ -221,11 +219,11 @@ def add_new_flag(url,token,last_id,n,xor,add_challenge_result):
 
 if __name__ == "__main__":
   token = "ecf6ddb1175aff108aae66d4c136035b7abc7e4c432bd2865af6650f19938812"
-  url = "http://127.0.0.1"
+  url = "http://209.114.126.72"
 
   if os.path.isfile('xor_record.csv') == False:
       with open("xor_record.csv",'w',newline='') as xor_record:
-        col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_exist','challenge_number']
+        col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_added','challenge_number']
         writer = csv.DictWriter(xor_record, fieldnames=col_names)
 
         writer.writeheader()
@@ -236,11 +234,10 @@ if __name__ == "__main__":
   i = 2
   try:
     while i>1:
-      if get_usernames(url,token) == True:
-        update_user_profile(url,token)
-        generate_pair_and_xor(url,token)
+      if get_usernames() == True:
+        update_user_profile()
+        generate_pair_and_xor()
       else:
         pass
   except KeyboardInterrupt:
     print("Quit by user...")
-#   add_new_challenge(url,token)
