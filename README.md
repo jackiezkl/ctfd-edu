@@ -36,7 +36,7 @@ number_of_workers = 2*number_of_CPUs+1
 ````
 6. Next, it copies the **ctfd-auto-scoreboard** plugin to the plugins folder
 7. Go to the host address to initialize the CTFd platform.
-8. Once done, go to `Admin Panel`--> `Config`-->`Custom Fields`, create the following fields in its order as stated, and make sure to press the save button for each:
+8. Once done, go to `Admin Panel`--> `Config`-->`Custom Fields`, create the following fields in its order as stated. The program will not work if order got messed up. Make sure to press the **save** button for each field created:
 ````
 first:
 Field Type: Text Field
@@ -56,17 +56,19 @@ Field Name: Binary Code
 Field Description: (leave empty)
 Options: (do not check anything)
 ````
-This will add the Full name and birth month fields during registration.
+This will add the Full name and birth month fields to the registration page.
 
 ![registration](registration.png)
 
-9. When setting up the event, make sure to set an event start or end time. Or change it in `Admin` -> `Config`.
-10. A token is needed before running the `add_xor_challenge` and `add_birth_challenge` program. To do that, login as admin, then go to `Settings`-->`access tokens`-->select a time-->`Generate`.
+9. When setting up the event time, set start and end time here or change it in `Admin` -> `Config` page.
+10. A token is needed before running the `add_xor_challenge` and `add_birth_challenge` program. To do that, login as admin, then go to `Settings`-->`access tokens`-->select a time-->`Generate`. If you don't select a time, it will default to expire in a month.
 
 ![token](token.png)
 
-11. Copy the token, and change the variable `token` in the `add_xor_challenge.py` file. The program will add binary codes to each player profile. 
+11. Copy the token, and change the variable `token` in the `add_xor_challenge.py` and `add_birth_challenge` file. The program will alarm you if the token or IP address is incorrect.
 
+12. After executing the `add_xor_challenge` program, it will add binary codes to each player and create XOR challenges. 
+ 
 From ![user-profile](user-profile.png) to ![user-profile-binary](user-profile-binary.png)
 
 The program will run in an infinite loop which dynamically generate new challenges for each new player joined in. 
