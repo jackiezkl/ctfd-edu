@@ -76,3 +76,5 @@ The program will run in an infinite loop which dynamically generate new challeng
 ![new-challenge](new-challenge.png)
 
 13. Run the `add_birth_challenge` program after the first group of people had registered their account. The program won't create birth month challenges if there are less than 3 players. When running the program, it creates two birth month challenges. It first randomly draw two months from all players' birth month pool, and create two challenges based on that. When adding flags, it checks all players birth months. If matches one of the two months, it set the player's first name as flag.
+
+14. It is not recommonded to run both `add_xor_challenge` and `add_birth_challenge` at the same time. There could be a conflict when two are creating the challenges and flags at the same time. 
