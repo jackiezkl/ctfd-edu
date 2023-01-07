@@ -124,16 +124,16 @@ def birthmonth_challenge():
 
 # get the challenge if od the created challenge, so we can set flag for that challenge
 def get_last_created_id(n):
-  id_check_session = requests.Session()
-  id_check_session.headers.update({"Authorization": f"Token {token}"})
-  id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
-  for name in id_check_result['data']:
-    if name['name'] == 'Birth Month '+str(n):
-      id_check_session.close()
-      return name['id']
-    else:
-      pass
-  pass
+  with requests.Session() as id_check_session:
+    id_check_session.headers.update({"Authorization": f"Token {token}"})
+    id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
+    for name in id_check_result['data']:
+      if name['name'] == 'Birth Month '+str(n):
+        id_check_session.close()
+        return name['id']
+      else:
+        pass
+    pass
 
 # add new birth month challenges
 def add_new_birth_challenge(picked_full_name,picked_birth_month,challenge_birth_month,birth_challenge_number):
@@ -173,11 +173,24 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
     else:
       print("[e] Error when adding challenge.")
       return False
-  
+
+def check_token():
+  check_token_result = {}
+
+  with requests.Session() as check_token_session:
+    check_token_session.headers.update({"Authorization": f"Token {token}"})
+    check_token_result = check_token_session.get(f"{url}/api/v1/users/1",headers={"Content-Type": "application/json"})
+  if check_token_result.status_code == 200:
+    pass
+  else:
+    print('Cannot access CTFd api, please check token or IP settings')
+    exit()
 
 if __name__ == "__main__":
-  token = "ecf6ddb1175aff108aae66d4c136035b7abc7e4c432bd2865af6650f19938812"
+  token = "ecf6ddb1175aff108aae66d4c136035b7abc7e4c432bd2865af6650f1993881"
   url = "http://209.114.126.72" 
+
+  check_token()
 
   if os.path.isfile('birth_month_record.csv') == False:
     with open("birth_month_record.csv",'w',newline='') as birth_month_record:
