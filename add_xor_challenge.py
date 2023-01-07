@@ -208,9 +208,23 @@ def add_new_flag(last_id,n,xor,add_challenge_result):
       print("[+] Error when adding challenge.")
       return False
 
+def check_token():
+  check_token_result = {}
+
+  with requests.Session() as check_token_session:
+    check_token_session.headers.update({"Authorization": f"Token {token}"})
+    check_token_result = check_token_session.get(f"{url}/api/v1/users/1",headers={"Content-Type": "application/json"})
+  if check_token_result.status_code == 200:
+    pass
+  else:
+    print('[e] Cannot access CTFd api, please check token or IP settings')
+    exit()
+
 if __name__ == "__main__":
   token = "ecf6ddb1175aff108aae66d4c136035b7abc7e4c432bd2865af6650f19938812"
   url = "http://209.114.126.72"
+
+  check_token()
 
   if os.path.isfile('xor_record.csv') == False:
       with open("xor_record.csv",'w',newline='') as xor_record:
