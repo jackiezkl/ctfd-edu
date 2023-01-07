@@ -61,9 +61,9 @@ def get_usernames():
             user_hex = generate_hex()
             users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
         names_record.close()
-      print("[+] Accquired every user's information!")
+      print("[i] Accquired every user's information!")
     else:
-      print("[+] User info file already exist, checking information...")
+      print("[i] User info file already exist, checking the file content...")
       ids = []
       with open("users_info_record.csv") as users_info_csv:
         users_info_reader = csv.DictReader(users_info_csv)
@@ -91,7 +91,7 @@ def get_usernames():
               print("[+] New user added.")
               users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
         names_record.close()
-        print("[+] User information is up to date.")
+        print("[i] User information is up to date.")
       return True
   else:
     return False
@@ -136,7 +136,7 @@ def generate_pair_and_xor():
 
     for n in range(len(ids)):
       if does_challenge_exist(n+1) == True:
-        print("[+] Challenge already exist, skip.")
+        print("[i] Challenge already exist, skip.")
         pass
       elif does_challenge_exist(n+1) == False:
         if add_new_challenge(full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
@@ -211,10 +211,10 @@ def add_new_flag(last_id,n,xor,add_challenge_result):
         print("[+] New challenge and flag added.")
         return True
       else:
-        print("[+] Error when adding flag.")
+        print("[e] Error when adding flag.")
         return False
     else:
-      print("[+] Error when adding challenge.")
+      print("[e] Error when adding challenge.")
       return False
 
 def check_token():
@@ -226,7 +226,7 @@ def check_token():
   if check_token_result.status_code == 200:
     pass
   else:
-    print('Cannot access CTFd api, please check token or IP settings')
+    print('[e] Cannot access CTFd api, please check token or IP settings')
     exit()
 
 if __name__ == "__main__":
@@ -254,4 +254,4 @@ if __name__ == "__main__":
       else:
         pass
   except KeyboardInterrupt:
-    print("Quit by user...")
+    print("[i] Quit by user...")
