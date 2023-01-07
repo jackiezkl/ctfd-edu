@@ -24,7 +24,6 @@ def update_user_profile():
           json=json.loads(payload),
           headers={"Content-Type": "application/json"},
         )
-    users_record.close()
 
 # collect username and id information for other functions to use
 def get_usernames():
@@ -60,17 +59,15 @@ def get_usernames():
             field_2_value = users_info_json['data']['fields'][1]['value']
             user_hex = generate_hex()
             users_info_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
-        names_record.close()
-      print("[i] Accquired every user's information!")
+      print("[+] Accquired every user's information!")
     else:
-      print("[i] User info file already exist, checking the file content...")
+      print("[+] User info file already exist, checking information...")
       ids = []
       with open("users_info_record.csv") as users_info_csv:
         users_info_reader = csv.DictReader(users_info_csv)
 
         for col in users_info_reader:
           ids.append(col['id'])
-        users_info_csv.close()
 
       with open("names_record.csv") as names_record:
         heading = next(names_record)
@@ -90,8 +87,7 @@ def get_usernames():
               user_hex = generate_hex()
               print("[+] New user added.")
               users_info_record_csv.write('%s,%s,%s,%s,%s,%s,%s,%s\n' % (user_id,user_name,field_1_value,field_2_value,user_hex,'','',''))
-        names_record.close()
-        print("[i] User information is up to date.")
+        print("[+] User information is up to date.")
       return True
   else:
     return False
@@ -114,8 +110,6 @@ def generate_pair_and_xor():
       paired_name.append(col['paired_name'])
       paired_hex.append(col['paired_hex'])
       xor_result.append(col['xor_result'])
-    users_info_record.close()
-
 
   for n in range(len(paired_name)):
     if paired_name[n] == '':
@@ -136,7 +130,7 @@ def generate_pair_and_xor():
 
     for n in range(len(ids)):
       if does_challenge_exist(n+1) == True:
-        print("[i] Challenge already exist, skip.")
+        print("[+] Challenge already exist, skip.")
         pass
       elif does_challenge_exist(n+1) == False:
         if add_new_challenge(full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
@@ -162,7 +156,6 @@ def does_challenge_exist(n):
       else:
         flag1 = "no"
         pass
-    check_existence.close()
     if flag1 == flag2:
       return False
     elif flag1 != flag2:
@@ -175,7 +168,6 @@ def get_last_created_id(n):
     id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
     for name in id_check_result['data']:
       if name['name'] == 'XOR Challenge '+n:
-        id_check_session.close()
         return name['id']
       else:
         pass
@@ -183,14 +175,13 @@ def get_last_created_id(n):
 # add new coordination challenges
 def add_new_challenge(first_name,second_name,xor,n):
   if second_name == '':
-    exit()
+    pass
   else:
     with requests.Session() as update_session:
       update_session.headers.update({"Authorization": f"Token {token}"})
       payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Each of the player is assigned a binary code, you can find your code in the Profile page.\\r\\nNow, retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease speak quietly or use private one-on-one chat function(if there is one) when asking codes from another player.","value":"24","state":"visible","type":"standard"}'
       challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
       add_challenge_result = challenge_result['success']
-      update_session.close()
 
       last_id = get_last_created_id(n)
 
@@ -211,47 +202,31 @@ def add_new_flag(last_id,n,xor,add_challenge_result):
         print("[+] New challenge and flag added.")
         return True
       else:
-        print("[e] Error when adding flag.")
+        print("[+] Error when adding flag.")
         return False
     else:
-      print("[e] Error when adding challenge.")
+      print("[+] Error when adding challenge.")
       return False
-
-def check_token():
-  check_token_result = {}
-
-  with requests.Session() as check_token_session:
-    check_token_session.headers.update({"Authorization": f"Token {token}"})
-    check_token_result = check_token_session.get(f"{url}/api/v1/users/1",headers={"Content-Type": "application/json"})
-  if check_token_result.status_code == 200:
-    pass
-  else:
-    print('[e] Cannot access CTFd api, please check token or IP settings')
-    exit()
 
 if __name__ == "__main__":
   token = "ecf6ddb1175aff108aae66d4c136035b7abc7e4c432bd2865af6650f19938812"
   url = "http://209.114.126.72"
 
-  check_token()
-  
   if os.path.isfile('xor_record.csv') == False:
       with open("xor_record.csv",'w',newline='') as xor_record:
         col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_added','challenge_number']
         writer = csv.DictWriter(xor_record, fieldnames=col_names)
 
         writer.writeheader()
-        xor_record.close()
   else:
     pass
 
-  i = 2
   try:
-    while i>1:
+    while True:
       if get_usernames() == True:
         update_user_profile()
         generate_pair_and_xor()
       else:
         pass
   except KeyboardInterrupt:
-    print("[i] Quit by user...")
+    print("Quit by user...")
