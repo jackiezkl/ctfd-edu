@@ -21,11 +21,11 @@ The plugin shows a scoreboard, and a countdown until the start of the event and 
 
 1. Clone the official CTFd repository at [here](https://github.com/CTFd/CTFd). When finished, don't change directory. Clone this repository to **the same directory where your CTFd is**. Run the **run_first.py**
 2. It first creates a ``.ctfd_secret_key file`` which is required by the next step.
-3. It then check the total number of CPU cores, and calculate the total number of workers. Then, it changes the setting. 
+3. Then, it checks the total number of CPU cores, and calculate the optimal total number of workers. Then, it changes the setting. 
 ````
 number_of_workers = 2*number_of_CPUs+1
 ````
-4. The program will add to the following to base template (`themes/core/templates/base.html` if you are using the default theme):
+4. The program will add to the following to base template (`themes/core/templates/base.html` if you are using the default theme. It will not work for other themes):
 ```
 <meta name="start_in" content="{{ ctf_starts_in() }}">
 <meta name="ends_in" content="{{ ctf_ends_in() }}">
@@ -35,8 +35,8 @@ number_of_workers = 2*number_of_CPUs+1
 <span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>
 ````
 6. Next, it copies the **ctfd-auto-scoreboard** plugin to the plugins folder
-7. Go to the host address to initialize the CTF.
-8. Go to `Admin Panel`--> `Config`-->`Custom Fields`, create the following fields in order as stated, and make sure to press the save button for each:
+7. Go to the host address to initialize the CTFd platform.
+8. Once done, go to `Admin Panel`--> `Config`-->`Custom Fields`, create the following fields in its order as stated, and make sure to press the save button for each:
 ````
 first:
 Field Type: Text Field
