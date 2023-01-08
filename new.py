@@ -369,7 +369,7 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
     content_string = '('+content_string.lstrip('|')+')'
 
     if add_challenge_result == True:
-      payload = '{"challenge_id":"'+str(last_id)+'","content":"'+content_string+'","type":"regex","data":""}'
+      payload = '{"challenge_id":"'+str(last_id)+'","content":"'+content_string+'","type":"regex","data":"case_insensitive"}'
       # print(payload)
       flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
@@ -381,6 +381,84 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
         return False
     else:
       print("[e] Error when adding challenge.")
+      return False
+#--------------------------------------
+def new_user_birth_check():
+  field_1_value = []
+  field_2_value = []
+  with open("users_info_record.csv") as users_info_csv:
+    users_info_reader = csv.DictReader(users_info_csv)
+    for col in users_info_reader:
+      field_1_value.append(col['field_1_value'])
+      field_2_value.append(col['field_2_value'])
+
+  full_name_used = []
+  birth_month = []
+  challenge_number = []
+  with open("birth_month_record.csv") as birth_challenge_record:
+    birth_challenge_reader = csv.DictReader(birth_challenge_record)
+    for col in birth_challenge_reader:
+      full_name_used.append(col['full_name_used'])
+      birth_month.append(col['birth_month'])
+      challenge_number.append(col['challenge_number'])
+
+  used_months = list(set(birth_month))
+
+  monthdict = {birth_month[a]:challenge_number[a] for a in range(len(birth_month))}
+
+  with open("birth_month_record.csv",'a') as birth_month_record:
+    col_names = ['full_name_used','birth_month','challenge_added','challenge_number']
+    birth_month_writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
+
+    for n in range(2):
+      for j in range(len(field_1_value)):
+        if used_months[n] == field_2_value[j] and field_1_value[j] not in full_name_used:
+          new_full_name = field_1_value[j]
+          flag_id,flag_content = birth_flag_id(birth_challenge_id(monthdict[used_months[n]]))
+          if patch_birth_flag(flag_id,flag_content,new_full_name) is True:
+            row="{'full_name_used':'"+new_full_name+"','birth_month':'"+used_months[n]+"','challenge_added':'yes','challenge_number':'"+str(monthdict[used_months[n]])+"'}"
+            row_dict = ast.literal_eval(row)
+            birth_month_writer.writerow(row_dict)
+        else:
+          pass
+
+def birth_challenge_id(birth_challenge_number):
+  with requests.Session() as id_check_session:
+    id_check_session.headers.update({"Authorization": f"Token {token}"})
+    id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
+    for name in id_check_result['data']:
+      if name['name'] == 'Birth Month '+str(birth_challenge_number):
+        return name['id']
+      else:
+        pass
+    pass
+
+def birth_flag_id(challenge_id):
+  with requests.Session() as id_check_session:
+    id_check_session.headers.update({"Authorization": f"Token {token}"})
+    id_check_result = id_check_session.get(f"{url}/api/v1/flags",headers={"Content-Type": "application/json"}).json()
+    for flag_content in id_check_result['data']:
+      if flag_content['challenge_id'] == challenge_id:
+        return flag_content['id'],flag_content['content']
+      else:
+        pass
+    pass
+
+def patch_birth_flag(flag_id,flag_content,new_full_name):
+  print('[+] New user flag found! Patching existing birth month challenge...')
+  new_content = flag_content.rstrip(')') + '|'+new_full_name.split()[0]+')'
+  with requests.Session() as update_session:
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    content_string = ''
+
+    payload = '{"content": "'+new_content+'", "data": "case_insensitive", "type": "regex", "id": "'+str(flag_id)+'"}'
+    flag_result = update_session.patch(f"{url}/api/v1/flags/{flag_id}",json=json.loads(payload)).json()
+
+    if flag_result['success'] == True:
+      print("[i] Birth month challenge flag was updated.")
+      return True
+    else:
+      print("[e] Error when adding flag.")
       return False
 
 def check_token():
@@ -431,5 +509,7 @@ if __name__ == "__main__":
         birthmonth_challenge()
       else:
         pass
+
+      new_user_birth_check()
   except KeyboardInterrupt:
     print("[i] Quit by user...")
