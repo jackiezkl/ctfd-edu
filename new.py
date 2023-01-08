@@ -339,7 +339,6 @@ def get_last_created_birth_id(n):
     id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
     for name in id_check_result['data']:
       if name['name'] == 'Birth Month '+str(n):
-        id_check_session.close()
         return name['id']
       else:
         pass
@@ -408,7 +407,6 @@ if __name__ == "__main__":
         writer = csv.DictWriter(xor_record, fieldnames=col_names)
 
         writer.writeheader()
-        xor_record.close()
   else:
     pass
 
@@ -418,7 +416,6 @@ if __name__ == "__main__":
       writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
 
       writer.writeheader()
-      birth_month_record.close()
   else:
     pass
 
