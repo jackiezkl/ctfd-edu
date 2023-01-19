@@ -383,7 +383,7 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
     else:
       print("[e] Error when adding challenge.")
       return False
-#-------------------the section below check new user's birth month and update existing challenges-------------------
+##-------------------the section below check new user's birth month and update existing challenges-------------------
 def new_user_birth_check():
   field_1_value = []
   field_2_value = []
@@ -473,6 +473,10 @@ def check_token():
   else:
     print('[e] Cannot access CTFd api, please check token or IP settings')
     exit()
+
+##-----------------the sectoin below change the points for each new challenge ---------
+def update_points():
+  
 
 if __name__ == "__main__":
   token = "e893233cbc79e4b567bd118f24758f44c4da7c0cf671900abac4ca73e83b3986"
