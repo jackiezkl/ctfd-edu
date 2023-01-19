@@ -206,7 +206,7 @@ def add_new_xor_flag(last_id,n,xor,add_challenge_result):
     else:
       print("[+] Error when adding challenge.")
       return False
-##----------------------------
+##--------------below are for creating birth day challenges----------
 # check if the birth month challenge is already exist
 def does_birth_challenge_exist():
   print('[i] Checking the challenge status...')
@@ -292,7 +292,8 @@ def birthmonth_challenge():
               row=''
         else:
           pass
-  # #following case is not used, this program only handles no challenge or 2 challenges situation.
+  # #following case with 1 existing birth challenge is not finalized, thus not used. 
+  # #this program only handles no challenge or 2 challenges situation.
   # elif len(set(month_used)) == 1:
   #   while True:
   #     month_to_add = random.sample(list(set(user_birth_months)),k=1)
@@ -382,7 +383,7 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
     else:
       print("[e] Error when adding challenge.")
       return False
-#--------------------------------------
+#-------------------the section below check new user's birth month and update existing challenges-------------------
 def new_user_birth_check():
   field_1_value = []
   field_2_value = []
@@ -474,8 +475,8 @@ def check_token():
     exit()
 
 if __name__ == "__main__":
-  token = "ecf6ddb1175aff108aae66d4c136035b7abc7e4c432bd2865af6650f19938812"
-  url = "http://209.114.126.72"
+  token = "e893233cbc79e4b567bd118f24758f44c4da7c0cf671900abac4ca73e83b3986"
+  url = "http://209.114.126.52"
 
   check_token()
   
