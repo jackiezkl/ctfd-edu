@@ -476,11 +476,11 @@ def check_token():
 
 ##-----------------the sectoin below change the points for each new challenge ---------
 def update_points():
-  
+  pass
 
 if __name__ == "__main__":
-  token = "e893233cbc79e4b567bd118f24758f44c4da7c0cf671900abac4ca73e83b3986"
-  url = "http://209.114.126.52"
+  token = "099b06d2394093117dfd53ca9e01f23a9437fda5579bdd82a317861740f1b35f"
+  url = "http://209.114.126.86"
 
   check_token()
   
