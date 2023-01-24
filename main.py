@@ -512,6 +512,7 @@ if __name__ == "__main__":
             birthmonth_challenge()
             new_user_birth_check()
           except Exception:
+            print('[e] Not enough users.\r')
             pass
         else:
           pass
