@@ -255,7 +255,7 @@ def birthmonth_challenge():
       month_used.append(col['birth_month'])
 
   if len(set(user_birth_months)) < 3:
-    print('[e] There are less than 3 players. In practice, birth challenge doesn\'t make a lot sense.\nContinue checking.\r')
+    print('[e] There\'re less than 3 players. In practice, birth challenge doesn\'t make a lot sense.\n    Continue checking.\r')
     pass
   elif len(set(month_used)) == 2:
     print('[e] CTF showing no birth challenge; however, csv file showing two. Please remove the "birth_month_record.csv" file and try again.\r')
@@ -515,6 +515,6 @@ if __name__ == "__main__":
       else:
         pass
   except Exception:
-    pass
+    continue
   except KeyboardInterrupt:
     print("[i] Quit by user...")
