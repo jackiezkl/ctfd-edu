@@ -511,11 +511,13 @@ if __name__ == "__main__":
           birthmonth_challenge()
         else:
           pass
+
+        new_user_birth_check()
       else:
         pass
       
 
 
-      new_user_birth_check()
+
   except KeyboardInterrupt:
     print("[i] Quit by user...")
