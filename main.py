@@ -479,7 +479,7 @@ def update_points():
   pass
 
 if __name__ == "__main__":
-  token = "099b06d2394093117dfd53ca9e01f23a9437fda5579bdd82a317861740f1b35f"
+  token = "e1e0c697d7ed975182df847918d0e0fee4c99b48d0eac461e3a2bcfdb3e72e3c"
   url = "http://209.114.126.86"
 
   check_token()
