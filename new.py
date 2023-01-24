@@ -14,24 +14,27 @@ def count_coordination():
 
     new_points = round(500/count)
 
-    for name in challenge_result['data']:
-      if "XOR Challenge" in name['name']:
-        update_points(str(name['id']),new_points)
-      elif "Birth Month" in name['name']:
-        update_points(str(name['id']),new_points)
-
+    try:
+      for name in challenge_result['data']:
+        if "XOR Challenge" in name['name']:
+          update_points(str(name['id']),new_points)
+        elif "Birth Month" in name['name']:
+          update_points(str(name['id']),new_points)
+      print('[+] Coordination points changed')
+    except Exception:
+      print('[e] Coordination points not updated.')
+      pass
 def update_points(challenge_id,new_points):
-  print(challenge_id)
-  print(new_points)
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     payload = '{"value":"'+str(new_points)+'"}'
     flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
-    print(flag_result.status_code)
+    if flag_result.status_code > 399:
+      print('[e] Challenge '+challenge_id+' points not updated')
 
 
 if __name__ == "__main__":
-  token = "099b06d2394093117dfd53ca9e01f23a9437fda5579bdd82a317861740f1b35f"
+  token = "e1e0c697d7ed975182df847918d0e0fee4c99b48d0eac461e3a2bcfdb3e72e3c"
   url = "http://209.114.126.86"
 
   count_coordination()
