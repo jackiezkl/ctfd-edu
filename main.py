@@ -508,13 +508,14 @@ if __name__ == "__main__":
         update_user_profile()
         generate_pair_and_xor()
         if does_birth_challenge_exist() == 0:
-          birthmonth_challenge()
-          new_user_birth_check()
+          try:
+            birthmonth_challenge()
+            new_user_birth_check()
+          except Exception:
+            pass
         else:
           pass
       else:
         pass
-  except Exception:
-    continue
   except KeyboardInterrupt:
     print("[i] Quit by user...")
