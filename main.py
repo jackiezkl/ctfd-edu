@@ -446,7 +446,7 @@ def birth_flag_id(challenge_id):
     pass
 
 def patch_birth_flag(flag_id,flag_content,new_full_name):
-  print('[+] New user flag found! Patching existing birth month challenge...')
+  print('[+] New user found! Patching existing birth month challenge...')
   new_content = flag_content.rstrip(')') + '|'+new_full_name.split()[0]+')'
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
@@ -507,13 +507,16 @@ if __name__ == "__main__":
       if get_usernames() == True:
         update_user_profile()
         generate_pair_and_xor()
-        if does_birth_challenge_exist() == 0:
+        flag = does_birth_challenge_exist()
+        if flag == 0:
           try:
             birthmonth_challenge()
             new_user_birth_check()
           except Exception:
             print('[e] Not enough users.\r')
             pass
+        elif flag == 2:
+          new_user_birth_check()
         else:
           pass
       else:
