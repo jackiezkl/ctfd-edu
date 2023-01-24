@@ -1,0 +1,6 @@
+id,user_name,user_hex,paired_name,paired_hex,xor_result,challenge_added,challenge_number
+2,first1 last1,11111101,first2 last2,11011111,00100010,yes,1
+3,first2 last2,11011111,first3 last3,10001000,01010111,yes,2
+4,first3 last3,10001000,first4 last4,10000101,00001101,yes,3
+5,first4 last4,10000101,first5 last5,10101110,00101011,yes,4
+6,first5 last5,10101110,first6 last6,10011110,00110000,yes,5

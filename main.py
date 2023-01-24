@@ -450,7 +450,7 @@ def patch_birth_flag(flag_id,flag_content,new_full_name):
   new_content = flag_content.rstrip(')') + '|'+new_full_name.split()[0]+')'
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
-    content_string = ''
+    # content_string = ''
 
     payload = '{"content": "'+new_content+'", "data": "case_insensitive", "type": "regex", "id": "'+str(flag_id)+'"}'
     flag_result = update_session.patch(f"{url}/api/v1/flags/{flag_id}",json=json.loads(payload)).json()

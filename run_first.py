@@ -23,7 +23,7 @@ def patch_base_html(parent_path):
 
     with open(dst_path, 'r') as base_file:
       search_text = '<a href="https://ctfd.io" class="text-secondary">\n\t\t\t\t<small class="text-muted">Powered by CTFd</small>\n\t\t\t</a>\n'
-      replace_text = '<script>const d=new Date();let year=d.getFullYear();document.write("CTF - "+year);</script>\n'
+      replace_text = '<script>const d=new Date();let year=d.getFullYear();document.write("{{ Configs.ctf_name }} - "+year);</script>\n'
       data = base_file.read()
       try:
         data = data.replace(search_text, replace_text)

@@ -1,0 +1,7 @@
+id,name,field_1_value,field_2_value,hex,paired_name,paired_hex,xor_result
+2,test1,first1 last1,April,fd,,,
+3,test2,first2 last2,March,df,,,
+4,test3,first3 last3,December,88,,,
+5,test4,first4 last4,January,85,,,
+6,test5,first5 last5,February,ae,,,
+7,test6,first6 last6,March,9e,,,
