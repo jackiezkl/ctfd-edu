@@ -507,13 +507,14 @@ if __name__ == "__main__":
       if get_usernames() == True:
         update_user_profile()
         generate_pair_and_xor()
+        if does_birth_challenge_exist() == 0:
+          birthmonth_challenge()
+        else:
+          pass
       else:
         pass
       
-      if does_birth_challenge_exist() == 0:
-        birthmonth_challenge()
-      else:
-        pass
+
 
       new_user_birth_check()
   except KeyboardInterrupt:
