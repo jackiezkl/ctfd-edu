@@ -509,15 +509,12 @@ if __name__ == "__main__":
         generate_pair_and_xor()
         if does_birth_challenge_exist() == 0:
           birthmonth_challenge()
+          new_user_birth_check()
         else:
           pass
-
-        new_user_birth_check()
       else:
         pass
-      
-
-
-
+  except Exception:
+    pass
   except KeyboardInterrupt:
     print("[i] Quit by user...")
