@@ -29,7 +29,7 @@ def update_user_profile():
 def get_usernames():
   username_id_csv = open('names_record.csv', 'w', newline='')
   username_id_csv.write('username,id\n')
-  print("[+] Created username record file: names_record.csv")
+  # print("[+] Created username record file: names_record.csv")
 
   with requests.Session() as username_session:
     all_user_info_json = username_session.get(f"{url}/api/v1/users").json()
