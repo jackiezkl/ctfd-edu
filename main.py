@@ -474,12 +474,6 @@ def check_token():
     print('[e] Cannot access CTFd api, please check token or IP.')
     exit()
 
-def update_visibility(challenge_id):
-  with requests.Session() as update_session:
-    update_session.headers.update({"Authorization": f"Token {token}"})
-    payload = '{"state":"visible"}'
-    flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
-
 ##-----------------the sectoin below change the points for each new challenge ---------
 def count_coordination(number_of_breakout_room):
   count = number_of_breakout_room
@@ -497,12 +491,12 @@ def count_coordination(number_of_breakout_room):
 
     if number_of_breakout_room == "1":
       update_points("80",new_points)
-      update_visibility("80")
+      make_visible("80")
     elif number_of_breakout_room == "2":
       update_points("80",new_points)
       update_points("81",new_points)
-      update_visibility("80")
-      update_visibility("81")
+      make_visible("80")
+      make_visible("81")
 
     try:
       for name in challenge_result['data']:
@@ -521,6 +515,12 @@ def update_points(challenge_id,new_points):
     flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
     if flag_result.status_code > 399:
       print('[e] Challenge '+challenge_id+' points not updated')
+
+def make_visible(challenge_id):
+  with requests.Session() as update_session:
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    payload = '{"state":"visible"}'
+    flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
 
 if __name__ == "__main__":
   token = "e1e0c697d7ed975182df847918d0e0fee4c99b48d0eac461e3a2bcfdb3e72e3c"

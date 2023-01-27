@@ -94,7 +94,7 @@ def save_id():
     except Exception:
       pass
 
-def update_visibility(challenge_id):
+def make_visible(challenge_id):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     payload = '{"state":"visible"}'
@@ -128,6 +128,7 @@ def check_req(challenge_id):
       requirements_id = str(flag_result['data']['prerequisites'][0])
       print(str(challenge_id) + ':'+requirements_id)
     except Exception:
+      print(challenge_id)
       pass
 
 if __name__ == "__main__":
@@ -140,18 +141,21 @@ if __name__ == "__main__":
   # patch_prereq("Birth Month 2","38")
   # ### Linux 5 must be hidden at the beginning.
   # patch_prereq_reverseid("31","XOR Challenge 5")
-  # update_visibility(31)
+  # make_visible(31)
   # patch_prereq_id("XOR Challenge 5","22")
   # patch_prereq_reverseid("11","XOR Challenge 6")
-  # update_visibility(11)
+  # make_visible(11)
   # patch_prereq_id("XOR Challenge 6","22")
   # patch_prereq("Break Room 1","XOR Challenge 1")
-  # patch_prereq("Firewall 5","XOR Challenge 2")
-  # patch_prereq("Name the Attack 3","XOR Challenge 2")
+  # patch_prereq_reverseid("71","XOR Challenge 2")
+  # make_visible(71)
+  # patch_prereq_reverseid("47","XOR Challenge 2")
+  # make_visible(47)
   # patch_prereq("Break Room 2","XOR Challenge 3")
-  # patch_prereq("Vulnerability Test,"XOR Challenge 3"")
+  # patch_prereq("12","XOR Challenge 3")
+  # make_visible(12)
   # patch_prereq("XOR Challenge 3","Birth Month 1")
-  # patch_prereq("Birth Month 1", "Coordination using Zoom Chat")
+  # patch_prereq("Birth Month 1", "Coordination Practice")
   # patch_prereq()
   # patch_prereq()
   # patch_prereq()
@@ -159,4 +163,6 @@ if __name__ == "__main__":
   # patch_prereq()
   # patch_prereq()
   # patch_prereq()
-  save_id()
+  # save_id()
+  for n in range(1,80):
+    check_req(n)
