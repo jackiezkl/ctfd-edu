@@ -384,6 +384,7 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
       print("[e] Error when adding challenge.")
       return False
 ##-------------------the section below check new user's birth month and update existing challenges-------------------
+# check if new user joined the game, and check the new user's birth month
 def new_user_birth_check():
   field_1_value = []
   field_2_value = []
@@ -423,6 +424,7 @@ def new_user_birth_check():
         else:
           pass
 
+# get the birth month challenge id
 def birth_challenge_id(birth_challenge_number):
   with requests.Session() as id_check_session:
     id_check_session.headers.update({"Authorization": f"Token {token}"})
@@ -434,6 +436,7 @@ def birth_challenge_id(birth_challenge_number):
         pass
     pass
 
+# add birth month flag by using the birth month challenge id
 def birth_flag_id(challenge_id):
   with requests.Session() as id_check_session:
     id_check_session.headers.update({"Authorization": f"Token {token}"})
@@ -445,6 +448,7 @@ def birth_flag_id(challenge_id):
         pass
     pass
 
+# patch the existing birth month challenge to use the new user information
 def patch_birth_flag(flag_id,flag_content,new_full_name):
   print('[+] New user found! Patching existing birth month challenge...')
   new_content = flag_content.rstrip(')') + '|'+new_full_name.split()[0]+')'
@@ -462,6 +466,7 @@ def patch_birth_flag(flag_id,flag_content,new_full_name):
       print("[e] Error when adding flag.")
       return False
 
+# verify the token works
 def check_token():
   check_token_result = {}
 
@@ -475,6 +480,7 @@ def check_token():
     exit()
 
 ##-----------------the sectoin below change the points for each new challenge ---------
+# count how many coordination challenges
 def count_coordination(number_of_breakout_room):
   count = number_of_breakout_room
   with requests.Session() as check_existence:
@@ -508,6 +514,8 @@ def count_coordination(number_of_breakout_room):
     except Exception:
       print('[e] Coordination points not updated.')
       pass
+
+# assign points to each coordination challenge based on the count number
 def update_points(challenge_id,new_points):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
@@ -516,6 +524,7 @@ def update_points(challenge_id,new_points):
     if flag_result.status_code > 399:
       print('[e] Challenge '+challenge_id+' points not updated')
 
+# change the visibility to visible
 def make_visible(challenge_id):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
@@ -526,8 +535,10 @@ if __name__ == "__main__":
   token = "e1e0c697d7ed975182df847918d0e0fee4c99b48d0eac461e3a2bcfdb3e72e3c"
   url = "http://209.114.126.86"
 
+# make sure the token is working 
   check_token()
   
+# ask for how many breakout room
   while True:
     number_of_breakout_room = input("How many Breakout Rooms?(Answer 0,1, or 2)\n")
     if number_of_breakout_room == "0":
@@ -543,24 +554,25 @@ if __name__ == "__main__":
       print("You need to answer 0,1, or 2.")
       continue
 
+# check the xor_record file, if doesn't exist, create the file
   if os.path.isfile('xor_record.csv') == False:
       with open("xor_record.csv",'w',newline='') as xor_record:
         col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_added','challenge_number']
         writer = csv.DictWriter(xor_record, fieldnames=col_names)
-
         writer.writeheader()
   else:
     pass
 
+# check the birth_month_record file, if doesn't exist, create the file
   if os.path.isfile('birth_month_record.csv') == False:
     with open("birth_month_record.csv",'w',newline='') as birth_month_record:
       col_names = ['full_name_used','birth_month','challenge_added','challenge_number']
       writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
-
       writer.writeheader()
   else:
     pass
 
+# run the main program
   try:
     while True:
       if get_usernames() == True:

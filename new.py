@@ -80,7 +80,7 @@ def patch_prereq_reverseid(challenge_id,prereq_name):
 
 
 def save_id():
-  for n in range(79,150):
+  for n in range(1,80):
     try:
       with requests.Session() as check_existence:
         check_existence.headers.update({"Authorization": f"Token {token}"})
@@ -164,5 +164,6 @@ if __name__ == "__main__":
   # patch_prereq()
   # patch_prereq()
   # save_id()
-  for n in range(1,80):
-    check_req(n)
+  # for n in range(1,80):
+  #   check_req(n)
+  save_id()
