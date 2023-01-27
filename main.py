@@ -471,12 +471,18 @@ def check_token():
   if check_token_result.status_code == 200:
     pass
   else:
-    print('[e] Cannot access CTFd api, please check token or IP settings')
+    print('[e] Cannot access CTFd api, please check token or IP.')
     exit()
 
+def update_visibility(challenge_id):
+  with requests.Session() as update_session:
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    payload = '{"state":"visible"}'
+    flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
+
 ##-----------------the sectoin below change the points for each new challenge ---------
-def count_coordination():
-  count = 0
+def count_coordination(number_of_breakout_room):
+  count = number_of_breakout_room
   with requests.Session() as check_existence:
     check_existence.headers.update({"Authorization": f"Token {token}"})
     challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
@@ -488,6 +494,15 @@ def count_coordination():
         count+=1
 
     new_points = round(500/count)
+
+    if number_of_breakout_room == "1":
+      update_points("80",new_points)
+      update_visibility("80")
+    elif number_of_breakout_room == "2":
+      update_points("80",new_points)
+      update_points("81",new_points)
+      update_visibility("80")
+      update_visibility("81")
 
     try:
       for name in challenge_result['data']:
@@ -513,6 +528,21 @@ if __name__ == "__main__":
 
   check_token()
   
+  while True:
+    number_of_breakout_room = input("How many Breakout Rooms?(Answer 0,1, or 2)\n")
+    if number_of_breakout_room == "0":
+      count = 0
+      break
+    elif number_of_breakout_room == "1":
+      count = 1
+      break
+    elif number_of_breakout_room == "2":
+      count = 2
+      break
+    else:
+      print("You need to answer 0,1, or 2.")
+      continue
+
   if os.path.isfile('xor_record.csv') == False:
       with open("xor_record.csv",'w',newline='') as xor_record:
         col_names = ['id', 'user_name','user_hex','paired_name','paired_hex','xor_result','challenge_added','challenge_number']
@@ -546,7 +576,7 @@ if __name__ == "__main__":
             pass
         elif flag == 2:
           new_user_birth_check()
-          count_coordination()
+          count_coordination(count)
         else:
           pass
       else:
