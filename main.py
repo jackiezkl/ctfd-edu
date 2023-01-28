@@ -531,6 +531,79 @@ def make_visible(challenge_id):
     payload = '{"state":"visible"}'
     flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
 
+# -------------------the section below update the prerequisite for new and existing challenges----------------- 
+def patch_prereq_name(challenge_name,prereq_name):
+  prerequisites_id = ''
+  challenge_id = ''
+  flag_challenge = 0
+  flag_prereq = 0
+  with requests.Session() as check_existence:
+    check_existence.headers.update({"Authorization": f"Token {token}"})
+    challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
+
+    for name in challenge_result['data']:
+      if challenge_name in name['name']:
+        challenge_id = str(name['id'])
+      else:
+        flag_challenge = 1
+
+    for name in challenge_result['data']:
+      if prereq_name in name['name']:
+        prerequisites_id = str(name['id'])
+      else:
+        flag_prereq = 1
+
+  with requests.Session() as update_session:
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    payload = '{"requirements":{"prerequisites":['+prerequisites_id+']}}'
+    flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
+    if flag_result.status_code > 399 and flag_challenge == 1 and flag_prereq == 0:
+      print("[e] '"+challenge_name+"' doesn't exist, nothing changed.")
+    elif flag_result.status_code > 399 and flag_prereq == 1 and flag_challenge == 0:
+      print( "[e] '"+prereq_name+"' doesn't exist, prerequisites not updated")
+    elif flag_result.status_code > 399 and flag_challenge == 1 and flag_prereq == 1:
+      print("[e] Neither '"+challenge_name+"' and '"+prereq_name+"' esixts, nothing changed.")
+    else:
+      print("[e] Something's wrong, nothing changed.")
+
+def patch_prereq_id(challenge_name,prereq_id):
+  challenge_id = ''
+  flag_challenge = 0
+  with requests.Session() as check_existence:
+    check_existence.headers.update({"Authorization": f"Token {token}"})
+    challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
+
+    for name in challenge_result['data']:
+      if challenge_name in name['name']:
+        challenge_id = str(name['id'])
+      else:
+        flag_challenge = 1
+
+  with requests.Session() as update_session:
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    payload = '{"requirements":{"prerequisites":['+prereq_id+']}}'
+    flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
+    if flag_result.status_code > 399 and flag_challenge == 1:
+      print("[e] '"+challenge_name+"' doesn\'t exist, nothing changed.")
+    else:
+      print("[e] Something's wrong, nothing changed.")
+
+def patch_prereq_reverseid(challenge_id,prereq_name):
+  prerequisites_id = ''
+  flag_prereq = 0
+  with requests.Session() as check_existence:
+    check_existence.headers.update({"Authorization": f"Token {token}"})
+    challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
+
+    for name in challenge_result['data']:
+      if prereq_name in name['name']:
+        prerequisites_id = str(name['id'])
+      else:
+        flag_prereq = 1
+
+
+
+
 if __name__ == "__main__":
   token = "e1e0c697d7ed975182df847918d0e0fee4c99b48d0eac461e3a2bcfdb3e72e3c"
   url = "http://209.114.126.86"

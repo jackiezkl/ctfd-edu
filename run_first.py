@@ -3,6 +3,9 @@ from secrets import token_hex
 from shutil import copytree
 from multiprocessing import cpu_count
 
+def already_replaced(path_to_file,string_to_check):
+
+
 def patch_base_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/base.html"
   dst_path = os.path.join(parent_path, relative_path)
@@ -16,10 +19,8 @@ def patch_base_html(parent_path):
         f.seek(0)
         for line in lines:
           f.write(line)
-        f.close()
       except Exception:
         print("[+] Couldn't find the *viewport* to replace with.")
-        f.close()
 
     with open(dst_path, 'r') as base_file:
       search_text = '<a href="https://ctfd.io" class="text-secondary">\n\t\t\t\t<small class="text-muted">Powered by CTFd</small>\n\t\t\t</a>\n'
@@ -34,7 +35,6 @@ def patch_base_html(parent_path):
     if flag == 1:
       with open(dst_path, 'w') as base_file:
         base_file.write(data)
-        base_file.close()
     elif flag == 0:
       exit()
   except Exception:
@@ -55,10 +55,8 @@ def patch_challenges_html(parent_path):
         challenges_file.seek(0)
         for line in lines:
           challenges_file.write(line)
-        challenges_file.close()
       except Exception:
         print("[+] Couldn't find the *viewport* to replace with.")
-        challenges_file.close()
   except Exception:
     print("[+] Couldn't find the challenges.html to work with.")
     exit()
@@ -90,7 +88,6 @@ def patch_register_html(parent_path):
   if flag == 1:
     with open(dst_path, 'w') as base_file:
       base_file.write(data)
-      base_file.close()
   elif flag == 0:
     exit()
 
@@ -114,7 +111,6 @@ def patch_username_description(parent_path):
   if flag == 1:
     with open(dst_path, 'w') as base_file:
       base_file.write(data)
-      base_file.close()
   elif flag == 0:
     exit()
 
@@ -134,17 +130,14 @@ def patch_private_html(parent_path):
       f.seek(0)
       for line in lines:
         f.write(line)
-      f.close()
     except Exception:
       print("[+] Couldn't find the *{{ user.name }}* to replace with.")
-      f.close()
 
 def create_secret(parent_path):
   relative_path = "CTFd/.ctfd_secret_key"
   dst_path = os.path.join(parent_path,relative_path)
   with open(dst_path, "w") as secret_file:
     secret_file.write(token_hex())
-    secret_file.close()
 
 def patch_docker_compose(parent_path):
   relative_path = "CTFd/docker-compose.yml"
@@ -166,9 +159,7 @@ def patch_docker_compose(parent_path):
   if flag == 1:
     with open(dst_path, 'w') as docker_compose_file:
       docker_compose_file.write(data)
-      docker_compose_file.close()
   elif flag == 0:
-    docker_compose_file.close()
     exit()
 
 if __name__=="__main__":

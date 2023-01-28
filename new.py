@@ -26,6 +26,10 @@ def update_prereq(challenge_id,prerequisites_id):
 
 
 def patch_prereq_name(challenge_name,prereq_name):
+  prerequisites_id = ''
+  challenge_id = ''
+  flag_challenge = 0
+  flag_prereq = 0
   with requests.Session() as check_existence:
     check_existence.headers.update({"Authorization": f"Token {token}"})
     challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
@@ -33,19 +37,31 @@ def patch_prereq_name(challenge_name,prereq_name):
     for name in challenge_result['data']:
       if challenge_name in name['name']:
         challenge_id = str(name['id'])
+      else:
+        flag_challenge = 1
 
     for name in challenge_result['data']:
       if prereq_name in name['name']:
         prerequisites_id = str(name['id'])
+      else:
+        flag_prereq = 1
 
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     payload = '{"requirements":{"prerequisites":['+prerequisites_id+']}}'
     flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
-    if flag_result.status_code > 399:
-      print('[e] Challenge '+challenge_id+' prerequisites not updated')
+    if flag_result.status_code > 399 and flag_challenge == 1 and flag_prereq == 0:
+      print("[e] '"+challenge_name+"' doesn't exist, nothing changed.")
+    elif flag_result.status_code > 399 and flag_prereq == 1 and flag_challenge == 0:
+      print( "[e] '"+prereq_name+"' doesn't exist, prerequisites not updated")
+    elif flag_result.status_code > 399 and flag_challenge == 1 and flag_prereq == 1:
+      print("[e] Neither '"+challenge_name+"' and '"+prereq_name+"' esixts, nothing changed.")
+    else:
+      print("[e] Something's wrong, nothing changed.")
 
 def patch_prereq_id(challenge_name,prereq_id):
+  challenge_id = ''
+  flag_challenge = 0
   with requests.Session() as check_existence:
     check_existence.headers.update({"Authorization": f"Token {token}"})
     challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
@@ -53,15 +69,21 @@ def patch_prereq_id(challenge_name,prereq_id):
     for name in challenge_result['data']:
       if challenge_name in name['name']:
         challenge_id = str(name['id'])
+      else:
+        flag_challenge = 1
 
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     payload = '{"requirements":{"prerequisites":['+prereq_id+']}}'
     flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
-    if flag_result.status_code > 399:
-      print('[e] Challenge '+challenge_id+' prerequisites not updated')
+    if flag_result.status_code > 399 and flag_challenge == 1:
+      print("[e] '"+challenge_name+"' doesn\'t exist, nothing changed.")
+    else:
+      print("[e] Something's wrong, nothing changed.")
 
 def patch_prereq_reverseid(challenge_id,prereq_name):
+  prerequisites_id = ''
+  flag_prereq = 0
   with requests.Session() as check_existence:
     check_existence.headers.update({"Authorization": f"Token {token}"})
     challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
@@ -69,13 +91,17 @@ def patch_prereq_reverseid(challenge_id,prereq_name):
     for name in challenge_result['data']:
       if prereq_name in name['name']:
         prerequisites_id = str(name['id'])
+      else:
+        flag_prereq = 1
 
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     payload = '{"requirements":{"prerequisites":['+prerequisites_id+']}}'
     flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
-    if flag_result.status_code > 399:
-      print('[e] Challenge '+challenge_id+' prerequisites not updated')
+    if flag_prereq == 1:
+      print("[e] '"+prereq_name+"' doesn\'t exist, nothing changed.")
+    else:
+      print("[e] Something's wrong, nothing changed.")
 
 
 
@@ -138,7 +164,7 @@ if __name__ == "__main__":
   # patch_prereq_id("XOR Challenge 8","35")
   # patch_prereq_id("XOR Challenge 7","44")
   # patch_prereq_id("XOR Challenge 4"，“64")
-  # patch_prereq("Birth Month 2","38")
+  # patch_prereq_id("Birth Month 2","38")
   # ### Linux 5 must be hidden at the beginning.
   # patch_prereq_reverseid("31","XOR Challenge 5")
   # make_visible(31)
@@ -154,7 +180,7 @@ if __name__ == "__main__":
   # patch_prereq("Break Room 2","XOR Challenge 3")
   # patch_prereq("12","XOR Challenge 3")
   # make_visible(12)
-  # patch_prereq("XOR Challenge 3","Birth Month 1")
+  # patch_prereq_name("XOR Challenge 3","Birth Month 1")
   # patch_prereq("Birth Month 1", "Coordination Practice")
   # patch_prereq()
   # patch_prereq()
@@ -166,4 +192,4 @@ if __name__ == "__main__":
   # save_id()
   # for n in range(1,80):
   #   check_req(n)
-  save_id()
+  # save_id()
