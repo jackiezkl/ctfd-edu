@@ -4,7 +4,7 @@ from shutil import copytree
 from multiprocessing import cpu_count
 
 def already_exist(parent_path, relative_path,string_to_check):
-  dst_path = os.patch.join(parent_path, relative_path)
+  dst_path = os.path.join(parent_path, relative_path)
   with open(dst_path) as check_file:
     if string_to_check in check_file.read():
       return True
