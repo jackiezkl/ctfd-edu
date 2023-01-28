@@ -3,12 +3,18 @@ from secrets import token_hex
 from shutil import copytree
 from multiprocessing import cpu_count
 
-def already_replaced(path_to_file,string_to_check):
-
+def already_exist(parent_path, relative_path,string_to_check):
+  dst_path = os.patch.join(parent_path, relative_path)
+  with open(dst_path) as check_file:
+    if string_to_check in check_file.read():
+      return True
+    else:
+      return False
 
 def patch_base_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/base.html"
   dst_path = os.path.join(parent_path, relative_path)
+
   try:
     with open(dst_path, 'r+') as f:
       lines = f.readlines()
@@ -166,12 +172,70 @@ if __name__=="__main__":
 #   change parent path of CTFd after clone
   current_path=os.getcwd()
   parent_path = os.path.dirname(current_path)+"/"
+  if os.path.isfile(os.path.join(parent_path,"CTFd/.ctfd_secret_key")) == False:
+    create_secret(parent_path)
+  else:
+    print(".ctfd_secret_key exist!")
 
-  create_secret(parent_path)
   patch_docker_compose(parent_path)
-  patch_base_html(parent_path)
-  patch_challenges_html(parent_path)
-  copy_plugin(parent_path)
-  patch_register_html(parent_path)
-  patch_username_description(parent_path)
-  patch_private_html(parent_path)
+
+  if os.path.isfile(os.path.join(parent_path,"CTFd/CTFd/plugins/ctfd-auto-scoreboard/assets/auto-scoreboard.js")) == False:
+    copy_plugin(parent_path)
+  else:
+    print("Plugin already exist.")
+
+  print("patching base.html ...")
+  if already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', '{{ ctf_starts_in() }}') == False and already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', 'year=d.getFullYear()') == False:
+    patch_base_html(parent_path)
+    print("Done")
+  elif already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', '{{ ctf_starts_in() }}') == True and already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', 'year=d.getFullYear()') == True:
+    print('base.html already patched, skipped.')
+    pass
+  elif already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', '{{ ctf_starts_in() }}') == True and already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', 'year=d.getFullYear()') == False:
+    print("Something's wrong, for some reason, ony the first half of base.html is patched. Skipped")
+    pass
+  elif already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', '{{ ctf_starts_in() }}') == False and already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', 'year=d.getFullYear()') == True:
+    print("Something's wrong, for some reason, the base file is half patched. Skipped")
+    pass
+  else:
+    print("Something's wrong please check if base.html esixts.")
+    pass
+
+  print("Patching challenges.html ...")
+  if already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/challenges.html','class="ctfd-auto-scoreboard"') == False:
+    patch_challenges_html(parent_path)
+    print("Done")
+  elif already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/challenges.html','class="ctfd-auto-scoreboard"') == True:
+    print('challenges.html already patched. Skipped')
+    pass
+  else:
+    print("Something's wrong please check if challenges.html esixts.")
+    pass
+
+  print("Patching register.html ...")
+  if already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", '<option value="May">May</option>') == False and already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", 'It can be anything you want to be called.') == False:
+    patch_register_html(parent_path)
+    print("Done")
+  elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", '<option value="May">May</option>') == True and already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", 'It can be anything you want to be called.') == True:
+    print("register.html already patched, skipped.")
+    pass
+  elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", '<option value="May">May</option>') == True and already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", 'It can be anything you want to be called.') == False:
+    print("Something's wrong, for some reason, ony the first half of base.html is patched. Skipped")
+    pass
+  elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", '<option value="May">May</option>') == False and already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", 'It can be anything you want to be called.') == True:
+    print("Something's wrong, for some reason, the base file is half patched. Skipped")
+    pass
+  else:
+    print("Something's wrong please check if register.html esixts.")
+    pass
+
+  print("Patching private.html ...")
+  if already_exist(parent_path, "CTFd/CTFd/themes/core/templates/users/private.html", '<h5 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}') == False:
+    patch_private_html(parent_path)
+    print("Done")
+  elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/users/private.html", '<h5 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}') == True:
+    print("private.html already patched, skipped.")
+    pass
+  else:
+    print("Something's wrong please check if private.html esixts.")
+    pass
