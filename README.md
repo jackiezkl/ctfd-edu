@@ -21,7 +21,7 @@ The plugin shows a scoreboard, and a countdown until the start of the event and 
 
 1. Clone the official CTFd repository at [here](https://github.com/CTFd/CTFd). When finished, don't change directory. Clone this repository to **the same directory where your CTFd is**. Run the **run_first.py**
 2. It first creates a ``.ctfd_secret_key`` file which is required by the next step.
-3. Then, it checks the total number of CPU cores, and calculate the optimal total number of workers. Then, it changes the setting. 
+3. Then, it checks the total number of CPU cores, and calculate the optimal total number of workers. Then, it changes the setting based on the suggested equition below. 
 ````
 number_of_workers = 2*number_of_CPUs+1
 ````
