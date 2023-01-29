@@ -106,7 +106,7 @@ def patch_prereq_reverseid(challenge_id,prereq_name):
 
 
 def save_id():
-  for n in range(1,80):
+  for n in range(1,82):
     try:
       with requests.Session() as check_existence:
         check_existence.headers.update({"Authorization": f"Token {token}"})
@@ -129,20 +129,112 @@ def make_visible(challenge_id):
 
 
 
-def check_id():
-  count = 0
+
+def check_name(challenge_name):
   with requests.Session() as check_existence:
     check_existence.headers.update({"Authorization": f"Token {token}"})
     challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
 
     for name in challenge_result['data']:
-      if "XOR Challenge 8" in name['name']:
-        challenge_id = name['id']
-        check_req(challenge_id)
-      elif "Birth Month" in name['name']:
-        challenge_id = name['id']
-        print(challenge_id)
-        check_req(challenge_id)
+      if challenge_name in name['name']:
+        return True
+
+def patch_new_prereq():
+  if check_name("XOR Challenge 8") == True:
+    patch_prereq_id("XOR Challenge 8","35")
+  else:
+    pass
+
+  if check_name("XOR Challenge 7") == True:
+    patch_prereq_id("XOR Challenge 7","44")
+  else:
+    pass
+
+  if check_name("XOR Challenge 4") == True:
+    patch_prereq_id("XOR Challenge 4","64")
+  else:
+    pass
+
+  if check_name("Birth Month 2") == True:
+    patch_prereq_id("Birth Month 2","38")
+  else:
+    pass
+
+### 31 Linux 5 must be hidden at the beginning.
+  if check_name("XOR Challenge 5") == True:
+    patch_prereq_reverseid("31","XOR Challenge 5")
+    make_visible(31)
+  else:
+    pass
+
+  if check_name("XOR Challenge 5") == True:
+    patch_prereq_id("XOR Challenge 5","22")
+  else:
+    pass
+
+  if check_name("XOR Challenge 6") == True:
+    patch_prereq_reverseid("11","XOR Challenge 6")
+    make_visible(11)
+  else:
+    pass
+
+  if check_name("XOR Challenge 6") == True:
+    patch_prereq_id("XOR Challenge 6","22")
+  else:
+    pass
+
+  if check_name("Break Room 1") == True and check_name("XOR Challenge 1") == True:
+    patch_prereq_name("Break Room 1","XOR Challenge 1")
+  else:
+    pass
+
+  if check_name("XOR Challenge 2") == True:
+    patch_prereq_reverseid("71","XOR Challenge 2")
+    make_visible(71)
+  else:
+    pass
+
+  if check_name("XOR Challenge 2") == True:
+    patch_prereq_reverseid("47","XOR Challenge 2")
+    make_visible(47)
+  else:
+    pass
+
+  if check_name("Break Room 2") == True and check_name("XOR Challenge 3") == True:
+    patch_prereq("Break Room 2","XOR Challenge 3")
+  else:
+    pass
+
+  if check_name("XOR Challenge 3") == True:
+    patch_prereq("12","XOR Challenge 3")
+    make_visible(12)
+  else:
+    pass
+
+  if check_name("XOR Challenge 3") == True and check_name("Birth Month 1") == True:
+    patch_prereq_name("XOR Challenge 3","Birth Month 1")
+  else:
+    pass
+
+  if check_name("Birth Month 1") == True and check_name("Coordination Practice") == True:
+    patch_prereq("Birth Month 1", "Coordination Practice")
+  else:
+    pass
+
+# def check_id():
+#   count = 0
+#   with requests.Session() as check_existence:
+#     check_existence.headers.update({"Authorization": f"Token {token}"})
+#     challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
+
+#     for name in challenge_result['data']:
+#       if "XOR Challenge 8" in name['name']:
+#         challenge_id = name['id']
+#         check_req(challenge_id)
+#       elif "Birth Month" in name['name']:
+#         challenge_id = name['id']
+#         print(challenge_id)
+#         check_req(challenge_id)
 
 
 
@@ -161,27 +253,8 @@ if __name__ == "__main__":
   token = "15c288f2a166e3cef2ebb182a007212e747947aae7ff55fe103bcbb7f1695e2a"
   url = "http://209.114.126.86"
 
-  # patch_prereq_id("XOR Challenge 8","35")
-  # patch_prereq_id("XOR Challenge 7","44")
-  # patch_prereq_id("XOR Challenge 4"，“64")
-  # patch_prereq_id("Birth Month 2","38")
-  # ### Linux 5 must be hidden at the beginning.
-  # patch_prereq_reverseid("31","XOR Challenge 5")
-  # make_visible(31)
-  # patch_prereq_id("XOR Challenge 5","22")
-  # patch_prereq_reverseid("11","XOR Challenge 6")
-  # make_visible(11)
-  # patch_prereq_id("XOR Challenge 6","22")
-  # patch_prereq("Break Room 1","XOR Challenge 1")
-  # patch_prereq_reverseid("71","XOR Challenge 2")
-  # make_visible(71)
-  # patch_prereq_reverseid("47","XOR Challenge 2")
-  # make_visible(47)
-  # patch_prereq("Break Room 2","XOR Challenge 3")
-  # patch_prereq("12","XOR Challenge 3")
-  # make_visible(12)
-  # patch_prereq_name("XOR Challenge 3","Birth Month 1")
-  # patch_prereq("Birth Month 1", "Coordination Practice")
+  patch_new_prereq()
+  # 
   # patch_prereq()
   # patch_prereq()
   # patch_prereq()
@@ -192,4 +265,4 @@ if __name__ == "__main__":
   # save_id()
   # for n in range(1,80):
   #   check_req(n)
-  # save_id()
+  
