@@ -34,7 +34,7 @@ number_of_workers = 2*number_of_CPUs+1
 ````
 <span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>
 ````
-6. Next, it copies the **ctfd-auto-scoreboard** plugin to the plugins folder
+6. Next, it copies the **`ctfd-auto-scoreboard`** plugin to the plugins folder
 7. Go to the host address to initialize the CTFd platform.
 8. Once done, go to `Admin Panel`--> `Config`-->`Custom Fields`, create the following fields in its order as stated. The program will not work if order got messed up. Make sure to press the **save** button for each field created:
 ````
@@ -60,8 +60,8 @@ This will add the Full name and birth month fields to the registration page.
 
 ![registration](registration.png)
 
-9. When setting up the event time, set start and end time here or change it in `Admin` -> `Config` page.
-10. A token is needed before running the `main.py` program. To do that, login as admin, then go to `Settings`-->`access tokens`-->select a time-->`Generate`. If you don't select a time, it will default to expire in a month.
+9. When setting up the event time, set start and end time now or change it in `Admin` -> `Config` page later.
+10. A token is needed before running the `main.py` program. To do that, login as admin, then go to `Settings`-->`access tokens`-->select a expiration date-->`Generate`. If you don't select a date, it will default to expire in a month.
 
 ![token](token.png)
 
