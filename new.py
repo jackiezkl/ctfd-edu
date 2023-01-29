@@ -15,24 +15,6 @@ def save_id():
     except Exception:
       pass
 
-
-# def check_id():
-#   count = 0
-#   with requests.Session() as check_existence:
-#     check_existence.headers.update({"Authorization": f"Token {token}"})
-#     challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
-
-#     for name in challenge_result['data']:
-#       if "XOR Challenge 8" in name['name']:
-#         challenge_id = name['id']
-#         check_req(challenge_id)
-#       elif "Birth Month" in name['name']:
-#         challenge_id = name['id']
-#         print(challenge_id)
-#         check_req(challenge_id)
-
-
-
 def check_req(challenge_id):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
