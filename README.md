@@ -14,7 +14,7 @@ The plugin shows a scoreboard, and a countdown until the start of the event and 
 
 ## Screenshot
 
-![scoreboard](scoreboard.png)
+![scoreboard](images/scoreboard.png)
 
 
 ## To use
@@ -58,22 +58,22 @@ Options: (do not check anything)
 ````
 This will add the Full name and birth month fields to the registration page.
 
-![registration](registration.png)
+![registration](images/registration.png)
 
 9. When setting up the event time, set start and end time now or change it in `Admin` -> `Config` page later.
 10. A token is needed before running the `main.py` program. To do that, login as admin, then go to `Settings`-->`access tokens`-->select a expiration date-->`Generate`. If you don't select a date, it will default to expire in a month.
 
-![token](token.png)
+![token](images/token.png)
 
 11. Copy the token, and change the variable `token` in the `main.py` file. The program will alarm you if the token or IP address is incorrect.
 
 12. After executing the `main.py` program, it will add binary codes to each player and create XOR challenges. 
  
-From ![user-profile](user-profile.png) to ![user-profile-binary](user-profile-binary.png)
+From ![user-profile](images/user-profile.png) to ![user-profile-binary](images/user-profile-binary.png)
 
 The program will run in an infinite loop which dynamically generate new challenges for each new player joined in. 
 
-![new-challenge](new-challenge.png)
+![new-challenge](images/new-challenge.png)
 
 13. Run the `main.py` program after the first group of people had registered their account. The program won't create birth month challenges if there are less than 3 players. When running the program, it creates two birth month challenges. It first randomly draw two months from all players' birth month pool, and create two challenges based on that. When adding flags, it checks all players birth months. If matches one of the two months, it set the player's first name as flag.
 
