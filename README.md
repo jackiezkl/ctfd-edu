@@ -61,13 +61,13 @@ This will add the Full name and birth month fields to the registration page.
 ![registration](registration.png)
 
 9. When setting up the event time, set start and end time here or change it in `Admin` -> `Config` page.
-10. A token is needed before running the `add_xor_challenge` and `add_birth_challenge` program. To do that, login as admin, then go to `Settings`-->`access tokens`-->select a time-->`Generate`. If you don't select a time, it will default to expire in a month.
+10. A token is needed before running the `main.py` program. To do that, login as admin, then go to `Settings`-->`access tokens`-->select a time-->`Generate`. If you don't select a time, it will default to expire in a month.
 
 ![token](token.png)
 
-11. Copy the token, and change the variable `token` in the `add_xor_challenge.py` and `add_birth_challenge` file. The program will alarm you if the token or IP address is incorrect.
+11. Copy the token, and change the variable `token` in the `main.py` file. The program will alarm you if the token or IP address is incorrect.
 
-12. After executing the `add_xor_challenge` program, it will add binary codes to each player and create XOR challenges. 
+12. After executing the `main.py` program, it will add binary codes to each player and create XOR challenges. 
  
 From ![user-profile](user-profile.png) to ![user-profile-binary](user-profile-binary.png)
 
@@ -75,6 +75,5 @@ The program will run in an infinite loop which dynamically generate new challeng
 
 ![new-challenge](new-challenge.png)
 
-13. Run the `add_birth_challenge` program after the first group of people had registered their account. The program won't create birth month challenges if there are less than 3 players. When running the program, it creates two birth month challenges. It first randomly draw two months from all players' birth month pool, and create two challenges based on that. When adding flags, it checks all players birth months. If matches one of the two months, it set the player's first name as flag.
+13. Run the `main.py` program after the first group of people had registered their account. The program won't create birth month challenges if there are less than 3 players. When running the program, it creates two birth month challenges. It first randomly draw two months from all players' birth month pool, and create two challenges based on that. When adding flags, it checks all players birth months. If matches one of the two months, it set the player's first name as flag.
 
-14. It is not recommonded to run both `add_xor_challenge` and `add_birth_challenge` at the same time. There could be a conflict when two are creating the challenges and flags at the same time. 
