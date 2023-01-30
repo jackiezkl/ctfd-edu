@@ -1,4 +1,4 @@
-import os
+import os,re
 from secrets import token_hex
 from shutil import copytree
 from multiprocessing import cpu_count
@@ -152,21 +152,26 @@ def patch_docker_compose(parent_path):
     print("[+] Couldn't find the *docker-compose.yml* to work with.")
     exit()
 
-  with open(dst_path, 'r') as docker_compose_file:
-    search_text = '     - WORKERS=1\n'
+  with open(dst_path, 'r+') as docker_compose_file:
+    search_text = '(- WORKERS=\d*)'
     replace_text = '     - WORKERS='+str(2*cpu_count()+1)+'\n'
     data = docker_compose_file.read()
-    try:
-      data = data.replace(search_text, replace_text)
-      flag = 1
-    except Exception:
-      print("[+] Couldn't find the element to replace with")
-      flag = 0
-  if flag == 1:
-    with open(dst_path, 'w') as docker_compose_file:
-      docker_compose_file.write(data)
-  elif flag == 0:
-    exit()
+
+    data = re.sub(search_text,replace_text,data)
+    docker_compose_file.seek(0)
+    docker_compose_file.write(data)
+    docker_compose_file.truncate()
+  #   try:
+  #     data = data.replace(search_text, replace_text)
+  #     flag = 1
+  #   except Exception:
+  #     print("[+] Couldn't find the element to replace with")
+  #     flag = 0
+  # if flag == 1:
+  #   with open(dst_path, 'w') as docker_compose_file:
+  #     docker_compose_file.write(data)
+  # elif flag == 0:
+  #   exit()
 
 if __name__=="__main__":
 #   change parent path of CTFd after clone
