@@ -154,7 +154,7 @@ def patch_docker_compose(parent_path):
 
   with open(dst_path, 'r+') as docker_compose_file:
     search_text = '(- WORKERS=\d*)'
-    replace_text = '     - WORKERS='+str(2*cpu_count()+1)+'\n'
+    replace_text = '- WORKERS='+str(2*cpu_count()+1)
     data = docker_compose_file.read()
 
     data = re.sub(search_text,replace_text,data)
