@@ -1,7 +1,7 @@
 import requests,json
 
 def save_id():
-  for n in range(1,82):
+  for n in range(1,100):
     try:
       with requests.Session() as check_existence:
         check_existence.headers.update({"Authorization": f"Token {token}"})
@@ -11,7 +11,8 @@ def save_id():
         challenge_name = challenge_result['data']['name']
         challenge_value = str(challenge_result['data']['value'])
         challenge_category = challenge_result['data']['category']
-        print(challenge_id+": ['"+challenge_name+"','"+challenge_value+"','"+challenge_category+"'],")
+        challenge_prereq = check_req(challenge_id)
+        print(challenge_id+": ['"+challenge_name+"','"+challenge_value+"','"+challenge_category+"','"+challenge_prereq+"'],")
     except Exception:
       pass
 
@@ -21,16 +22,16 @@ def check_req(challenge_id):
     flag_result = update_session.get(f"{url}/api/v1/challenges/{challenge_id}/requirements",json='').json()
     try:
       requirements_id = str(flag_result['data']['prerequisites'][0])
-      print(str(challenge_id) + ':'+requirements_id)
+      # print(str(challenge_id) + ':'+requirements_id)
+      return requirements_id
     except Exception:
-      print(challenge_id)
-      pass
+      # print(challenge_id)
+      return ''
 
 if __name__ == "__main__":
   token = "15c288f2a166e3cef2ebb182a007212e747947aae7ff55fe103bcbb7f1695e2a"
   url = "http://209.114.126.86"
 
-  # save_id()
-  for n in range(1,80):
-    check_req(n)
-  
+  save_id()
+  # for n in range(1,80):
+  #   check_req(n)
