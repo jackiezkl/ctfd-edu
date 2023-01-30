@@ -175,14 +175,14 @@ if __name__=="__main__":
   if os.path.isfile(os.path.join(parent_path,"CTFd/.ctfd_secret_key")) == False:
     create_secret(parent_path)
   else:
-    print(".ctfd_secret_key exist!")
+    print(".ctfd_secret_key exist! No need to have another .ctfd_secret_key file. Skipped.")
 
   patch_docker_compose(parent_path)
 
   if os.path.isfile(os.path.join(parent_path,"CTFd/CTFd/plugins/ctfd-auto-scoreboard/assets/auto-scoreboard.js")) == False:
     copy_plugin(parent_path)
   else:
-    print("Plugin already exist.")
+    print("Plugin already exist. Skipped.")
 
   print("patching base.html ...")
   if already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', '{{ ctf_starts_in() }}') == False and already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', 'year=d.getFullYear()') == False:
