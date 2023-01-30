@@ -3,7 +3,7 @@ from secrets import token_hex
 from shutil import copytree
 from multiprocessing import cpu_count
 
-def already_exist(parent_path, relative_path,string_to_check):
+def already_exist(parent_path,relative_path,string_to_check):
   dst_path = os.path.join(parent_path, relative_path)
   with open(dst_path) as check_file:
     if string_to_check in check_file.read():
@@ -15,57 +15,51 @@ def patch_base_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/base.html"
   dst_path = os.path.join(parent_path, relative_path)
 
-  try:
-    with open(dst_path, 'r+') as f:
-      lines = f.readlines()
-      try:
-        for i, line in enumerate(lines):
-          if line.startswith('\t<meta name="viewport"'):
-            lines[i] = lines[i] + '\t<meta name="starts_in" content="{{ ctf_starts_in() }}">\n\t<meta name="ends_in" content="{{ ctf_ends_in() }}">\n'
-        f.seek(0)
-        for line in lines:
-          f.write(line)
-      except Exception:
-        print("[+] Couldn't find the *viewport* to replace with.")
+  with open(dst_path, 'r+') as f:
+    lines = f.readlines()
+    try:
+      for i, line in enumerate(lines):
+        if line.startswith('\t<meta name="viewport"'):
+          lines[i] = lines[i] + '\t<meta name="starts_in" content="{{ ctf_starts_in() }}">\n\t<meta name="ends_in" content="{{ ctf_ends_in() }}">\n'
+      f.seek(0)
+      for line in lines:
+        f.write(line)
+    except Exception:
+      print("[e] Couldn't find the *viewport* to replace with.")
 
-    with open(dst_path, 'r') as base_file:
-      search_text = '<a href="https://ctfd.io" class="text-secondary">\n\t\t\t\t<small class="text-muted">Powered by CTFd</small>\n\t\t\t</a>\n'
-      replace_text = '<script>const d=new Date();let year=d.getFullYear();document.write("{{ Configs.ctf_name }} - "+year);</script>\n'
-      data = base_file.read()
-      try:
-        data = data.replace(search_text, replace_text)
-        flag = 1
-      except Exception:
-        print("[+] Couldn't find the *Powered by CTFd* to replace with")
-        flag = 0
-    if flag == 1:
-      with open(dst_path, 'w') as base_file:
-        base_file.write(data)
-    elif flag == 0:
-      exit()
-  except Exception:
-    print("[+] Could't find base.html file to work with.")
+
+  with open(dst_path, 'r') as base_file:
+    search_text = '<a href="https://ctfd.io" class="text-secondary">\n\t\t\t\t<small class="text-muted">Powered by CTFd</small>\n\t\t\t</a>\n'
+    replace_text = '<script>const d=new Date();let year=d.getFullYear();document.write("{{ Configs.ctf_name }} - "+year);</script>\n'
+    data = base_file.read()
+    try:
+      data = data.replace(search_text, replace_text)
+      flag = 1
+    except Exception:
+      print("[e] Couldn't find the *Powered by CTFd* to replace with")
+      flag = 0
+
+  if flag == 1:
+    with open(dst_path, 'w') as base_file:
+      base_file.write(data)
+  elif flag == 0:
     exit()
 
 def patch_challenges_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/challenges.html"
   dst_path = os.path.join(parent_path, relative_path)
 
-  try:
-    with open(dst_path, 'r+') as challenges_file:
-      lines = challenges_file.readlines()
-      try:
-        for i, line in enumerate(lines):
-          if line.startswith('<div class="modal fade" id="challenge-window"'):
-            lines[i] = '<span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>\n\n' + lines[i]
-        challenges_file.seek(0)
-        for line in lines:
-          challenges_file.write(line)
-      except Exception:
-        print("[+] Couldn't find the *viewport* to replace with.")
-  except Exception:
-    print("[+] Couldn't find the challenges.html to work with.")
-    exit()
+  with open(dst_path, 'r+') as challenges_file:
+    lines = challenges_file.readlines()
+    try:
+      for i, line in enumerate(lines):
+        if line.startswith('<div class="modal fade" id="challenge-window"'):
+          lines[i] = '<span class="ctfd-auto-scoreboard" style="position: relative; float: right; top: 0px; right: 0px; min-width: 20%;">&nbsp;</span>\n\n' + lines[i]
+      challenges_file.seek(0)
+      for line in lines:
+        challenges_file.write(line)
+    except Exception:
+      print("[e] Couldn't find the *viewport* to replace with.")
 
 def copy_plugin(parent_path):
   relative_path = "CTFd/CTFd/plugins/ctfd-auto-scoreboard"
@@ -73,12 +67,13 @@ def copy_plugin(parent_path):
   src_path = "ctfd-auto-scoreboard"
 
   copytree(src_path,dst_path)
+  print('[+] plugin copied to place.')
 
 def patch_register_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/register.html"
   dst_path = os.path.join(parent_path, relative_path)
   if os.path.exists(dst_path) == False:
-    print("[+] Couldn't find the *register.html* to work with.")
+    print("[e] Couldn't find the *register.html* to work with.")
     exit()
 
   with open(dst_path, 'r') as base_file:
@@ -89,7 +84,7 @@ def patch_register_html(parent_path):
       data = data.replace(search_text, replace_text)
       flag = 1
     except Exception:
-      print("[+] Couldn't find the element to replace with")
+      print("[e] Couldn't find the element to replace with")
       flag = 0
   if flag == 1:
     with open(dst_path, 'w') as base_file:
@@ -101,18 +96,18 @@ def patch_username_description(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/register.html"
   dst_path = os.path.join(parent_path, relative_path)
   if os.path.exists(dst_path) == False:
-    print("[+] Couldn't find the *register.html* to work with.")
+    print("[e] Couldn't find the *register.html* to work with.")
     exit()
 
   with open(dst_path, 'r') as base_file:
-    search_text = '\t\t\t\t\t\tYour username on the site\n'
-    replace_text = '\t\t\t\t\t\tYour username on the site. It can be anything you want to be called.\n'
+    search_text = 'Your username on the site'
+    replace_text = 'Your username on the site. It can be anything you want to be called.'
     data = base_file.read()
     try:
       data = data.replace(search_text, replace_text)
       flag = 1
     except Exception:
-      print("[+] Couldn't find the element to replace with")
+      print("[e] Couldn't find the element to replace with")
       flag = 0
   if flag == 1:
     with open(dst_path, 'w') as base_file:
@@ -124,7 +119,7 @@ def patch_private_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/users/private.html"
   dst_path = os.path.join(parent_path, relative_path)
   if os.path.exists(dst_path) == False:
-    print("[+] Couldn't find the *users/private.html* to work with.")
+    print("[e] Couldn't find the *users/private.html* to work with.")
     exit()
 
   with open(dst_path, 'r+') as f:
@@ -137,7 +132,7 @@ def patch_private_html(parent_path):
       for line in lines:
         f.write(line)
     except Exception:
-      print("[+] Couldn't find the *{{ user.name }}* to replace with.")
+      print("[e] Couldn't find the *{{ user.name }}* to replace with.")
 
 def create_secret(parent_path):
   relative_path = "CTFd/.ctfd_secret_key"
@@ -149,29 +144,23 @@ def patch_docker_compose(parent_path):
   relative_path = "CTFd/docker-compose.yml"
   dst_path = os.path.join(parent_path, relative_path)
   if os.path.exists(dst_path) == False:
-    print("[+] Couldn't find the *docker-compose.yml* to work with.")
+    print("[e] Couldn't find the *docker-compose.yml* to work with.")
     exit()
 
-  with open(dst_path, 'r+') as docker_compose_file:
-    search_text = '(- WORKERS=\d*)'
-    replace_text = '- WORKERS='+str(2*cpu_count()+1)
-    data = docker_compose_file.read()
+  try:
+    with open(dst_path, 'r+') as docker_compose_file:
+      search_text = '(- WORKERS=\d*)'
+      replace_text = '- WORKERS='+str(2*cpu_count()+1)
+      data = docker_compose_file.read()
 
-    data = re.sub(search_text,replace_text,data)
-    docker_compose_file.seek(0)
-    docker_compose_file.write(data)
-    docker_compose_file.truncate()
-  #   try:
-  #     data = data.replace(search_text, replace_text)
-  #     flag = 1
-  #   except Exception:
-  #     print("[+] Couldn't find the element to replace with")
-  #     flag = 0
-  # if flag == 1:
-  #   with open(dst_path, 'w') as docker_compose_file:
-  #     docker_compose_file.write(data)
-  # elif flag == 0:
-  #   exit()
+      data = re.sub(search_text,replace_text,data)
+      docker_compose_file.seek(0)
+      docker_compose_file.write(data)
+      docker_compose_file.truncate()
+      print("[+] docker-compose file patched.")
+  except Exception:
+    print("[e] Couldn't find the element to replace with")
+
 
 if __name__=="__main__":
 #   change parent path of CTFd after clone
@@ -179,68 +168,70 @@ if __name__=="__main__":
   parent_path = os.path.dirname(current_path)+"/"
   if os.path.isfile(os.path.join(parent_path,"CTFd/.ctfd_secret_key")) == False:
     create_secret(parent_path)
+    print("[+] .ctfd_secret_key file created.")
   else:
-    print(".ctfd_secret_key exist! No need to have another .ctfd_secret_key file. Skipped.")
+    print("[e] .ctfd_secret_key exist! No need to have another .ctfd_secret_key file. Skipped.")
 
   patch_docker_compose(parent_path)
 
   if os.path.isfile(os.path.join(parent_path,"CTFd/CTFd/plugins/ctfd-auto-scoreboard/assets/auto-scoreboard.js")) == False:
     copy_plugin(parent_path)
   else:
-    print("Plugin already exist. Skipped.")
+    print("[e] Plugin already exist. Skipped.")
 
-  print("patching base.html ...")
+  print("[i] patching base.html ...")
   if already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', '{{ ctf_starts_in() }}') == False and already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', 'year=d.getFullYear()') == False:
     patch_base_html(parent_path)
-    print("Done")
+    print("[+] Done")
   elif already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', '{{ ctf_starts_in() }}') == True and already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', 'year=d.getFullYear()') == True:
-    print('base.html already patched, skipped.')
+    print('[e] base.html already patched, skipped.')
     pass
   elif already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', '{{ ctf_starts_in() }}') == True and already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', 'year=d.getFullYear()') == False:
-    print("Something's wrong, for some reason, ony the first half of base.html is patched. Skipped")
+    print("[e] Something's wrong, for some reason, ony the first half of base.html is patched. Skipped")
     pass
   elif already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', '{{ ctf_starts_in() }}') == False and already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/base.html', 'year=d.getFullYear()') == True:
-    print("Something's wrong, for some reason, the base file is half patched. Skipped")
+    print("[e] Something's wrong, for some reason, the base file is half patched. Skipped")
     pass
   else:
-    print("Something's wrong please check if base.html esixts.")
+    print("[e] Something's wrong please check if base.html esixts.")
     pass
 
-  print("Patching challenges.html ...")
+  print("[i] Patching challenges.html ...")
   if already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/challenges.html','class="ctfd-auto-scoreboard"') == False:
     patch_challenges_html(parent_path)
-    print("Done")
+    print("[+] Done")
   elif already_exist(parent_path, 'CTFd/CTFd/themes/core/templates/challenges.html','class="ctfd-auto-scoreboard"') == True:
-    print('challenges.html already patched. Skipped')
+    print('[e] challenges.html already patched. Skipped')
     pass
   else:
-    print("Something's wrong please check if challenges.html esixts.")
+    print("[e] Something's wrong please check if challenges.html esixts.")
     pass
 
-  print("Patching register.html ...")
+  print("[i] Patching register.html ...")
   if already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", '<option value="May">May</option>') == False and already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", 'It can be anything you want to be called.') == False:
     patch_register_html(parent_path)
-    print("Done")
+    patch_username_description(parent_path)
+    print("[+] Done")
   elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", '<option value="May">May</option>') == True and already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", 'It can be anything you want to be called.') == True:
-    print("register.html already patched, skipped.")
+    print("[e] register.html already patched, skipped.")
     pass
   elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", '<option value="May">May</option>') == True and already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", 'It can be anything you want to be called.') == False:
-    print("Something's wrong, for some reason, ony the first half of base.html is patched. Skipped")
+    print("[e] Something's wrong, for some reason, ony the first half of base.html is patched. Skipped")
     pass
   elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", '<option value="May">May</option>') == False and already_exist(parent_path, "CTFd/CTFd/themes/core/templates/register.html", 'It can be anything you want to be called.') == True:
-    print("Something's wrong, for some reason, the base file is half patched. Skipped")
+    print("[e] Something's wrong, for some reason, the base file is half patched. Skipped")
     pass
   else:
-    print("Something's wrong please check if register.html esixts.")
+    print("[e] Something's wrong please check if register.html esixts.")
     pass
 
-  print("Patching private.html ...")
+  print("[i] Patching private.html ...")
   if already_exist(parent_path, "CTFd/CTFd/themes/core/templates/users/private.html", '<h5 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}') == False:
     patch_private_html(parent_path)
-    print("Done")
+    print("[+] Done")
   elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/users/private.html", '<h5 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}') == True:
-    print("private.html already patched, skipped.")
+    print("[e] private.html already patched, skipped.")
     pass
   else:
-    print("Something's wrong please check if private.html esixts.")
+    print("[e] Something's wrong please check if private.html esixts.")
     pass
