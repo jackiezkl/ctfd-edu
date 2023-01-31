@@ -9,6 +9,27 @@ def generate_hex():
   full_eight_bits = hex_array[higher_four_bits] + hex_array[lower_four_bits]
   return full_eight_bits
 
+# checks the challenge existance, if so, return the challenge id
+def challenge_id_and_existance(challenge_type,n):
+  if challenge_type == "xor":
+    cname = 'XOR Challenge '+n
+  elif challenge_type == "birth":
+    cname = 'Birth Month '+n
+
+
+  cid = 82
+
+  while True:
+    with requests.Session() as id_check_session:
+      id_check_session.headers.update({"Authorization": f"Token {token}"})
+      id_check_result = id_check_session.get(f"{url}/api/v1/challenges/{cid}",headers={"Content-Type": "application/json"}).json()
+      try:
+        if cname in id_check_result['data']['name']:
+          return id_check_result['data']['id'],True
+      except Exception:
+        return 'None',False
+      cid+=1
+
 # update the user profile to add binaries to each user
 def update_user_profile():
   with open("users_info_record.csv") as users_record:
@@ -129,10 +150,11 @@ def generate_pair_and_xor():
     writer = csv.DictWriter(xor_record, fieldnames=col_names)
 
     for n in range(len(ids)):
-      if does_xor_challenge_exist(n+1) == True:
+      cid,cstatus = challenge_id_and_existance('xor',n+1)
+      if cstatus == True:
         print("[+] Challenge already exist, skip.")
         pass
-      elif does_xor_challenge_exist(n+1) == False:
+      elif cstatus == False:
         if add_new_xor_challenge(full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
           row="{'id':'"+ids[n]+"', 'user_name':'"+full_name[n]+"','user_hex':'"+user_hex[n]+"','paired_name':'"+paired_name[n]+"','paired_hex':'"+paired_hex[n]+"','xor_result':'"+xor_result[n]+"','challenge_added':'yes','challenge_number':'"+str(int(n)+1)+"'}"
           row_dict = ast.literal_eval(row)
@@ -141,36 +163,7 @@ def generate_pair_and_xor():
         else:
           pass
 
-# check if xor challenge already existed
-def does_xor_challenge_exist(n):
-  flag1 = ''
-  flag2 = 'no'
-  with requests.Session() as check_existence:
-    check_existence.headers.update({"Authorization": f"Token {token}"})
-    challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
-    # print(n)
-    for name in challenge_result['data']:
-      if name['name'] == "XOR Challenge "+str(n):
-        flag1 = "yes"
-        break
-      else:
-        flag1 = "no"
-        pass
-    if flag1 == flag2:
-      return False
-    elif flag1 != flag2:
-      return True
 
-# get the last created challenge id
-def get_last_created_xor_id(n):
-  with requests.Session() as id_check_session:
-    id_check_session.headers.update({"Authorization": f"Token {token}"})
-    id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
-    for name in id_check_result['data']:
-      if name['name'] == 'XOR Challenge '+n:
-        return name['id']
-      else:
-        pass
 
 # add new coordination challenges
 def add_new_xor_challenge(first_name,second_name,xor,n):
@@ -179,11 +172,11 @@ def add_new_xor_challenge(first_name,second_name,xor,n):
   else:
     with requests.Session() as update_session:
       update_session.headers.update({"Authorization": f"Token {token}"})
-      payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Each of the player is assigned a binary code, you can find your code in the Profile page.\\r\\nNow, retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease speak quietly or use private one-on-one chat function(if there is one) when asking codes from another player.","value":"24","state":"visible","type":"standard"}'
+      payload = '{"name":"XOR Challenge '+n+'","category":"Coordination","description":"Each of the player is assigned a binary code, you can find your code in the Profile page.\\r\\nNow, retrieve secret codes from **'+first_name+'** and **'+second_name+'**. Return the XOR of the two binary sequances.\\r\\n\\r\\nThe flag is in the format <code>flag{01010101}</code> \\r\\n\\r\\nPlease speak quietly or use private one-on-one chat function(if there is one) when asking codes from another player.","value":"24","state":"hidden","type":"standard"}'
       challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
       add_challenge_result = challenge_result['success']
 
-      last_id = get_last_created_xor_id(n)
+      last_id,cstatus = challenge_id_and_existance('xor',n)
 
       result = add_new_xor_flag(last_id,n,xor,add_challenge_result)
 
@@ -206,27 +199,18 @@ def add_new_xor_flag(last_id,n,xor,add_challenge_result):
     else:
       print("[+] Error when adding challenge.")
       return False
-##--------------below are for creating birth day challenges----------
-# check if the birth month challenge is already exist
+
+##--------------below are for creating birth day challenges--------------
+# check how many birth month challenge already exist
 def does_birth_challenge_exist():
   print('[i] Checking the challenge status...')
-  flag = 0
-  with requests.Session() as check_existence:
-    check_existence.headers.update({"Authorization": f"Token {token}"})
-    challenges_list = check_existence.get(f"{url}/api/v1/challenges",json='').json()
+  cid2,cstatus2 = challenge_id_and_existance('birth','2')
+  cid1,cstatus1 = challenge_id_and_existance('birth','1')
 
-  for challenge in challenges_list['data']:
-    if challenge['name'] == "Birth Month 2":
-      flag += 1
-    elif challenge['name'] == "Birth Month 1":
-      flag += 1
-    else:
-      pass
-
-  if flag == 2:
+  if cstatus2 == True:
     print('[e] There are aleady two birth month challenges, checking new user...\r')
     return 2
-  elif flag == 1:
+  elif cstatus1 == True:
     print('[e] There is one birth month challenge already, I can\'t handle this situation right now. Please remove the existing challenge and retry.\r')
     return 1
   else:
@@ -293,7 +277,6 @@ def birthmonth_challenge():
         else:
           pass
   # #following case with 1 existing birth challenge is not finalized, thus not used. 
-  # #this program only handles no challenge or 2 challenges situation.
   # elif len(set(month_used)) == 1:
   #   while True:
   #     month_to_add = random.sample(list(set(user_birth_months)),k=1)
@@ -333,27 +316,15 @@ def birthmonth_challenge():
     print('[e] CTF showing no birth month challenge; however, csv file showing one. Pelase remove the "birth_month_record.csv" file, and run this program again.\r')
     pass
 
-# get the challenge if od the created challenge, so we can set flag for that challenge
-def get_last_created_birth_id(n):
-  with requests.Session() as id_check_session:
-    id_check_session.headers.update({"Authorization": f"Token {token}"})
-    id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
-    for name in id_check_result['data']:
-      if name['name'] == 'Birth Month '+str(n):
-        return name['id']
-      else:
-        pass
-    pass
-
 # add new birth month challenges
 def add_new_birth_challenge(picked_full_name,picked_birth_month,challenge_birth_month,birth_challenge_number):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
-    payload = '{"name":"Birth Month '+str(birth_challenge_number)+'","category":"Coordination","description":"There should be at least one player that was born in '+challenge_birth_month+'. Could you provide the first name of at least one?\\r\\n\\r\\nEnter their first name as the flag.","value":"34","state":"visible","type":"standard"}'
+    payload = '{"name":"Birth Month '+str(birth_challenge_number)+'","category":"Coordination","description":"There should be at least one player that was born in '+challenge_birth_month+'. Could you provide the first name of at least one?\\r\\n\\r\\nEnter their first name as the flag.","value":"34","state":"hidden","type":"standard"}'
     challenge_result = update_session.post(f"{url}/api/v1/challenges",json=json.loads(payload)).json()
     add_challenge_result = challenge_result['success']
 
-  last_id = get_last_created_birth_id(birth_challenge_number)
+  last_id,cstatus = challenge_id_and_existance('birth',birth_challenge_number)
 
   result = add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_birth_month,add_challenge_result)
   return result
@@ -383,7 +354,7 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
     else:
       print("[e] Error when adding challenge.")
       return False
-##-------------------the section below check new user's birth month and update existing challenges-------------------
+##--------------the section below check new user's birth month and update existing challenges--------------
 # check if new user joined the game, and check the new user's birth month
 def new_user_birth_check():
   field_1_value = []
@@ -416,7 +387,9 @@ def new_user_birth_check():
       for j in range(len(field_1_value)):
         if used_months[n] == field_2_value[j] and field_1_value[j] not in full_name_used:
           new_full_name = field_1_value[j]
-          flag_id,flag_content = birth_flag_id(birth_challenge_id(monthdict[used_months[n]]))
+          cid,cstatus = challenge_id_and_existance('birth',monthdict[used_months[n]])
+          # flag_id,flag_content = birth_flag_id(birth_challenge_id(monthdict[used_months[n]]))          
+          flag_id,flag_content = birth_flag_id(cid)
           if patch_birth_flag(flag_id,flag_content,new_full_name) is True:
             row="{'full_name_used':'"+new_full_name+"','birth_month':'"+used_months[n]+"','challenge_added':'yes','challenge_number':'"+str(monthdict[used_months[n]])+"'}"
             row_dict = ast.literal_eval(row)
@@ -424,17 +397,17 @@ def new_user_birth_check():
         else:
           pass
 
-# get the birth month challenge id
-def birth_challenge_id(birth_challenge_number):
-  with requests.Session() as id_check_session:
-    id_check_session.headers.update({"Authorization": f"Token {token}"})
-    id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
-    for name in id_check_result['data']:
-      if name['name'] == 'Birth Month '+str(birth_challenge_number):
-        return name['id']
-      else:
-        pass
-    pass
+# # get the birth month challenge id
+# def birth_challenge_id(birth_challenge_number):
+#   with requests.Session() as id_check_session:
+#     id_check_session.headers.update({"Authorization": f"Token {token}"})
+#     id_check_result = id_check_session.get(f"{url}/api/v1/challenges",headers={"Content-Type": "application/json"}).json()
+#     for name in id_check_result['data']:
+#       if name['name'] == 'Birth Month '+str(birth_challenge_number):
+#         return name['id']
+#       else:
+#         pass
+#     pass
 
 # add birth month flag by using the birth month challenge id
 def birth_flag_id(challenge_id):
@@ -479,41 +452,46 @@ def check_token():
     print('[e] Cannot access CTFd api, please check token or IP.')
     exit()
 
-##-----------------the sectoin below change the points for each new challenge ---------
+##--------------the sectoin below change the points for each new challenge--------------
 # count how many coordination challenges
 def count_coordination(number_of_breakout_room):
   count = number_of_breakout_room
-  with requests.Session() as check_existence:
-    check_existence.headers.update({"Authorization": f"Token {token}"})
-    challenge_result = check_existence.get(f"{url}/api/v1/challenges",json='').json()
+  cid = 82
+  while True:
+    with requests.Session() as id_check_session:
+      id_check_session.headers.update({"Authorization": f"Token {token}"})
+      id_check_result = id_check_session.get(f"{url}/api/v1/challenges/{cid}",headers={"Content-Type": "application/json"}).json()
 
+      try:
+        if "XOR Challenge" in id_check_result['data']['name']:
+          count += 1
+        elif "Birth Month" in id_check_result['data']['name']:
+          count += 1
+      except Exception:
+        break
+      cid+=1
+  
+  new_points = round(500/count)
+
+  if number_of_breakout_room == "1":
+    update_points("80",new_points)
+    # make_visible("80")
+  elif number_of_breakout_room == "2":
+    update_points("80",new_points)
+    update_points("81",new_points)
+    # make_visible("80")
+    # make_visible("81")
+
+  try:
     for name in challenge_result['data']:
       if "XOR Challenge" in name['name']:
-        count+=1
+        update_points(str(name['id']),new_points)
       elif "Birth Month" in name['name']:
-        count+=1
-
-    new_points = round(500/count)
-
-    if number_of_breakout_room == "1":
-      update_points("80",new_points)
-      make_visible("80")
-    elif number_of_breakout_room == "2":
-      update_points("80",new_points)
-      update_points("81",new_points)
-      make_visible("80")
-      make_visible("81")
-
-    try:
-      for name in challenge_result['data']:
-        if "XOR Challenge" in name['name']:
-          update_points(str(name['id']),new_points)
-        elif "Birth Month" in name['name']:
-          update_points(str(name['id']),new_points)
-      print('[+] Coordination points changed')
-    except Exception:
-      print('[e] Coordination points not updated.')
-      pass
+        update_points(str(name['id']),new_points)
+    print('[+] Coordination points changed')
+  except Exception:
+    print('[e] Coordination points not updated.')
+    pass
 
 # assign points to each coordination challenge based on the count number
 def update_points(challenge_id,new_points):
@@ -524,14 +502,7 @@ def update_points(challenge_id,new_points):
     if flag_result.status_code > 399:
       print('[e] Challenge '+challenge_id+' points not updated')
 
-# change the visibility to visible
-def make_visible(challenge_id):
-  with requests.Session() as update_session:
-    update_session.headers.update({"Authorization": f"Token {token}"})
-    payload = '{"state":"visible"}'
-    flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
-
-# -------------------the section below update the prerequisite for new and existing challenges----------------- 
+##--------------the section below update the prerequisite for new and existing challenges-------------- 
 def patch_prereq_name(challenge_name,prereq_name):
   prerequisites_id = ''
   challenge_id = ''
@@ -602,11 +573,13 @@ def check_name(challenge_name):
       if challenge_name in name['name']:
         return True
 
+# given a challenge id, change its visibility to visible
 def make_visible(challenge_id):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     payload = '{"state":"visible"}'
     flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
+
 
 def patch_new_prereq():
   if check_name("XOR Challenge 8") == True:
@@ -652,8 +625,8 @@ def patch_new_prereq():
   else:
     pass
 
-  if check_name("Break Room 1") == True and check_name("XOR Challenge 1") == True:
-    patch_prereq_name("Break Room 1","XOR Challenge 1")
+  if check_name("Breakout Room 1") == True and check_name("XOR Challenge 1") == True:
+    patch_prereq_name("Breakout Room 1","XOR Challenge 1")
   else:
     pass
 
@@ -669,8 +642,8 @@ def patch_new_prereq():
   else:
     pass
 
-  if check_name("Break Room 2") == True and check_name("XOR Challenge 3") == True:
-    patch_prereq("Break Room 2","XOR Challenge 3")
+  if check_name("Breakout Room 2") == True and check_name("XOR Challenge 3") == True:
+    patch_prereq("Breakout Room 2","XOR Challenge 3")
   else:
     pass
 

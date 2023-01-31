@@ -1,7 +1,8 @@
 import requests,json
 
 def save_id():
-  for n in range(1,100):
+  challenge_dict = {}
+  for n in range(79,100):
     try:
       with requests.Session() as check_existence:
         check_existence.headers.update({"Authorization": f"Token {token}"})
@@ -13,8 +14,10 @@ def save_id():
         challenge_category = challenge_result['data']['category']
         challenge_prereq = check_req(challenge_id)
         print(challenge_id+": ['"+challenge_name+"','"+challenge_value+"','"+challenge_category+"','"+challenge_prereq+"'],")
+        challenge_dict[challenge_id]=[challenge_name,challenge_value,challenge_category,challenge_prereq]
     except Exception:
       pass
+  return challenge_dict
 
 def check_req(challenge_id):
   with requests.Session() as update_session:
