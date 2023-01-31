@@ -560,33 +560,9 @@ def patch_new_prereq():
         patch_prereq(key,"79")
         birth_month1_id = key
         make_visible(key)
-    elif "XOR Challenge 8" in value:
-      if challenge_dict.get(key)[3] == '':
-        patch_prereq(key,"35")
-        make_visible(key)
-    elif "XOR Challenge 7" in value:
-      if challenge_dict.get(key)[3] == '':
-        patch_prereq(key,"44")
-        make_visible(key)
-    elif "XOR Challenge 4" in value:
-      if challenge_dict.get(key)[3] == '':
-        patch_prereq(key,"64")
-        make_visible(key)
     elif "Birth Month 2" in value:
       if challenge_dict.get(key)[3] == '':
         patch_prereq(key,"38")
-        make_visible(key)
-    elif "XOR Challenge 5" in value:
-      if challenge_dict.get(key)[3] == '':
-        patch_prereq("31",key)
-        make_visible (31)
-        patch_prereq(key,"22")
-        make_visible(key)
-    elif "XOR Challenge 6" in value:
-      if challenge_dict.get(key)[3] == '':
-        patch_prereq("11",key)
-        make_visible(11)
-        patch_prereq(key,"22")
         make_visible(key)
     elif "XOR Challenge 1" in value:
       if challenge_dict.get(key)[3] == '':
@@ -609,6 +585,30 @@ def patch_new_prereq():
         patch_prereq("12",key)
         make_visible(12)
         patch_prereq(key,birth_month1_id)
+        make_visible(key)
+    elif "XOR Challenge 4" in value:
+      if challenge_dict.get(key)[3] == '':
+        patch_prereq(key,"64")
+        make_visible(key)
+    elif "XOR Challenge 5" in value:
+      if challenge_dict.get(key)[3] == '':
+        patch_prereq("31",key)
+        make_visible (31)
+        patch_prereq(key,"22")
+        make_visible(key)
+    elif "XOR Challenge 6" in value:
+      if challenge_dict.get(key)[3] == '':
+        patch_prereq("11",key)
+        make_visible(11)
+        patch_prereq(key,"22")
+        make_visible(key)
+    elif "XOR Challenge 7" in value:
+      if challenge_dict.get(key)[3] == '':
+        patch_prereq(key,"44")
+        make_visible(key)
+    elif "XOR Challenge 8" in value:
+      if challenge_dict.get(key)[3] == '':
+        patch_prereq(key,"35")
         make_visible(key)
 
 if __name__ == "__main__":
