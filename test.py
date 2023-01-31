@@ -67,11 +67,8 @@ def count_coordination(number_of_breakout_room):
     with requests.Session() as id_check_session:
       id_check_session.headers.update({"Authorization": f"Token {token}"})
       id_check_result = id_check_session.get(f"{url}/api/v1/challenges/{cid}",headers={"Content-Type": "application/json"}).json()
-
       try:
-        if "XOR Challenge" in id_check_result['data']['name']:
-          count += 1
-        elif "Birth Month" in id_check_result['data']['name']:
+        if id_check_result['data']['category'] == 'Coordination':
           count += 1
       except Exception:
         break
@@ -79,15 +76,23 @@ def count_coordination(number_of_breakout_room):
   
   new_points = round(500/count)
   print(new_points)
-    # if number_of_breakout_room == "1":
-    #   update_points("80",new_points)
-    #   make_visible("80")
-    # elif number_of_breakout_room == "2":
-    #   update_points("80",new_points)
-    #   update_points("81",new_points)
-    #   make_visible("80")
-    #   make_visible("81")
 
+  cid2 = 82
+  try:
+    while True:
+      with requests.Session() as id_check_session:
+        id_check_session.headers.update({"Authorization": f"Token {token}"})
+        id_check_result = id_check_session.get(f"{url}/api/v1/challenges/{cid2}",headers={"Content-Type": "application/json"}).json()
+        try:
+          if id_check_result['data']['category'] == 'Coordination':
+            update_points(str(id_check_result['data']['id']),new_points)
+        except Exception:
+          break
+        cid2+=1
+    print('[+] Coordination points changed')
+  except Exception:
+    print('[e] Coordination points not updated.')
+    pass
     # try:
     #   for name in challenge_result['data']:
     #     if "XOR Challenge" in name['name']:
@@ -99,6 +104,13 @@ def count_coordination(number_of_breakout_room):
     #   print('[e] Coordination points not updated.')
     #   pass
 
+def update_points(challenge_id,new_points):
+  with requests.Session() as update_session:
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    payload = '{"value":"'+str(new_points)+'"}'
+    flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
+    if flag_result.status_code > 399:
+      print('[e] Challenge '+challenge_id+' points not updated')
 
 if __name__ == "__main__":
   token = "15c288f2a166e3cef2ebb182a007212e747947aae7ff55fe103bcbb7f1695e2a"

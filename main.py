@@ -475,19 +475,22 @@ def count_coordination(number_of_breakout_room):
 
   if number_of_breakout_room == "1":
     update_points("80",new_points)
-    # make_visible("80")
   elif number_of_breakout_room == "2":
     update_points("80",new_points)
     update_points("81",new_points)
-    # make_visible("80")
-    # make_visible("81")
 
+  cid2 = 82
   try:
-    for name in challenge_result['data']:
-      if "XOR Challenge" in name['name']:
-        update_points(str(name['id']),new_points)
-      elif "Birth Month" in name['name']:
-        update_points(str(name['id']),new_points)
+    while True:
+      with requests.Session() as id_check_session:
+        id_check_session.headers.update({"Authorization": f"Token {token}"})
+        id_check_result = id_check_session.get(f"{url}/api/v1/challenges/{cid2}",headers={"Content-Type": "application/json"}).json()
+        try:
+          if id_check_result['data']['category'] == 'Coordination':
+            update_points(str(id_check_result['data']['id']),new_points)
+        except Exception:
+          break
+        cid2+=1
     print('[+] Coordination points changed')
   except Exception:
     print('[e] Coordination points not updated.')
