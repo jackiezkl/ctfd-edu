@@ -1,5 +1,6 @@
 import requests,json
 
+# this program checks all challenges and list their id, name, value, category, and prerequisites
 def check_req(challenge_id):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
