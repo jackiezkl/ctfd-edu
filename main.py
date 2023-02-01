@@ -12,9 +12,9 @@ def generate_hex():
 # checks the challenge existance, if so, return the challenge id
 def challenge_id_and_existance(challenge_type,n):
   if challenge_type == "xor":
-    cname = 'XOR Challenge '+n
+    cname = 'XOR Challenge '+str(n)
   elif challenge_type == "birth":
-    cname = 'Birth Month '+n
+    cname = 'Birth Month '+str(n)
 
 
   cid = 82
@@ -553,12 +553,12 @@ def patch_new_prereq():
       break
     cid+=1
 
+  print("[+] Checking and updating prerequisite information...")
   birth_month1_id = ''
   for key,value in challenge_dict.items():
     if "Birth Month 1" in value:
       if challenge_dict.get(key)[3] == '':
         patch_prereq(key,"79")
-        birth_month1_id = key
         make_visible(key)
     elif "Birth Month 2" in value:
       if challenge_dict.get(key)[3] == '':
@@ -584,7 +584,9 @@ def patch_new_prereq():
         make_visible(81)
         patch_prereq("12",key)
         make_visible(12)
-        patch_prereq(key,birth_month1_id)
+        for key2,value2 in challenge_dict.items():
+          if "Birth Month 1" in value2:
+            patch_prereq(key,key2)
         make_visible(key)
     elif "XOR Challenge 4" in value:
       if challenge_dict.get(key)[3] == '':
@@ -610,7 +612,10 @@ def patch_new_prereq():
       if challenge_dict.get(key)[3] == '':
         patch_prereq(key,"35")
         make_visible(key)
-
+    else:
+      if challenge_dict.get(key)[3] == '':
+        patch_prereq(key,"77")
+        make_visible(key)
 if __name__ == "__main__":
   token = "15c288f2a166e3cef2ebb182a007212e747947aae7ff55fe103bcbb7f1695e2a"
   url = "http://209.114.126.86"
