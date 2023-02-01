@@ -377,25 +377,29 @@ def new_user_birth_check():
 
   used_months = list(set(birth_month))
 
-  monthdict = {birth_month[a]:challenge_number[a] for a in range(len(birth_month))}
+  if used_months:
+    monthdict = {birth_month[a]:challenge_number[a] for a in range(len(birth_month))}
 
-  with open("birth_month_record.csv",'a') as birth_month_record:
-    col_names = ['full_name_used','birth_month','challenge_added','challenge_number']
-    birth_month_writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
+    with open("birth_month_record.csv",'a') as birth_month_record:
+      col_names = ['full_name_used','birth_month','challenge_added','challenge_number']
+      birth_month_writer = csv.DictWriter(birth_month_record, fieldnames=col_names)
 
-    for n in range(2):
-      for j in range(len(field_1_value)):
-        if used_months[n] == field_2_value[j] and field_1_value[j] not in full_name_used:
-          new_full_name = field_1_value[j]
-          cid,cstatus = challenge_id_and_existance('birth',monthdict[used_months[n]])
-          # flag_id,flag_content = birth_flag_id(birth_challenge_id(monthdict[used_months[n]]))          
-          flag_id,flag_content = birth_flag_id(cid)
-          if patch_birth_flag(flag_id,flag_content,new_full_name) is True:
-            row="{'full_name_used':'"+new_full_name+"','birth_month':'"+used_months[n]+"','challenge_added':'yes','challenge_number':'"+str(monthdict[used_months[n]])+"'}"
-            row_dict = ast.literal_eval(row)
-            birth_month_writer.writerow(row_dict)
-        else:
-          pass
+      for n in range(2):
+        for j in range(len(field_1_value)):
+          if used_months[n] == field_2_value[j] and field_1_value[j] not in full_name_used:
+            new_full_name = field_1_value[j]
+            cid,cstatus = challenge_id_and_existance('birth',monthdict[used_months[n]])
+            # flag_id,flag_content = birth_flag_id(birth_challenge_id(monthdict[used_months[n]]))          
+            flag_id,flag_content = birth_flag_id(cid)
+            if patch_birth_flag(flag_id,flag_content,new_full_name) is True:
+              row="{'full_name_used':'"+new_full_name+"','birth_month':'"+used_months[n]+"','challenge_added':'yes','challenge_number':'"+str(monthdict[used_months[n]])+"'}"
+              row_dict = ast.literal_eval(row)
+              birth_month_writer.writerow(row_dict)
+          else:
+            pass
+  else:
+    print("[e] The two existing birth month challenges must be leftover from a previous CTF, please remove them and try again.")
+    sys.exit()
 
 # # get the birth month challenge id
 # def birth_challenge_id(birth_challenge_number):
