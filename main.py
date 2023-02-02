@@ -211,7 +211,6 @@ def patch_coor_practice():
   for name in names:
     challenge_flag = challenge_flag + "|" + name.split()[0]
   challenge_flag = "("+challenge_flag.lstrip("|")+")"
-  print(challenge_flag)
 
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
