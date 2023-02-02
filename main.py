@@ -200,6 +200,32 @@ def add_new_xor_flag(last_id,n,xor,add_challenge_result):
       print("[+] Error when adding challenge.")
       return False
 
+def patch_coor_practice():
+  names = []
+  with open("users_info_record.csv") as users_info_csv:
+    users_info_reader = csv.DictReader(users_info_csv)
+    
+    for col in users_info_reader:
+      names.append(col['field_1_value'])
+  challenge_flag = ''
+  for name in names:
+    challenge_flag = challenge_flag + "|" + name.split()[0]
+  challenge_flag = "("+challenge_flag.lstrip("|")+")"
+  print(challenge_flag)
+
+  with requests.Session() as update_session:
+    update_session.headers.update({"Authorization": f"Token {token}"})
+
+    payload = '{"content": "'+challenge_flag+'", "data": "case_insensitive", "type": "regex", "id": "88"}'
+    flag_result = update_session.patch(f"{url}/api/v1/flags/88",json=json.loads(payload)).json()
+
+    if flag_result['success'] == True:
+      print("[i] Coordination practice challenge flag was updated.")
+      return True
+    else:
+      print("[e] Error when patching coordination practice flag.")
+      return False
+
 ##--------------below are for creating birth day challenges--------------
 # check how many birth month challenge already exist
 def does_birth_challenge_exist():
@@ -243,7 +269,7 @@ def birthmonth_challenge():
     pass
   elif len(set(month_used)) == 2:
     print('[e] CTF showing no birth challenge; however, csv file showing two. Please remove the "birth_month_record.csv" file and try again.\r')
-    exit()
+    sys.exit()
   elif len(set(month_used)) == 0:
     print('[i] Creating challenge now...')
     month_to_add = random.sample(list(set(user_birth_months)),k=2)
@@ -454,7 +480,7 @@ def check_token():
     pass
   else:
     print('[e] Cannot access CTFd api, please check token or IP.')
-    exit()
+    sys.exit()
 
 ##--------------the sectoin below change the points for each new challenge--------------
 # count how many coordination challenges
@@ -666,6 +692,7 @@ if __name__ == "__main__":
     while True:
       if get_usernames() == True:
         update_user_profile()
+        patch_coor_practice()
         generate_pair_and_xor()
         flag = does_birth_challenge_exist()
         if flag == 0:
