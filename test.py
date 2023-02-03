@@ -25,7 +25,7 @@ if __name__ == "__main__":
   parent_path = os.path.dirname(current_path)+"/"
 
   challenge_dict = {}
-
+  replace_text = ""
   cid = 79
   while True:
     try:
