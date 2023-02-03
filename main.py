@@ -589,7 +589,7 @@ def patch_new_prereq(count):
     cid+=1
 
   print("[+] Checking and updating prerequisite information...")
-  birth_month1_id = ''
+  
   for key,value in challenge_dict.items():
     if "Birth Month 1" in value:
       if challenge_dict.get(key)[3] == '':
@@ -671,7 +671,7 @@ if __name__ == "__main__":
 
 # make sure the token is working 
   check_token()
-  
+  global birth_month1_id 
 # ask for how many breakout room
   while True:
     number_of_breakout_room = input("How many Breakout Rooms?(Answer 0,1, or 2)\n")
