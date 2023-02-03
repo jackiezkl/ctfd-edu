@@ -152,7 +152,7 @@ def generate_pair_and_xor():
     for n in range(len(ids)):
       cid,cstatus = challenge_id_and_existance('xor',n+1)
       if cstatus == True:
-        print("[+] Challenge already exist, skip.")
+        print("[i] Challenge already exist, skip.")
         pass
       elif cstatus == False:
         if add_new_xor_challenge(full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
