@@ -19,7 +19,7 @@ if __name__ == "__main__":
   replace_text = ''
   challenge_dict = {}
 
-  cid = 78
+  cid = 1
   while True:
     try:
       with requests.Session() as check_existence:

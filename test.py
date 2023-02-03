@@ -13,7 +13,7 @@ def patch_autoscoreboard_js(parent_path):
   with open(dst_path, 'r') as jsfile: 
     lines = jsfile.readlines()
     for i,line in enumerate(lines):
-      if line.startswith("    78: ['Introduction','5','Introduction']"):
+      if line.startswith("    79: ['Coordination Practice', '30', 'Coordination']"):
         start_line = i
       elif line.startswith("  var getUserSolvesHistogram"):
         end_line = i
