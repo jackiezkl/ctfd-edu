@@ -152,7 +152,7 @@ def generate_pair_and_xor():
     for n in range(len(ids)):
       cid,cstatus = challenge_id_and_existance('xor',n+1)
       if cstatus == True:
-        print("[i] Challenge already exist, skip.")
+        print(f"[i] Challenge {n+1} already exist, skip.")
         pass
       elif cstatus == False:
         if add_new_xor_challenge(full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
@@ -423,8 +423,7 @@ def new_user_birth_check():
           else:
             pass
   else:
-    print("[e] The two existing birth month challenges must be leftover from a previous CTF, please remove them and try again.")
-    sys.exit()
+    pass
 
 # # get the birth month challenge id
 # def birth_challenge_id(birth_challenge_number):
@@ -532,7 +531,7 @@ def update_points(challenge_id,new_points):
     payload = '{"value":"'+str(new_points)+'"}'
     flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
     if flag_result.status_code > 399:
-      print('[e] Challenge '+challenge_id+' points not updated')
+      print(f'[e] Challenge {challenge_id} points not updated')
 
 ##--------------the section below update the prerequisite for new and existing challenges-------------- 
 def check_req(challenge_id):
@@ -662,7 +661,7 @@ def patch_new_prereq(count):
       make_hidden(81)
     elif count == 2:
       make_visible(80)
-      make_viaible(81)
+      make_visible(81)
     else:
       pass
 if __name__ == "__main__":
@@ -717,7 +716,7 @@ if __name__ == "__main__":
         if flag == 0:
           try:
             birthmonth_challenge()
-            new_user_birth_check()
+            # new_user_birth_check()
           except Exception:
             print('[e] No enough user to add birth challenges.\r')
             pass
