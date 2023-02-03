@@ -8,7 +8,7 @@ def patch_autoscoreboard_js(parent_path):
     exit()
 
   line_number = 1
-  known_challenge = "78: ['Introduction','5','Introduction']"
+  known_challenge = "    78: ['Introduction','5','Introduction']"
   with open(dst_path, 'r') as jsfile: 
     lines = jsfile.readlines()
     for i,line in enumerate(lines):
