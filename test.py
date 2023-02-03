@@ -12,6 +12,7 @@ def patch_autoscoreboard_js(parent_path):
   with open(dst_path, 'r') as jsfile: 
     lines = jsfile.readlines()
     for line in enumerate(lines):
+      print(line)
       if known_challenge in line:
         print(line_number)
         line_number += 1
