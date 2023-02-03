@@ -562,7 +562,13 @@ def make_visible(challenge_id):
     payload = '{"state":"visible"}'
     flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
 
-def patch_new_prereq():
+def make_hidden(challenge_id):
+  with requests.Session() as update_session:
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    payload = '{"state":"hidden"}'
+    flag_result = update_session.patch(f"{url}/api/v1/challenges/{challenge_id}",json=json.loads(payload))
+
+def patch_new_prereq(count):
   challenge_dict = {}
   cid = 82
   while True:
@@ -596,7 +602,6 @@ def patch_new_prereq():
     elif "XOR Challenge 1" in value:
       if challenge_dict.get(key)[3] == '':
         patch_prereq("80",key)
-        make_visible(80)
         patch_prereq(key,"77")
         make_visible(key)
     elif "XOR Challenge 2" in value:
@@ -610,7 +615,10 @@ def patch_new_prereq():
     elif "XOR Challenge 3" in value:
       if challenge_dict.get(key)[3] == '':
         patch_prereq("81",key)
-        make_visible(81)
+        if count == 2:
+          make_visible(81)
+        else:
+          pass
         patch_prereq("12",key)
         make_visible(12)
         for key2,value2 in challenge_dict.items():
@@ -645,6 +653,18 @@ def patch_new_prereq():
       if challenge_dict.get(key)[3] == '':
         patch_prereq(key,"77")
         make_visible(key)
+
+    if count == 0:
+      make_hidden(80)
+      make_hidden(81)
+    elif count == 1:
+      make_visible(80)
+      make_hidden(81)
+    elif count == 2:
+      make_visible(80)
+      make_viaible(81)
+    else:
+      pass
 if __name__ == "__main__":
   token = "15c288f2a166e3cef2ebb182a007212e747947aae7ff55fe103bcbb7f1695e2a"
   url = "http://209.114.126.86"
@@ -704,7 +724,7 @@ if __name__ == "__main__":
         elif flag == 2:
           new_user_birth_check()
           count_coordination(count)
-          patch_new_prereq()
+          patch_new_prereq(count)
         else:
           pass
       else:
