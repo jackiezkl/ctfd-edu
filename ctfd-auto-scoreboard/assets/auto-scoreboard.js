@@ -104,7 +104,7 @@
     76: ['Vulnerability Test 4', '24', 'Testing and Evaluation'],
     77: ['The Background', '5', 'Introduction'],
     78: ['Introduction', '5', 'Introduction'],
-    79: ['Coordination Practice', '30', 'Coordination'],
+79: ['Coordination Practice', '30', 'Coordination'],
   }
   
   var getUserSolvesHistogram = function(user) {

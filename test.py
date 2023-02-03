@@ -1,26 +1,23 @@
 import os,requests,json
 
-def patch_autoscoreboard_js(parent_path):
+def patch_autoscoreboard_js(parent_path,replace_text):
   relative_path = "CTFd/CTFd/plugins/ctfd-auto-scoreboard/assets/auto-scoreboard.js"
   dst_path = os.path.join(parent_path, relative_path)
   if os.path.exists(dst_path) == False:
     print("[e] Couldn't find the *auto-scoreboard.js* to work with.")
     exit()
 
-  start_line = 0
-  end_line = 0
-
   with open(dst_path, 'r') as jsfile: 
     lines = jsfile.readlines()
-    for i,line in enumerate(lines):
-      if line.startswith("    79: ['Coordination Practice', '30', 'Coordination']"):
-        start_line = i
-      elif line.startswith("  var getUserSolvesHistogram"):
-        end_line = i
-
-  print(start_line+1)
-  print(end_line-2)
-
+    try:
+      for i,line in enumerate(lines):
+        if line.startswith("79: ['Coordination Practice', '30', 'Coordination']"):
+          line[i] = replace_text
+      jsfile.seek(0)
+      for line in lines:
+        challenges_file.write(line)
+    except Exception:
+      print("Couldn't write the auto-scoreboard.js file.")
 
 if __name__ == "__main__":
   token = "15c288f2a166e3cef2ebb182a007212e747947aae7ff55fe103bcbb7f1695e2a"
@@ -49,6 +46,6 @@ if __name__ == "__main__":
     cid+=1
 
   for i in challenge_dict:
-    replace_text = replace_text+f"{i}: {challenge_dict[i]},\n"
+    replace_text = replace_text+f"{i}: {challenge_dict[i]},"
 
   patch_autoscoreboard_js(parent_path)
