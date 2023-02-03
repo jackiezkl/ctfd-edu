@@ -18,8 +18,8 @@ def patch_autoscoreboard_js(parent_path):
       elif line.startswith("  var getUserSolvesHistogram"):
         end_line = i
 
-  print(start_line)
-  print(end_line)
+  print(start_line+1)
+  print(end_line-2)
 
 
 if __name__ == "__main__":
