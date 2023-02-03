@@ -15,7 +15,7 @@ def patch_autoscoreboard_js(parent_path):
     for i,line in enumerate(lines):
       if line.startswith("    78: ['Introduction','5','Introduction']"):
         start_line = i
-      elif line.startswith("var getUserSolvesHistogram"):
+      elif line.startswith("  var getUserSolvesHistogram"):
         end_line = i
 
   print(start_line)
