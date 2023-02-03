@@ -48,4 +48,4 @@ if __name__ == "__main__":
   for i in challenge_dict:
     replace_text = replace_text+f"{i}: {challenge_dict[i]},"
 
-  patch_autoscoreboard_js(parent_path)
+  patch_autoscoreboard_js(parent_path,replace_text)
