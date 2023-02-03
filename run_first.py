@@ -1,15 +1,18 @@
-import os,re
+import os,re,sys
 from secrets import token_hex
 from shutil import copytree
 from multiprocessing import cpu_count
 
 def already_exist(parent_path,relative_path,string_to_check):
   dst_path = os.path.join(parent_path, relative_path)
-  with open(dst_path) as check_file:
-    if string_to_check in check_file.read():
-      return True
-    else:
-      return False
+  try:
+    with open(dst_path) as check_file:
+      if string_to_check in check_file.read():
+        return True
+      else:
+        return False
+  except Exception:
+    sys.exit()
 
 def patch_base_html(parent_path):
   relative_path = "CTFd/CTFd/themes/core/templates/base.html"
