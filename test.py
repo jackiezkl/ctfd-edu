@@ -16,6 +16,7 @@ def patch_autoscoreboard_js(parent_path,replace_text):
       jsfile.seek(0)
       for line in lines:
         jsfile.write(line)
+      print("[+] auto-scoreboard.js file patched.")
     except Exception:
       print("Couldn't write the auto-scoreboard.js file.")
 
