@@ -7,16 +7,12 @@ def patch_autoscoreboard_js(parent_path):
     print("[e] Couldn't find the *auto-scoreboard.js* to work with.")
     exit()
 
-  line_number = 1
   known_challenge = "    78: ['Introduction','5','Introduction']"
   with open(dst_path, 'r') as jsfile: 
     lines = jsfile.readlines()
     for i,line in enumerate(lines):
       if line.startswith(known_challenge):
-        print(line_number)
         print(i)
-        line_number += 1
-
 
 
 if __name__ == "__main__":
