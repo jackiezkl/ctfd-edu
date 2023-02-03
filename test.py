@@ -7,7 +7,7 @@ def patch_autoscoreboard_js(parent_path,replace_text):
     print("[e] Couldn't find the *auto-scoreboard.js* to work with.")
     exit()
 
-  with open(dst_path, 'r') as jsfile: 
+  with open(dst_path, 'r+') as jsfile: 
     lines = jsfile.readlines()
     try:
       for i,line in enumerate(lines):
