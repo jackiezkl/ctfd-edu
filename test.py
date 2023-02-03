@@ -7,12 +7,19 @@ def patch_autoscoreboard_js(parent_path):
     print("[e] Couldn't find the *auto-scoreboard.js* to work with.")
     exit()
 
-  known_challenge = "    78: ['Introduction','5','Introduction']"
+  start_line = 0
+  end_line = 0
+
   with open(dst_path, 'r') as jsfile: 
     lines = jsfile.readlines()
     for i,line in enumerate(lines):
-      if line.startswith(known_challenge):
-        print(i)
+      if line.startswith("    78: ['Introduction','5','Introduction']"):
+        start_line = i
+      elif line.startswith("var getUserSolvesHistogram"):
+        end_line = i
+
+  print(start_line)
+  print(end_line)
 
 
 if __name__ == "__main__":
