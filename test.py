@@ -15,7 +15,7 @@ def patch_autoscoreboard_js(parent_path,replace_text):
           line[i] = replace_text
       jsfile.seek(0)
       for line in lines:
-        challenges_file.write(line)
+        jsfile.write(line)
     except Exception:
       print("Couldn't write the auto-scoreboard.js file.")
 
@@ -47,5 +47,5 @@ if __name__ == "__main__":
 
   for i in challenge_dict:
     replace_text = replace_text+f"{i}: {challenge_dict[i]},"
-
+  print(replace_text)
   patch_autoscoreboard_js(parent_path,replace_text)
