@@ -11,7 +11,7 @@ def patch_autoscoreboard_js(parent_path,replace_text):
     lines = jsfile.readlines()
     try:
       for i,line in enumerate(lines):
-        if line.startswith("79: ['Coordination Practice',"):
+        if line.startswith("79: ['Coordination Practice'"):
           line[i] = replace_text
       jsfile.seek(0)
       for line in lines:
