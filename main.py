@@ -60,7 +60,7 @@ def get_usernames():
     for i in range(total_number_of_users):
       username_id_csv.write('%s,%s\n' % (all_user_info_json['data'][i]['name'],all_user_info_json['data'][i]['id']))
     username_id_csv.close()
-    print("[+] Saved to names_record.csv")
+    print("[+] Updated names_record.csv")
 
     if os.path.isfile('users_info_record.csv') == False:
       with open("names_record.csv") as names_record:
@@ -152,7 +152,7 @@ def generate_pair_and_xor():
     for n in range(len(ids)):
       cid,cstatus = challenge_id_and_existance('xor',n+1)
       if cstatus == True:
-        print(f"[i] Challenge {n+1} already exist, skip.")
+        print(f"[i] XOR Challenge {n+1} already exist, skip.")
         pass
       elif cstatus == False:
         if add_new_xor_challenge(full_name[n],paired_name[n],xor_result[n],str(int(n)+1)) is True:
@@ -191,10 +191,10 @@ def add_new_xor_flag(last_id,n,xor,add_challenge_result):
       flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
       if flag_result['success'] == True:
-        print("[+] New challenge and flag added.")
+        print(f"[+] Added new XOR Challenge {last_id} and its flag.")
         return True
       else:
-        print("[+] Error when adding flag.")
+        print(f"[+] Error when adding XOR Challenge {last_id} flag.")
         return False
     else:
       print("[+] Error when adding challenge.")
@@ -379,6 +379,7 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
     else:
       print("[e] Error when adding challenge.")
       return False
+      
 ##--------------the section below check new user's birth month and update existing challenges--------------
 # check if new user joined the game, and check the new user's birth month
 def new_user_birth_check():
