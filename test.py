@@ -10,14 +10,11 @@ def patch_autoscoreboard_js(parent_path,replace_text):
   with open(dst_path, 'r+') as jsfile: 
     lines = jsfile.readlines()
     try:
-      print(replace_text)
       for i,line in enumerate(lines):
         if line.startswith("79: ['Coordination Practice'"):
-          line[i] = replace_text
-          print("test point 1")
+          lines[i] = replace_text
       jsfile.seek(0)
       for line in lines:
-        print("test point 2")
         jsfile.write(line)
       print("[+] auto-scoreboard.js file patched.")
     except Exception:
