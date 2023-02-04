@@ -130,7 +130,7 @@ def patch_private_html(parent_path):
     try:
       for i, line in enumerate(lines):
         if line.startswith('\t\t\t<h1>{{ user.name }}</h1>\n'):
-          lines[i] = lines[i] + '\t\t\t{% for field in user.get_fields(admin=true) %}\n\t\t\t\t<h4 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}\n\t\t\t\t</h4>\n\t\t\t{% endfor %}\n'
+          lines[i] = lines[i] + '\t\t\t{% for field in user.get_fields(admin=true) %}\n\t\t\t\t<h5 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}\n\t\t\t\t</h5>\n\t\t\t{% endfor %}\n'
       f.seek(0)
       for line in lines:
         f.write(line)
@@ -260,10 +260,10 @@ if __name__=="__main__":
     pass
 
   print("[i] Patching private.html ...")
-  if already_exist(parent_path, "CTFd/CTFd/themes/core/templates/users/private.html", '<h4 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}') == False:
+  if already_exist(parent_path, "CTFd/CTFd/themes/core/templates/users/private.html", '<h5 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}') == False:
     patch_private_html(parent_path)
     print("[+] Done")
-  elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/users/private.html", '<h4 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}') == True:
+  elif already_exist(parent_path, "CTFd/CTFd/themes/core/templates/users/private.html", '<h5 class="d-block">\n\t\t\t\t\t{{ field.name }}: {{ field.value }}') == True:
     print("[e] private.html already patched, skipped.")
     pass
   else:
