@@ -11,7 +11,7 @@ def patch_autoscoreboard_js(parent_path,replace_text):
     lines = jsfile.readlines()
     try:
       for i,line in enumerate(lines):
-        if line.startswith("79: ['Coordination Practice'"):
+        if line.startswith("    79: ['Coordination Practice'"):
           lines[i] = replace_text
       jsfile.seek(0)
       for line in lines:
@@ -48,4 +48,4 @@ if __name__ == "__main__":
 
   for i in challenge_dict:
     replace_text = replace_text+f"{i}: {challenge_dict[i]},"
-  patch_autoscoreboard_js(parent_path,replace_text+"\n")
+  patch_autoscoreboard_js(parent_path,"    "+replace_text+"\n")
