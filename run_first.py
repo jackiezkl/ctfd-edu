@@ -271,10 +271,10 @@ if __name__=="__main__":
     pass
 
   print("[i] Patching docker-compose file...")
-  if already_exist(parent_path, "CTFd/conf/nginx/mime.types", "text/cahe.manifest") == False:
+  if already_exist(parent_path, "CTFd/docker-compose.yml", "- ./conf/nginx/mime.types:/etc/nginx/mime.types") == False:
     patch_nginx_conf(parent_path)
     print("[+] Done")
-  elif already_exist(parent_path, "CTFd/conf/nginx/mime.types", "text/cahe.manifest") == True:
+  elif already_exist(parent_path, "CTFd/docker-compose.yml", "- ./conf/nginx/mime.types:/etc/nginx/mime.types") == True:
     print("[e] nginx config already patched.")
     pass
   else:
