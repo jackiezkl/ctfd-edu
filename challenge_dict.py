@@ -102,11 +102,11 @@ while True:
   except Exception:
     break
   cid+=1
-"""
+
 with open(dst_path, 'w') as dictfile: 
   try:
     dictfile.write(challenge_dict)
     print("[+] challenge_dict file updated.")
   except Exception:
-    print("Couldn't write the challenge_dict file.")"""
-print(challenge_dict)
+    print("Couldn't write the challenge_dict file.")
+# print(challenge_dict)
