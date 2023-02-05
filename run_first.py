@@ -164,39 +164,6 @@ def patch_docker_compose(parent_path):
   except Exception:
     print("[e] Couldn't find the element to replace with")
 
-"""the following is commented out. It was used for
-testing javascript auto update function through html5 manifest"""
-# def patch_nginx_conf(parent_path):
-#   copy_flag = False
-#   mime_dst_path = "CTFd/conf/nginx"
-#   mime_src_path = "mime.types"
-#   try:
-#     copy2(mime_src_path,mime_dst_path)
-#     copy_flag = True
-#   except Exception:
-#     pass
-
-#   if copy_flag == True:
-#     relative_path = "CTFd/docker-compose.yml"
-#     dst_path = os.path.join(parent_path, relative_path)
-#     if os.path.exists(dst_path) == False:
-#       print("[e] Couldn't find the *docker-compose.yml* to work with.")
-#       exit()
-
-#     with open(dst_path, 'r+') as f:
-#       lines = f.readlines()
-#       try:
-#         for i, line in enumerate(lines):
-#           if line.startswith('      - ./conf/nginx/http.conf:/etc/nginx/nginx.conf\n'):
-#             lines[i] = lines[i] + "      - ./conf/nginx/mime.types:/etc/nginx/mime.types\n"
-#         f.seek(0)
-#         for line in lines:
-#           f.write(line)
-#       except Exception:
-#         print("[e] Couldn't find the *http.conf* to replace with.")
-#   else:
-#     print("[e] Couldn't copy the *mime.types* to destination place, docker-compose.yml not patched.")
-
 if __name__=="__main__":
 #   change parent path of CTFd after clone
   current_path=os.getcwd()
@@ -270,14 +237,3 @@ if __name__=="__main__":
   else:
     print("[e] Something's wrong please check if private.html esixts.")
     pass
-
-  # print("[i] Patching docker-compose file...")
-  # if already_exist(parent_path, "CTFd/docker-compose.yml", "- ./conf/nginx/mime.types:/etc/nginx/mime.types") == False:
-  #   patch_nginx_conf(parent_path)
-  #   print("[+] Done")
-  # elif already_exist(parent_path, "CTFd/docker-compose.yml", "- ./conf/nginx/mime.types:/etc/nginx/mime.types") == True:
-  #   print("[e] nginx config already patched.")
-  #   pass
-  # else:
-  #   print("[e] Something's wrong please check if docker-compose file esixts.")
-  #   pass
