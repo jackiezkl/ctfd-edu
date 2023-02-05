@@ -191,10 +191,10 @@ def add_new_xor_flag(last_id,n,xor,add_challenge_result):
       flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
       if flag_result['success'] == True:
-        print(f"[+] Added new XOR Challenge {last_id} and its flag.")
+        print(f"[+] Added new challenge {last_id} and its flag.")
         return True
       else:
-        print(f"[+] Error when adding XOR Challenge {last_id} flag.")
+        print(f"[+] Error when adding challenge {last_id} flag.")
         return False
     else:
       print("[+] Error when adding challenge.")
