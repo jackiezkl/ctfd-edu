@@ -5,9 +5,9 @@ url = "http://209.114.126.86"
 
 current_path=os.getcwd()
 parent_path = os.path.dirname(current_path)+"/"
-relative_path = "CTFd/CTFd/plugins/ctfd-auto-scoreboard/assets/challenge_dict.txt"
+relative_path = "CTFd/CTFd/plugins/ctfd-auto-scoreboard/assets/challenge_dict.json"
 dst_path = os.path.join(parent_path, relative_path)
-print(dst_path)
+
 challenge_dict = {
   1: ['Flag in a Flag System', '70', 'Analysis'],
   2: ['We are being attacked!', '42', 'Analysis'],
@@ -105,7 +105,7 @@ while True:
 
 with open(dst_path, 'w') as dictfile: 
   try:
-    dictfile.write(challenge_dict)
+    dictfile.write(json.dumps(challenge_dict))
     print("[+] challenge_dict file updated.")
   except Exception:
     print("Couldn't write the challenge_dict file.")
