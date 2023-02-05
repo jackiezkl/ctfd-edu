@@ -1,13 +1,13 @@
 import os,requests,json
 
-def patch_autoscoreboard_js(parent_path,replace_text):
-  relative_path = "CTFd/CTFd/plugins/ctfd-auto-scoreboard/assets/auto-scoreboard.js"
+def patch_autoscoreboard_js(parent_path,file_content):
+  relative_path = "CTFd/CTFd/plugins/ctfd-auto-scoreboard/assets/challenge_list.txt"
   dst_path = os.path.join(parent_path, relative_path)
   if os.path.exists(dst_path) == False:
     print("[e] Couldn't find the *auto-scoreboard.js* to work with.")
     exit()
 
-  with open(dst_path, 'r+') as jsfile: 
+  with open(dst_path, 'w') as jsfile: 
     lines = jsfile.readlines()
     try:
       for i,line in enumerate(lines):
@@ -41,11 +41,12 @@ if __name__ == "__main__":
         challenge_category = challenge_result['data']['category']
         # challenge_prereq = check_req(cid)
         challenge_dict.update({cid:[challenge_name,challenge_value,challenge_category]})
-        # print(challenge_id+": ['"+challenge_name+"','"+challenge_value+"','"+challenge_category+"','"+challenge_prereq+"'],")`
+        # print(challenge_id+":['"+challenge_name+"','"+challenge_value+"','"+challenge_category+"','"+challenge_prereq+"'],")`
     except Exception:
       break
     cid+=1
 
   for i in challenge_dict:
-    replace_text = replace_text+f"{i}: {challenge_dict[i]},"
-  patch_autoscoreboard_js(parent_path,replace_text+"\n")
+    replace_text = replace_text+f"{i}:{challenge_dict[i]},"
+  print(replace_text)
+  # patch_autoscoreboard_js(parent_path,replace_text+"\n")
