@@ -8,7 +8,7 @@ firefoxoptions.add_argument("--headless")
 
 with webdriver.Firefox(options=firefoxoptions) as driver:
   driver.get("http://127.0.0.1")
-  for i in range(1,20):
+  for i in range(1,16):
     username = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase, k=5))
     email = f"{username}@gmail.com"
     fullname = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase, k=5))+" "+''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase, k=5))
