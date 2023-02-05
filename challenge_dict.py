@@ -7,7 +7,7 @@ current_path=os.getcwd()
 parent_path = os.path.dirname(current_path)+"/"
 relative_path = "CTFd/CTFd/plugins/ctfd-auto-scoreboard/assets/challenge_dict.txt"
 dst_path = os.path.join(parent_path, relative_path)
-
+print(dst_path)
 challenge_dict = {
   1: ['Flag in a Flag System', '70', 'Analysis'],
   2: ['We are being attacked!', '42', 'Analysis'],
