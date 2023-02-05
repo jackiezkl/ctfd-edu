@@ -233,7 +233,7 @@ def does_birth_challenge_exist():
   cid1,cstatus1 = challenge_id_and_existance('birth','1')
 
   if cstatus2 == True:
-    print('[e] There are aleady two birth month challenges, checking new user...\r')
+    print('[i] There are aleady two birth month challenges, checking new user...\r')
     return 2
   elif cstatus1 == True:
     print('[e] There is one birth month challenge already, I can\'t handle this situation right now. Please remove the existing challenge and retry.\r')
