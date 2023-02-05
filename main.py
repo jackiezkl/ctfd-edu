@@ -417,7 +417,7 @@ def new_user_birth_check():
             cid,cstatus = challenge_id_and_existance('birth',monthdict[used_months[n]])
             # flag_id,flag_content = birth_flag_id(birth_challenge_id(monthdict[used_months[n]]))          
             flag_id,flag_content = birth_flag_id(cid)
-            if patch_birth_flag(flag_id,flag_content,new_full_name) is True:
+            if patch_birth_flag(flag_id,flag_content,new_full_name,cid) is True:
               row="{'full_name_used':'"+new_full_name+"','birth_month':'"+used_months[n]+"','challenge_added':'yes','challenge_number':'"+str(monthdict[used_months[n]])+"'}"
               row_dict = ast.literal_eval(row)
               birth_month_writer.writerow(row_dict)
@@ -451,7 +451,7 @@ def birth_flag_id(challenge_id):
     pass
 
 # patch the existing birth month challenge to use the new user information
-def patch_birth_flag(flag_id,flag_content,new_full_name):
+def patch_birth_flag(flag_id,flag_content,new_full_name,challenge_id):
   print('[+] New user found! Patching existing birth month challenge...')
   new_content = flag_content.rstrip(')') + '|'+new_full_name.split()[0]+')'
   with requests.Session() as update_session:
@@ -462,7 +462,7 @@ def patch_birth_flag(flag_id,flag_content,new_full_name):
     flag_result = update_session.patch(f"{url}/api/v1/flags/{flag_id}",json=json.loads(payload)).json()
 
     if flag_result['success'] == True:
-      print("[i] Birth month challenge flag was updated.")
+      print(f"[i] Birth month {challenge_id} challenge flag was updated.")
       return True
     else:
       print("[e] Error when adding flag.")
@@ -651,7 +651,7 @@ def patch_new_prereq(count):
         make_visible(key)
     else:
       if challenge_dict.get(key)[3] == '':
-        patch_prereq(key,"77")
+        patch_prereq(key,str(random.choice([2,4,10,20,22,23,27,35,43,44,55,56,62,64,67,79])))
         make_visible(key)
 
     if count == 0:
