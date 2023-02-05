@@ -6,7 +6,7 @@ import time,random,string
 while True:
   try:
     userinput = input("Please enter how many user do you want to create?")
-    number = int(userinput)
+    number = int(userinput) + 1
     break
   except Exception:
     continue
@@ -30,4 +30,4 @@ with webdriver.Firefox(options=firefoxoptions) as driver:
     time.sleep(1.5)
     driver.find_element(By.XPATH,'/html/body/nav/div/div/ul[2]/li[4]/a/span[2]/i').click()
     time.sleep(1.5)
-    print(f"user test{i} added")
+    print(f"user {username} added")
