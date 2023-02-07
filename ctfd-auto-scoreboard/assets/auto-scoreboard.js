@@ -107,14 +107,14 @@
 // 79: ['Coordination Practice', '30', 'Coordination'],
 //   }
   
-  async function getData(url) {
-    var response = await fetch(url);
 
-    return response.json();
+  var challengesList;
+  function getData() {
+  fetch("/plugins/ctfd-auto-scoreboard/assets/challenge_dict.json")
+    .then(response => response.json())
+    .then(result => challengesList=result);
   }
-
-  var challengesList = await getData("/plugins/ctfd-auto-scoreboard/assets/challenge_dict.json");
-  
+  getData()
   var getUserSolvesHistogram = function(user) {
     let numSolves = 0;
     let categoryHistogram = {'Investigation': 0, 'Design': 0, 'Analysis': 0, 'Implementation': 0, 'Testing and Evaluation': 0, 'Coordination': 0};
