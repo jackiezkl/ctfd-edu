@@ -5,7 +5,7 @@ import time,random,string
 
 while True:
   try:
-    userinput = input("Please enter how many user do you want to create?")
+    userinput = input("Please enter how many user do you want to create?\n")
     number = int(userinput) + 1
     break
   except Exception:
