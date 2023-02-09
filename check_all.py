@@ -29,13 +29,13 @@ if __name__ == "__main__":
         challenge_name = challenge_result['data']['name']
         challenge_value = str(challenge_result['data']['value'])
         challenge_category = challenge_result['data']['category']
-        # challenge_prereq = check_req(cid)
-        challenge_dict.update({cid:[challenge_name,challenge_value,challenge_category]})
-        # print(challenge_id+": ['"+challenge_name+"','"+challenge_value+"','"+challenge_category+"','"+challenge_prereq+"'],")`
+        challenge_prereq = check_req(cid)
+        # challenge_dict.update({cid:[challenge_name,challenge_value,challenge_category]})
+        print(challenge_id+": ['"+challenge_name+"','"+challenge_value+"','"+challenge_category+"','"+challenge_prereq+"'],")
     except Exception:
       break
     cid+=1
 
-  for i in challenge_dict:
-    replace_text = replace_text+f"{i}: {challenge_dict[i]},\n"
-  print(replace_text)
+  # for i in challenge_dict:
+  #   replace_text = replace_text+f"{i}: {challenge_dict[i]},\n"
+  # print(replace_text)

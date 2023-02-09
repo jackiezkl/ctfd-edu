@@ -1,33 +1,41 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-import time,random,string
+import random,json,requests,string
 
-while True:
-  try:
-    userinput = input("Please enter how many user do you want to create?\n")
-    number = int(userinput) + 1
-    break
-  except Exception:
-    continue
 
-firefoxoptions = Options()
-firefoxoptions.add_argument("--headless")
+def add_new_user(username,email,fullname,birthmonth):
+  with requests.Session() as update_session:
+    update_session.headers.update({"Authorization": f"Token {token}"})
+    content_string = ''
 
-with webdriver.Firefox(options=firefoxoptions) as driver:
-  driver.get("http://127.0.0.1")
+    payload = '{"name":"'+username+'","email":"'+email+'","password":"passtest","type":"user","verified":false,"hidden":false,"banned":false,"fields":[{"field_id":1,"value":"'+fullname+'"},{"field_id":2,"value":"'+birthmonth+'"}]}'
+    # print(payload)
+    flag_result = update_session.post(f"{url}/api/v1/users",json=json.loads(payload)).json()
+
+    if flag_result['success'] == True:
+      print(f"user {username} added")
+    else:
+      print("[e] Error when adding new user.")
+
+
+if __name__ == "__main__":
+  token = "15c288f2a166e3cef2ebb182a007212e747947aae7ff55fe103bcbb7f1695e2a"
+  url = "http://209.114.126.86"
+
+
+  while True:
+    try:
+      userinput = input("Please enter how many user do you want to create?\n")
+      number = int(userinput) + 1
+      break
+    except Exception:
+      continue
+
+  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+
   for i in range(1,number):
     username = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase, k=5))
     email = f"{username}@gmail.com"
     fullname = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase, k=5))+" "+''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase, k=5))
-    driver.find_element(By.XPATH,"/html/body/nav/div/div/ul[2]/li[1]/a").click()
-    driver.find_element(By.XPATH,'//*[@id="name"]').send_keys(username)
-    driver.find_element(By.XPATH,'//*[@id="email"]').send_keys(email)
-    driver.find_element(By.XPATH,'//*[@id="password"]').send_keys("passtest")
-    driver.find_element(By.XPATH,'//*[@id="fields[1]"]').send_keys(fullname)
-    driver.find_element(By.XPATH,f'/html/body/main/div[2]/div/div/form/div[5]/select/option[{random.randint(2,13)}]').click()
-    driver.find_element(By.XPATH,'//*[@id="_submit"]').click()
-    time.sleep(1.5)
-    driver.find_element(By.XPATH,'/html/body/nav/div/div/ul[2]/li[4]/a/span[2]/i').click()
-    time.sleep(1.5)
-    print(f"user {username} added")
+    birthmonth = random.choice(months)
+    add_new_user(username,email,fullname,birthmonth)
+

@@ -25,11 +25,7 @@
   });
 
   var challengesList;
-  // function getData() {
-  // fetch("/plugins/ctfd-auto-scoreboard/assets/challenge_dict.json")
-  //   .then(response => response.json())
-  //   .then(result => challengesList=result);
-  // }
+
   function refreshChallengesList() {
   fetch('/plugins/ctfd-auto-scoreboard/assets/challenge_dict.json?v=' + new Date().getTime())
     .then(function(response) {
@@ -299,9 +295,9 @@ refreshChallenges();
     }
   }
 
-  setInterval(update_auto_scoreboard, 10000);
+  setInterval(update_auto_scoreboard, 5000);
   
-  setTimeout(update_auto_scoreboard(), 100);
-  setTimeout(update_auto_scoreboard(), 500);
+  // setTimeout(update_auto_scoreboard(), 100);
+  // setTimeout(update_auto_scoreboard(), 500);
   setTimeout(update_auto_scoreboard(), 1000);
 })()
