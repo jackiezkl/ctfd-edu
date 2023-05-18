@@ -187,7 +187,7 @@ def add_new_xor_flag(last_id,n,xor,add_challenge_result):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     if add_challenge_result == True:
-      payload = '{"challenge_id":"'+str(last_id)+'","content":"'+xor+'","type":"static","data":""}'
+      payload = '{"challenge_id":"'+str(last_id)+'","content":"(flag{)?'+xor+'}?","type":"static","data":""}'
       flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
       if flag_result['success'] == True:
@@ -366,7 +366,7 @@ def add_new_birth_flag(last_id,picked_full_name,picked_birth_month,challenge_bir
     content_string = '('+content_string.lstrip('|')+')'
 
     if add_challenge_result == True:
-      payload = '{"challenge_id":"'+str(last_id)+'","content":"'+content_string+'","type":"regex","data":"case_insensitive"}'
+      payload = '{"challenge_id":"'+str(last_id)+'","content":"(flag{)?'+content_string+'}?","type":"regex","data":"case_insensitive"}'
       # print(payload)
       flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
@@ -458,7 +458,7 @@ def patch_birth_flag(flag_id,flag_content,new_full_name,challenge_id):
     update_session.headers.update({"Authorization": f"Token {token}"})
     # content_string = ''
 
-    payload = '{"content": "'+new_content+'", "data": "case_insensitive", "type": "regex", "id": "'+str(flag_id)+'"}'
+    payload = '{"content": "(flag{)?'+new_content+'}?", "data": "case_insensitive", "type": "regex", "id": "'+str(flag_id)+'"}'
     flag_result = update_session.patch(f"{url}/api/v1/flags/{flag_id}",json=json.loads(payload)).json()
 
     if flag_result['success'] == True:
