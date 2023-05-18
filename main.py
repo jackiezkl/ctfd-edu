@@ -668,7 +668,7 @@ def patch_new_prereq(count):
       pass
 if __name__ == "__main__":
   token = "15c288f2a166e3cef2ebb182a007212e747947aae7ff55fe103bcbb7f1695e2a"
-  url = "http://209.114.126.86"
+  url = "http://127.0.0.1"
 
 # make sure the token is working 
   check_token()
