@@ -187,7 +187,8 @@ def add_new_xor_flag(last_id,n,xor,add_challenge_result):
   with requests.Session() as update_session:
     update_session.headers.update({"Authorization": f"Token {token}"})
     if add_challenge_result == True:
-      payload = '{"challenge_id":"'+str(last_id)+'","content":"(flag{)?'+xor+'}?","type":"static","data":""}'
+      # payload = '{"challenge_id":"'+str(last_id)+'","content":"(flag{)?'+xor+'}?","type":"static","data":""}'
+      payload = '{"challenge_id":"'+str(last_id)+'","content":"(flag{)?'+xor+'}?","type":"regex","data":"case_insensitive"}'
       flag_result = update_session.post(f"{url}/api/v1/flags",json=json.loads(payload)).json()
 
       if flag_result['success'] == True:
